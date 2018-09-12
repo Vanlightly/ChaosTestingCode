@@ -1,0 +1,29 @@
+containers:
+  rabbitmq1:
+    image: rabbitmq:3.7-management
+    hostname: rabbitmq1
+    environment: { "RABBITMQ_ERLANG_COOKIE": 12345 }
+    volumes: { "./rabbitmq.config": "/etc/rabbitmq/rabbitmq.config" }
+    expose: [1936,5672,15672]
+
+  rabbitmq2:
+    image: rabbitmq:3.7-management
+    hostname: rabbitmq2
+    environment: { "RABBITMQ_ERLANG_COOKIE": 12345 }
+    volumes: { "./rabbitmq.config": "/etc/rabbitmq/rabbitmq.config", "./cluster-entrypoint.sh": "/usr/local/bin/cluster-entrypoint.sh" }
+    command: sh -c "/usr/local/bin/cluster-entrypoint.sh"
+    expose: [1936,5672,15672]
+    links: { rabbitmq1: rabbitmq1 }
+    start_delay: 10
+  
+  rabbitmq3:
+    image: rabbitmq:3.7-management
+    hostname: rabbitmq3
+    environment: { "RABBITMQ_ERLANG_COOKIE": 12345 }
+    volumes: { "./rabbitmq.config": "/etc/rabbitmq/rabbitmq.config", "./cluster-entrypoint.sh": "/usr/local/bin/cluster-entrypoint.sh" }
+    command: sh -c "/usr/local/bin/cluster-entrypoint.sh"
+    expose: [1936,5672,15672]
+    links: { rabbitmq1: rabbitmq1 }
+    start_delay: 20
+
+network:
