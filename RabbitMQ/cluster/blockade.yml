@@ -27,3 +27,5 @@ containers:
     start_delay: 20
 
 network:
+  flaky: 2%
+  slow: 100ms 50ms 25% distribution normal

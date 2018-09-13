@@ -10,16 +10,6 @@ import time
 node_names = ['rabbitmq1', 'rabbitmq2', 'rabbitmq3']
 nodes = ['172.17.0.2', '172.17.0.3', '172.17.0.4']
 
-def get_node_ip(node_name):
-    index = 0
-    for node in node_names:
-        if node == node_name:
-            return nodes[index]
-
-        index +=1
-
-    return -1
-
 def get_node_index(node_name):
     index = 0
     for node in node_names:
@@ -74,7 +64,7 @@ for x in range(count):
         channel = connect()
         count += 1 # retry it
 
-time.sleep(5)
+time.sleep(10)
 print("Sent " + str(sent) + " messages")
 res = channel.queue_declare(queue=queue, durable=True)
 message_count = res.method.message_count
