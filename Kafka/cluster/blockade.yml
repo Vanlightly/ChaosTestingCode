@@ -18,9 +18,9 @@ containers:
       "KAFKA_BROKER_ID": 1, 
       "KAFKA_LOG4J_LOGGERS": "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO" }
     # uncomment if you want the data to survive resets of the cluster
-    #volumes: { "./volumes/kafka/01/data": "/var/lib/kafka/data" }
+    volumes: { "./volumes/kafka/01/data": "/var/lib/kafka/data" }
     links: { zk1: zk1 }
-    start_delay: 10
+    start_delay: 5
     
   kafka2:
     image: confluentinc/cp-kafka:5.0.0
@@ -33,9 +33,9 @@ containers:
       "KAFKA_BROKER_ID": 2,
       "KAFKA_LOG4J_LOGGERS": "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO" }
     # uncomment if you want the data to survive resets of the cluster
-    #volumes: { "./volumes/kafka/02/data": "/var/lib/kafka/data" }
+    volumes: { "./volumes/kafka/02/data": "/var/lib/kafka/data" }
     links: { zk1: zk1 }
-    start_delay: 15
+    start_delay: 10
 
   kafka3:
     image: confluentinc/cp-kafka:5.0.0
@@ -48,6 +48,9 @@ containers:
       "KAFKA_BROKER_ID": 3,
       "KAFKA_LOG4J_LOGGERS": "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO" }
     # uncomment if you want the data to survive resets of the cluster
-    #volumes: { "./volumes/kafka/03/data": "/var/lib/kafka/data" }
+    volumes: { "./volumes/kafka/03/data": "/var/lib/kafka/data" }
     links: { zk1: zk1 }
-    start_delay: 20
+    start_delay: 15
+
+network:
+  slow: 500ms 50ms 25% distribution normal

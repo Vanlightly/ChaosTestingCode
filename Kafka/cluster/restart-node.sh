@@ -1,5 +1,6 @@
 #!/bin/bash
 
+blockade stop $1
 blockade start $1
 
 echo "Acquiring container ids and ip addresses"

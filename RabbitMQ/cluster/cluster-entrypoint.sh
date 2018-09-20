@@ -2,9 +2,9 @@
 
 set -e
 
-if [ ! -f signal.txt ]; then
+if [ ! -f is-member-of-cluster.txt ]; then
 
-    touch signal.txt
+    touch is-member-of-cluster.txt
 
     # Start RMQ from entry point.
     # This will ensure that environment variables passed

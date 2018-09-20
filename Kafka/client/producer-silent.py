@@ -4,19 +4,6 @@ import sys
 from time import sleep
 import json
 
-last_tx = 0
-
-# def my_stats_callback(json_str):
-#     global last_tx
-#     data = json.loads(json_str)
-#     #print(data["topics"]["test1"]["partitions"]["0"]["msgs"])
-#     curr_tx = data["tx"]
-#     if curr_tx > last_tx:
-#         #print("Sent requests: " + str(curr_tx))
-#         last_tx = curr_tx
-
-    #print(str(data["topics"]["test1"]["partitions"]["0"]["leader"]))
-
 def delivery_report(err, msg):
     """ Called once for each message produced to indicate delivery result.
         Triggered by poll() or flush(). """
@@ -27,9 +14,6 @@ def delivery_report(err, msg):
         print(err)
     else:
         success += 1
-
-    if (success + fail) % 10000 == 0:
-        print("Success: " + str(success) + " Failed: " + str(fail))
 
 def printStats():
     global sent
@@ -42,9 +26,6 @@ def printStats():
 acks_mode = sys.argv[3]
 p = Producer({'bootstrap.servers': '172.17.0.3:9092,172.17.0.4:9093,172.17.0.5:9094',
     'message.send.max.retries': 0,
-    #'batch.num.messages': 1000,
-    #'stats_cb': my_stats_callback,
-    #'statistics.interval.ms': 100,
     'default.topic.config': { 'request.required.acks': acks_mode }})
 
 topic = sys.argv[4]
