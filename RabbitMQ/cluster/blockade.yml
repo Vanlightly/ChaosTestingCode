@@ -3,14 +3,20 @@ containers:
     image: rabbitmq:3.7-management
     hostname: rabbitmq1
     environment: { "RABBITMQ_ERLANG_COOKIE": 12345 }
-    #volumes: { "volumes/01/data": "/var/lib/rabbitmq/mnesia", "./rabbitmq.config": "/etc/rabbitmq/rabbitmq.config" }
+    volumes: { 
+      #"volumes/01/data": "/var/lib/rabbitmq/mnesia", 
+      "./rabbitmq.config": "/etc/rabbitmq/rabbitmq.config" 
+    }
     expose: [1936,5672,15672]
 
   rabbitmq2:
     image: rabbitmq:3.7-management
     hostname: rabbitmq2
     environment: { "RABBITMQ_ERLANG_COOKIE": 12345 }
-    #volumes: { "volumes/02/data": "/var/lib/rabbitmq/mnesia", "./rabbitmq.config": "/etc/rabbitmq/rabbitmq.config", "./cluster-entrypoint.sh": "/usr/local/bin/cluster-entrypoint.sh" }
+    volumes: { 
+      #"volumes/02/data": "/var/lib/rabbitmq/mnesia", 
+      "./rabbitmq.config": "/etc/rabbitmq/rabbitmq.config", 
+      "./cluster-entrypoint.sh": "/usr/local/bin/cluster-entrypoint.sh" }
     command: sh -c "/usr/local/bin/cluster-entrypoint.sh"
     expose: [1936,5672,15672]
     links: { rabbitmq1: rabbitmq1 }
@@ -20,7 +26,11 @@ containers:
     image: rabbitmq:3.7-management
     hostname: rabbitmq3
     environment: { "RABBITMQ_ERLANG_COOKIE": 12345 }
-    #volumes: { "volumes/03/data": "/var/lib/rabbitmq/mnesia", "./rabbitmq.config": "/etc/rabbitmq/rabbitmq.config", "./cluster-entrypoint.sh": "/usr/local/bin/cluster-entrypoint.sh" }
+    volumes: { 
+      # "volumes/03/data": "/var/lib/rabbitmq/mnesia", 
+      "./rabbitmq.config": "/etc/rabbitmq/rabbitmq.config", 
+      "./cluster-entrypoint.sh": "/usr/local/bin/cluster-entrypoint.sh" 
+    }
     command: sh -c "/usr/local/bin/cluster-entrypoint.sh"
     expose: [1936,5672,15672]
     links: { rabbitmq1: rabbitmq1 }
