@@ -1,0 +1,49 @@
+containers:
+  rabbitmq1:
+    image: rabbitmq:3.7-management
+    hostname: rabbitmq1
+    container_name: rabbitmq1
+    environment: { "RABBITMQ_ERLANG_COOKIE": 12345 }
+    volumes: { 
+      #"volumes/01/data": "/var/lib/rabbitmq/mnesia", 
+      "./rabbitmq.config": "/etc/rabbitmq/rabbitmq.config" }
+    expose: [1936,5672,15672]
+    # dns: ["172.17.0.2"]
+    # container_name: clusterwithdns_rabbitmq1.rabbitmq.docker
+
+  rabbitmq2:
+    image: rabbitmq:3.7-management
+    hostname: rabbitmq2
+    container_name: rabbitmq2
+    environment: { "RABBITMQ_ERLANG_COOKIE": 12345 }
+    volumes: { 
+      #"volumes/02/data": "/var/lib/rabbitmq/mnesia", 
+      "./rabbitmq.config": "/etc/rabbitmq/rabbitmq.config", 
+      "./cluster-entrypoint.sh": "/usr/local/bin/cluster-entrypoint.sh" }
+    command: sh -c "/usr/local/bin/cluster-entrypoint.sh"
+    expose: [1936,5672,15672]
+    links: { rabbitmq1: rabbitmq1 }
+    start_delay: 10
+    # dns: ["172.17.0.2"]
+    # container_name: clusterwithdns_rabbitmq2.rabbitmq.docker
+  
+  rabbitmq3:
+    image: rabbitmq:3.7-management
+    hostname: rabbitmq3
+    container_name: rabbitmq3
+    environment: { "RABBITMQ_ERLANG_COOKIE": 12345 }
+    volumes: { 
+      # "volumes/03/data": "/var/lib/rabbitmq/mnesia", 
+      "./rabbitmq.config": "/etc/rabbitmq/rabbitmq.config", 
+      "./cluster-entrypoint.sh": "/usr/local/bin/cluster-entrypoint.sh" 
+    }
+    command: sh -c "/usr/local/bin/cluster-entrypoint.sh"
+    expose: [1936,5672,15672]
+    links: { rabbitmq1: rabbitmq1 }
+    start_delay: 20
+    # dns: ["172.17.0.2"]
+
+network:
+  driver: udn
+  flaky: 2%
+  slow: 100ms 50ms 25% distribution normal
