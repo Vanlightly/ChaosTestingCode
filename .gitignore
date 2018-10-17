@@ -106,9 +106,19 @@ venv.bak/
 # blockade and virtualenv
 RabbitMQ/cluster/.blockade
 RabbitMQ/rabbitmq
+RabbitMQ/cluster/volumes
+
+RabbitMqUdn/cluster/.blockade
+RabbitMqUdn/venv-rabbit
+RabbitMqUdn/cluster/volumes
+
 Kafka/cluster/volumes
 Kafka/cluster/.blockade
 Kafka/cluster/kafka-env
 Kafka/client/kafkaclientenv
+
+Pulsar/cluster/.blockade
+Pulsar/automated/test-output
+Pulsar/venv-pulsar
 
 

@@ -1,0 +1,78 @@
+pulsar-admin clusters create cluster-1 \
+  --url http://pulsar1:8080 \
+  --broker-url pulsar://pulsar1:6650
+
+bash create-tenant.sh pulsar1 vanlightly
+bash create-namespace-with-retention.sh pulsar1 vanlightly ns1 4 3 2
+
+
+# show internal stats
+./pulsar-admin topics stats-internal persistent://vanlightly/cluster-1/ns1/test1
+{
+  "entriesAddedCounter" : 9,
+  "numberOfEntries" : 9,
+  "totalSize" : 441,
+  "currentLedgerEntries" : 9,
+  "currentLedgerSize" : 441,
+  "lastLedgerCreatedTimestamp" : "2018-10-04T12:41:38.91Z",
+  "waitingCursorsCount" : 0,
+  "pendingAddEntriesCount" : 0,
+  "lastConfirmedEntry" : "0:8",
+  "state" : "LedgerOpened",
+  "ledgers" : [ {
+    "ledgerId" : 0,
+    "entries" : 0,
+    "size" : 0,
+    "offloaded" : false
+  } ],
+  "cursors" : { }
+}
+
+./pulsar-admin topics info-internal persistent://vanlightly/cluster-1/ns1/test1
+{
+  "version": 1,
+  "creationDate": "2018-10-04T12:41:38.587Z",
+  "modificationDate": "2018-10-04T12:41:38.925Z",
+  "ledgers": [
+    {
+      "ledgerId": 0
+    }
+  ],
+  "cursors": {}
+}
+
+./pulsar-admin topics lookup persistent://vanlightly/cluster-1/ns1/test1
+"pulsar://pulsar3:6650"
+
+./pulsar-admin topics reset-cursor persistent://vanlightly/cluster-1/ns1/test1 -t 2h -s sub1
+<no output>
+
+./pulsar-admin topics peek-messages persistent://vanlightly/cluster-1/ns1/test1 -n 2 -s sub1
+Batch Message ID: 0:0:0
+Tenants:
+{
+  "X-Pulsar-num-batch-message" : "1",
+  "publish-time" : "2018-10-04T12:41:39.165Z"
+}
+         +-------------------------------------------------+
+         |  0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f |
++--------+-------------------------------------------------+----------------+
+|00000000| 48 65 6c 6c 6f 2d 31                            |Hello-1         |
++--------+-------------------------------------------------+----------------+
+-------------------------------------------------------------------------
+
+Batch Message ID: 0:1:0
+Tenants:
+{
+  "X-Pulsar-num-batch-message" : "1",
+  "publish-time" : "2018-10-04T12:41:40.195Z"
+}
+         +-------------------------------------------------+
+         |  0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f |
++--------+-------------------------------------------------+----------------+
+|00000000| 48 65 6c 6c 6f 2d 32                            |Hello-2         |
++--------+-------------------------------------------------+----------------+
+
+docker exec -it $CONTAINER_ID bin/pulsar-admin brokers namespaces cluster-1 --url pulsar1:8080 | if grep -q vanlightly; then echo pulsar1; fi
+docker exec -it $CONTAINER_ID bin/pulsar-admin brokers namespaces cluster-1 --url pulsar2:8080 | if grep -q vanlightly; then echo pulsar2; fi
+docker exec -it $CONTAINER_ID bin/pulsar-admin brokers namespaces cluster-1 --url pulsar3:8080 | if grep -q vanlightly; then echo pulsar3; fi

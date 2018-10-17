@@ -20,6 +20,7 @@ def get_node_index(node_name):
         index +=1
 
     return -1
+    
 mgmt_node_ip = nodes[get_node_index(mgmt_node)]
 r = requests.put('http://' + mgmt_node_ip + ':15672/api/queues/%2F/' + queue, 
         data = "{\"auto_delete\":false,\"durable\":true,\"arguments\":{},\"node\":\"" + queue_node + "\"}",

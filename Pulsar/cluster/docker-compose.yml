@@ -1,0 +1,130 @@
+version: '2'
+
+services:
+  zk1:
+    image: apachepulsar/pulsar
+    hostname: zk1
+    expose:
+      - 2181
+    environment:
+      - PULSAR_MEM=" -Xms512m -Xmx512m -XX:MaxDirectMemorySize=1g"
+    command: >
+      /bin/bash -c
+      "bin/apply-config-from-env.py conf/zookeeper.conf
+      && bin/pulsar zookeeper"
+  initialize-cluster-metadata:
+    image: apachepulsar/pulsar
+    depends_on:
+      - zk1
+    command: >
+      bin/pulsar initialize-cluster-metadata
+      --cluster cluster-1
+      --zookeeper zk1:2181
+      --configuration-store zk1:2181
+      --web-service-url http://pulsar1:8080
+      --broker-service-url pulsar://pulsar1:6650
+  bookie1:
+    image: apachepulsar/pulsar
+    hostname: bookie1
+    depends_on:
+      - initialize-cluster-metadata
+    environment:
+      - PULSAR_MEM=" -Xms512m -Xmx512m -XX:MaxDirectMemorySize=1g"
+      - dbStorage_writeCacheMaxSizeMb=256
+      - dbStorage_readAheadCacheMaxSizeMb=256
+      - zkServers=zk1:2181
+    command: >
+      /bin/bash -c
+      "sleep 5
+      && bin/apply-config-from-env.py conf/bookkeeper.conf
+      && bin/pulsar bookie"
+  bookie2:
+    image: apachepulsar/pulsar
+    hostname: bookie2
+    depends_on:
+      - initialize-cluster-metadata
+    environment:
+      - PULSAR_MEM=" -Xms512m -Xmx512m -XX:MaxDirectMemorySize=1g"
+      - dbStorage_writeCacheMaxSizeMb=256
+      - dbStorage_readAheadCacheMaxSizeMb=256
+      - zkServers=zk1:2181
+    command: >
+      /bin/bash -c
+      "sleep 15
+      && bin/apply-config-from-env.py conf/bookkeeper.conf
+      && bin/pulsar bookie"
+  bookie3:
+    image: apachepulsar/pulsar
+    hostname: bookie3
+    depends_on:
+      - initialize-cluster-metadata
+    environment:
+      - PULSAR_MEM=" -Xms512m -Xmx512m -XX:MaxDirectMemorySize=1g"
+      - dbStorage_writeCacheMaxSizeMb=256
+      - dbStorage_readAheadCacheMaxSizeMb=256
+      - zkServers=zk1:2181
+    command: >
+      /bin/bash -c
+      "sleep 15
+      && bin/apply-config-from-env.py conf/bookkeeper.conf
+      && bin/pulsar bookie"
+  pulsar1:
+    image: apachepulsar/pulsar
+    hostname: pulsar1
+    expose:
+      - 8080 
+      - 6650 
+    depends_on:
+      - bookie1
+    environment:
+      - PULSAR_MEM=" -Xms512m -Xmx512m -XX:MaxDirectMemorySize=1g"
+      - clusterName=cluster-1
+      - zookeeperServers=zk1:2181
+      - managedLedgerDefaultEnsembleSize=1
+      - managedLedgerDefaultWriteQuorum=1
+      - managedLedgerDefaultAckQuorum=1
+    command: >
+      /bin/bash -c
+      "sleep 20
+      && bin/apply-config-from-env.py conf/broker.conf
+      && bin/pulsar broker"
+  pulsar2:
+    image: apachepulsar/pulsar
+    hostname: pulsar2
+    expose:
+      - 8080 
+      - 6650 
+    depends_on:
+      - bookie1
+    environment:
+      - PULSAR_MEM=" -Xms512m -Xmx512m -XX:MaxDirectMemorySize=1g"
+      - clusterName=cluster-1
+      - zookeeperServers=zk1:2181
+      - managedLedgerDefaultEnsembleSize=1
+      - managedLedgerDefaultWriteQuorum=1
+      - managedLedgerDefaultAckQuorum=1
+    command: >
+      /bin/bash -c
+      "sleep 20 
+      && bin/apply-config-from-env.py conf/broker.conf
+      && bin/pulsar broker"
+  pulsar3:
+    image: apachepulsar/pulsar
+    hostname: pulsar3
+    expose:
+      - 8080 
+      - 6650 
+    depends_on:
+      - bookie1
+    environment:
+      - PULSAR_MEM=" -Xms512m -Xmx512m -XX:MaxDirectMemorySize=1g"
+      - clusterName=cluster-1
+      - zookeeperServers=zk1:2181
+      - managedLedgerDefaultEnsembleSize=1
+      - managedLedgerDefaultWriteQuorum=1
+      - managedLedgerDefaultAckQuorum=1
+    command: >
+      /bin/bash -c
+      "sleep 20 
+      && bin/apply-config-from-env.py conf/broker.conf
+      && bin/pulsar broker"
