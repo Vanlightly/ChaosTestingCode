@@ -4,6 +4,8 @@ containers:
     hostname: zk1
     container_name: zk1
     expose: [2181]
+    # environment:
+    #   - PULSAR_MEM=" -Xms512m -Xmx512m -XX:MaxDirectMemorySize=1g"
     command: >
       /bin/bash -c
       "bin/apply-config-from-env.py conf/zookeeper.conf
@@ -46,20 +48,34 @@ containers:
       "bin/apply-config-from-env.py conf/bookkeeper.conf
       && bin/pulsar bookie"
     start_delay: 10
-  bookie3:
-    image: apachepulsar/pulsar
-    hostname: bookie3
-    container_name: bookie3
-    environment: {
-      "dbStorage_writeCacheMaxSizeMb": 128,
-      "dbStorage_readAheadCacheMaxSizeMb": 128,
-      "zkServers": "zk1:2181"
-    }
-    command: >
-      /bin/bash -c
-      "bin/apply-config-from-env.py conf/bookkeeper.conf
-      && bin/pulsar bookie"
-    start_delay: 10
+  # bookie3:
+  #   image: apachepulsar/pulsar
+  #   hostname: bookie3
+  #   container_name: bookie3
+  #   environment: {
+  #     "dbStorage_writeCacheMaxSizeMb": 128,
+  #     "dbStorage_readAheadCacheMaxSizeMb": 128,
+  #     "zkServers": "zk1:2181"
+  #   }
+  #   command: >
+  #     /bin/bash -c
+  #     "bin/apply-config-from-env.py conf/bookkeeper.conf
+  #     && bin/pulsar bookie"
+  #   start_delay: 10
+  # bookie4:
+  #   image: apachepulsar/pulsar
+  #   hostname: bookie4
+  #   container_name: bookie4
+  #   environment: {
+  #     "dbStorage_writeCacheMaxSizeMb": 128,
+  #     "dbStorage_readAheadCacheMaxSizeMb": 128,
+  #     "zkServers": "zk1:2181"
+  #   }
+  #   command: >
+  #     /bin/bash -c
+  #     "bin/apply-config-from-env.py conf/bookkeeper.conf
+  #     && bin/pulsar bookie"
+  #   start_delay: 10
   pulsar1:
     image: apachepulsar/pulsar
     hostname: pulsar1

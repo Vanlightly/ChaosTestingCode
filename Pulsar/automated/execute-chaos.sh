@@ -17,7 +17,25 @@ case "$1" in
         echo "$broker killed!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
         ;;
     kill-bookie)
-        echo "TODO"
+        bookie=$(bash find-bookie-to-kill.sh)
+        echo "$bookie is in the current ledger ensemble, killing $bookie!!!!!!"
+        blockade kill "$bookie"
+        echo "$bookie killed!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+        ;;
+    isolate-broker-from-zk)
+        echo "$3 is the topic owner, isolating $3 from zookeepr!!!!!!"
+        blockade partition $4 $5
+        echo "$3 isolated!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+        ;;
+    isolate-bookie-from-zk)
+        echo "$3 is a bookie in the first ledger, isolating $3 from zookeepr!!!!!!"
+        blockade partition $4 $5
+        echo "$3 isolated!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+        ;;
+    custom-isolation)
+        echo "Performing custom isolation $3"
+        blockade partition $3
+        echo "isolated!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
         ;;
     *)
         echo "Chaos action not recognized"

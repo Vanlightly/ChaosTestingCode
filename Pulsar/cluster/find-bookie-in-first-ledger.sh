@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd ../cluster
+
 if $(docker ps | grep -q bookie1); then
     bookie1=$(echo $(bash get-node-ip.sh bookie1 | grep 172))
 fi 
@@ -24,7 +26,7 @@ if $(docker ps | grep -q bookie6); then
     bookie6=$(echo $(bash get-node-ip.sh bookie6 | grep 172))
 fi
 
-bash find-ensemble.sh pulsar1 $1 | while read line;
+bash find-ensemble.sh | while read line;
     do
         if $(echo "$line" | grep -q "$bookie1"); then
             echo bookie1;

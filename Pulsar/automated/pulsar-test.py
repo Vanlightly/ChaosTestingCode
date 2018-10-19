@@ -6,16 +6,7 @@ import subprocess
 from datetime import datetime
 import threading
 from collections import defaultdict
-
-chaos_action = sys.argv[1]
-topic_prefix = sys.argv[2]
-test_num = int(sys.argv[3])
-count = int(sys.argv[4])
-kill_mark = int(sys.argv[5])
-config = sys.argv[6].split('-')
-ensemble_size = config[0]
-write_quorum = config[1]
-ack_quorum = config[2]
+import re
 
 def log(text, to_file=False):
     global output_file
@@ -39,16 +30,113 @@ def get_proxy_ip():
     ip = output.decode('ascii').replace('\n', '')
     return ip
 
-def create_cluster(e, qw, qa):
-    subprocess.call(["./setup-test-run.sh", e, qw, qa])
+def create_cluster(e, qw, qa, brokers, bookies):
+    subprocess.call(["./setup-test-run.sh", e, qw, qa, brokers, bookies])
 
-def kill_broker():
-    global topic, chaos_action
-    subprocess.call(["./execute-chaos.sh", chaos_action, topic])
+def get_live_nodes():
+    bash_command = "bash ../cluster/list-live-nodes.sh"
+    process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
+    output, error = process.communicate()
+    nodes_line = output.decode('ascii').replace('\n', '')
+    return nodes_line.split(' ')
+
+def get_live_in_zk_brokers():
+    bash_command = "bash ../cluster/list-brokers.sh"
+    process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
+    output, error = process.communicate()
+    brokers_line = output.decode('ascii').replace('\n', '').replace('[', '').replace(']', '')
+    brokers_list = brokers_line.split(', ')
+    brokers = list()    
+    for broker in brokers_list:
+        brokers.append(broker.split(':')[0])
+
+    return brokers
+
+def get_live_broker():
+    brokers = get_live_in_zk_brokers()
+    return brokers[0]
+
+def get_owner_broker(topic):
+    live_broker = get_live_broker()
+    bash_command = f"bash ../cluster/find-topic-owner.sh {live_broker} {topic}"
+    process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
+    output, error = process.communicate()
+    owner = output.decode('ascii').replace('\n', '')
+    return owner
+
+def get_bookie_in_first_ledger():
+    live_broker = get_live_broker()
+    bash_command = "bash ../cluster/find-bookie-in-first-ledger.sh"
+    process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
+    output, error = process.communicate()
+    bookie = output.decode('ascii').replace('\n', '')
+    return bookie
+
+def get_last_confirmed_entry(topic):
+    broker = get_live_broker()
+    bash_command = f"bash ../cluster/find-last-bk-entry.sh {broker} {topic}"
+    process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
+    output, error = process.communicate()
+    lac_line = output.decode('ascii').replace('\n', '')
+    entry = int(lac_line.split(":")[1].replace("\"", "").replace(",", ""))
+    first = int(lac_line.split(":")[0].replace("\"", ""))
+    return [first, entry]
+
+def get_entry(msg_id):
+    id = str(msg_id)    .replace("(", "").replace(")", "").split(",")
+    first = int(id[0])
+    entry = int(id[1])
+    return [first, entry]
+
+def is_same_entry(last_entry, current_entry):
+    return last_entry[0] == current_entry[0] and last_entry[1] == current_entry[1]
+
+def get_isolate_from_zk_partitions(target_node, topic):
+    partition1 = list()
+    partition2 = list()
+
+    for node in get_live_nodes():
+        if node != "zk1":
+            partition1.append(node)
+
+    for node in get_live_nodes():
+        if node != target_node:
+            partition2.append(node)
+
+    partition1_arg = ",".join(partition1)
+    partition2_arg = ",".join(partition2)
+
+    return [target_node, partition1_arg, partition2_arg]
+
+def get_custom_partitions():
+    global chaos_action, partitions
+    # format is custom-isolation(node,node|node,node|..)
+    m = re.search('^custom-isolation\[(.+?)\]$', chaos_action)
+    if m:
+        p_text = m.group(1)
+        parts = p_text.split('|')
+        for i in range(0, len(parts)):
+            partitions.append(parts[i])
+    else:
+        log("Could not identify custom partitions in supplied argument")
+        sys.exit(1)
+
+def execute_chaos_action(topic, chaos_action, partitions):
+    if chaos_action == "isolate-broker-from-zk" or chaos_action == "isolate-bookie-from-zk":
+        subprocess.call(["./execute-chaos.sh", chaos_action, topic, partitions[0], partitions[1], partitions[2]])
+    elif chaos_action.startswith("custom-isolation"):
+        if len(partitions) == 0:
+            log("No custom partition supplied")
+            sys.exit(1)
+        
+        parts = " ".join(partitions)
+        subprocess.call(["./execute-chaos.sh", "custom-isolation", topic, parts])
+    else:
+        subprocess.call(["./execute-chaos.sh", chaos_action, topic])
     
 
 def send_callback(res, msg):
-    global messages_pos_acked, messages_neg_acked, send_count, ack_count, pos_ack_count, neg_ack_count, kill_mark, killed, topic
+    global messages_pos_acked, messages_neg_acked, send_count, ack_count, pos_ack_count, neg_ack_count, action_mark, action_performed, chaos_action, topic, partitions
     ack_count += 1
 
     if str(res) == "Ok":
@@ -63,13 +151,13 @@ def send_callback(res, msg):
     if ack_count % 50000 == 0:
         log(f"Send count: {str(send_count)} Ack count: {str(ack_count)} Pos: {str(pos_ack_count)} Neg: {str(neg_ack_count)}")    
 
-    if ack_count > kill_mark and killed == False:
-        killed = True
-        r = threading.Thread(target=kill_broker)
+    if ack_count > action_mark and action_performed == False:
+        action_performed = True
+        r = threading.Thread(target=execute_chaos_action,args=(topic, chaos_action, partitions))
         r.start()
     
-def produce(produer):
-    global send_count, ack_count, pos_ack_count, neg_ack_count
+def produce(producer):
+    global send_count, ack_count, pos_ack_count, neg_ack_count, chaos_action, partitions
 
     # send the first message synchronously, to ensure everything is running ok
     producer.send(str(send_count).encode('utf-8'))
@@ -77,6 +165,16 @@ def produce(produer):
     send_count += 1
     ack_count += 1
     pos_ack_count += 1
+
+    # perform slow to gather information now before fast message producing
+    if chaos_action == "isolate-broker-from-zk":
+        owner = get_owner_broker(topic)
+        partitions = get_isolate_from_zk_partitions(owner, topic)
+    elif chaos_action == "isolate-bookie-from-zk":
+        bookie = get_bookie_in_first_ledger()
+        partitions = get_isolate_from_zk_partitions(bookie, topic)
+    elif chaos_action.startswith("custom-isolation"):
+        get_custom_partitions()
 
     # send bulk of messages asynchronously in order to achieve high message rate
     while send_count < count-1:
@@ -94,49 +192,89 @@ def produce(produer):
     send_count += 1
     ack_count += 1
     pos_ack_count += 1
+    log(f"Send count: {str(send_count)} Ack count: {str(ack_count)} Pos: {str(pos_ack_count)} Neg: {str(neg_ack_count)}")    
 
 def read(reader):
-    global out_of_order, received_count, duplicate, messages_sent, test_run
-    final_msg_id = pulsar.MessageId.latest
-    msg = reader.read_next()
-    current = int(msg.data())
-    lastMsg = msg
-    received_count = 1
-    last = current
-    messages_sent[last].append(msg.message_id())
+    global out_of_order, received_count, duplicate, messages_sent, test_run, topic
+    last_confirmed = get_last_confirmed_entry(topic)
+    log(f"Last confirmed entry: {last_confirmed}")
 
-    while lastMsg.message_id() != final_msg_id:
+    msg = reader.read_next()
+    msg_id = msg.message_id()
+    msg_entry = get_entry(msg_id)
+    current_payload = int(msg.data())
+    lastMsg = msg
+    
+    received_count = 1
+    last_payload = current_payload
+    messages_sent[last_payload].append(msg_id)
+    reader_timeout = 10000
+
+    log(f"Start reading from {msg_id}")
+
+    while True:
         try:
-            msg = reader.read_next(10000)
-            current = int(msg.data())
-            messages_sent[current].append(msg.message_id())
+            msg = reader.read_next(reader_timeout)
+            msg_id = msg.message_id()
+            msg_entry = get_entry(msg_id)
+
+            # lower the wait time towards the end
+            if is_same_entry(last_confirmed, msg_entry):
+                reader_timeout = 10000
+            else:
+                reader_timeout = 60000
+            
+            current_payload = int(msg.data())
+            messages_sent[current_payload].append(msg_id)
                         
             received_count += 1
             if received_count % 50000 == 0:
-                log(f"Received: {received_count}")
+                log(f"Received: {received_count} Curr Entry: {msg_entry}")
                             
-            if last >= current:
-                line = f"{test_run}|{lastMsg.message_id()}|{str(last)}|{msg.message_id()}|{current}"
-                if len(messages_sent[current]) > 1:
+            if last_payload >= current_payload:
+                line = f"{test_run}|{lastMsg.message_id()}|{str(last_payload)}|{msg_id}|{current_payload}"
+                if len(messages_sent[current_payload]) > 1:
                     duplicate += 1
                     write_duplicate(line)
                 else:
                     out_of_order += 1
                     write_out_of_order(line)
 
-            last = current
+            last_payload = current_payload
             lastMsg = msg
         except Exception as ex:
             template = "An exception of type {0} occurred. Arguments:{1!r}"
             message = template.format(type(ex).__name__, ex.args)
+            
             if 'Pulsar error: TimeOut' in message:
                 break
+            else:
+                log(message)
     
-    if lastMsg.message_id() != final_msg_id:
-        log("Latest message reached")
-    else:
-        log(f"Latest message not reached. Last read: {lastMsg.message_id()}, latest in topic is: {final_msg_id}")
+    log(f"Read phase complete with message {msg.message_id()}")
 
+def show_help():
+    f=open("help", "r")    
+    contents =f.read()
+    print(contents)
+
+chaos_action = sys.argv[1]
+
+if chaos_action == "help":
+    show_help()
+    sys.exit(0)
+    
+topic_prefix = sys.argv[2]
+test_num = int(sys.argv[3])
+count = int(sys.argv[4])
+action_mark = int(sys.argv[5])
+bk_config = sys.argv[6].split('-')
+ensemble_size = bk_config[0]
+write_quorum = bk_config[1]
+ack_quorum = bk_config[2]
+node_counts = sys.argv[7].split('-')
+brokers = node_counts[0]
+bookies = node_counts[1]
 
 test_run = 1
 
@@ -157,18 +295,21 @@ while test_run <= test_num:
 
     # prepare cluster phase ---------------
     topic = topic_prefix + "_" + str(test_run)
-    create_cluster(ensemble_size, write_quorum, ack_quorum)
+    create_cluster(ensemble_size, write_quorum, ack_quorum, brokers, bookies)
 
     # run test
     send_count = 0
     ack_count = 0
     pos_ack_count = 0
     neg_ack_count = 0
-    killed = False
+    action_performed = False
 
     log(f"", True)
     log(f"Test Run #{test_run} on topic {topic}  ------------", True)
 
+    # - CHAOS VARIABLES
+    partitions = list()
+        
     # - WRITE PHASE --------------------
     proxy_ip = get_proxy_ip()
     messages_sent = defaultdict(list)
@@ -205,7 +346,6 @@ while test_run <= test_num:
     out_of_order = 0
     duplicate = 0
     message_id = pulsar.MessageId.earliest
-    
     conn_attempts = 1
 
     while True:
@@ -223,6 +363,10 @@ while test_run <= test_num:
                 log("Failed to connect, will retry")
         
             conn_attempts += 1
+
+    if chaos_action == "kill-bookie":
+        log("Waiting for 20 seconds before starting reader")
+        time.sleep(20)
 
     try:
         read(reader)
