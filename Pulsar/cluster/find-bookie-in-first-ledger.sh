@@ -3,27 +3,27 @@
 cd ../cluster
 
 if $(docker ps | grep -q bookie1); then
-    bookie1=$(echo $(bash get-node-ip.sh bookie1 | grep 172))
+    bookie1=$(echo $(bash get-node-ip.sh bookie1))
 fi 
 
 if $(docker ps | grep -q bookie2); then
-    bookie2=$(echo $(bash get-node-ip.sh bookie2 | grep 172))
+    bookie2=$(echo $(bash get-node-ip.sh bookie2))
 fi 
 
 if $(docker ps | grep -q bookie3); then
-    bookie3=$(echo $(bash get-node-ip.sh bookie3 | grep 172))
+    bookie3=$(echo $(bash get-node-ip.sh bookie3))
 fi 
 
 if $(docker ps | grep -q bookie4); then
-    bookie4=$(echo $(bash get-node-ip.sh bookie4 | grep 172))
+    bookie4=$(echo $(bash get-node-ip.sh bookie4))
 fi 
 
 if $(docker ps | grep -q bookie5); then
-    bookie5=$(echo $(bash get-node-ip.sh bookie5 | grep 172))
+    bookie5=$(echo $(bash get-node-ip.sh bookie5))
 fi 
 
 if $(docker ps | grep -q bookie6); then
-    bookie6=$(echo $(bash get-node-ip.sh bookie6 | grep 172))
+    bookie6=$(echo $(bash get-node-ip.sh bookie6))
 fi
 
 bash find-ensemble.sh | while read line;
@@ -47,6 +47,4 @@ bash find-ensemble.sh | while read line;
             echo bookie6;
             exit 0;
         fi
-
-        echo "$line"
     done

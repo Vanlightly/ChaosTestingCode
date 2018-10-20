@@ -30,8 +30,8 @@ def get_proxy_ip():
     ip = output.decode('ascii').replace('\n', '')
     return ip
 
-def create_cluster(e, qw, qa, brokers, bookies):
-    subprocess.call(["./setup-test-run.sh", e, qw, qa, brokers, bookies])
+def create_cluster(e, qw, qa, brokers, bookies, deduplication_enabled):
+    subprocess.call(["./setup-test-run.sh", e, qw, qa, brokers, bookies, deduplication_enabled])
 
 def get_live_nodes():
     bash_command = "bash ../cluster/list-live-nodes.sh"
@@ -72,12 +72,23 @@ def get_bookie_in_first_ledger():
     bookie = output.decode('ascii').replace('\n', '')
     return bookie
 
-def get_last_confirmed_entry(topic):
+def get_last_confirmed_entry(topic, attempt=1):
     broker = get_live_broker()
     bash_command = f"bash ../cluster/find-last-bk-entry.sh {broker} {topic}"
     process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
     lac_line = output.decode('ascii').replace('\n', '')
+    print(f"LCE. broker {broker} lac_line {lac_line}")
+
+    if "No such container" in lac_line:
+        # most likely, zk has a stale view on the world, let it catch up and try once more
+        if attempt > 3:
+            log("live broker is not really live. Aborting test")
+        else:
+            time.sleep(5)
+            attempt += 1
+            return get_last_confirmed_entry(topic, attempt)
+
     entry = int(lac_line.split(":")[1].replace("\"", "").replace(",", ""))
     first = int(lac_line.split(":")[0].replace("\"", ""))
     return [first, entry]
@@ -90,6 +101,16 @@ def get_entry(msg_id):
 
 def is_same_entry(last_entry, current_entry):
     return last_entry[0] == current_entry[0] and last_entry[1] == current_entry[1]
+
+def get_kill_count():
+    global chaos_action
+    # format is action[count]
+    m = re.search('.+\[(.+?)\]$', chaos_action)
+    if m:
+        return m.group(1)
+    else:
+        log("Could not identify kill count")
+        sys.exit(1)
 
 def get_isolate_from_zk_partitions(target_node, topic):
     partition1 = list()
@@ -131,6 +152,9 @@ def execute_chaos_action(topic, chaos_action, partitions):
         
         parts = " ".join(partitions)
         subprocess.call(["./execute-chaos.sh", "custom-isolation", topic, parts])
+    elif chaos_action.startswith("kill-bookies"):
+        kill_count = get_kill_count()
+        subprocess.call(["./execute-chaos.sh", "kill-bookies", topic, kill_count])
     else:
         subprocess.call(["./execute-chaos.sh", chaos_action, topic])
     
@@ -215,6 +239,7 @@ def read(reader):
     while True:
         try:
             msg = reader.read_next(reader_timeout)
+            received_count += 1
             msg_id = msg.message_id()
             msg_entry = get_entry(msg_id)
 
@@ -227,7 +252,6 @@ def read(reader):
             current_payload = int(msg.data())
             messages_sent[current_payload].append(msg_id)
                         
-            received_count += 1
             if received_count % 50000 == 0:
                 log(f"Received: {received_count} Curr Entry: {msg_entry}")
                             
@@ -275,6 +299,7 @@ ack_quorum = bk_config[2]
 node_counts = sys.argv[7].split('-')
 brokers = node_counts[0]
 bookies = node_counts[1]
+deduplication_enabled = sys.argv[8]
 
 test_run = 1
 
@@ -295,7 +320,7 @@ while test_run <= test_num:
 
     # prepare cluster phase ---------------
     topic = topic_prefix + "_" + str(test_run)
-    create_cluster(ensemble_size, write_quorum, ack_quorum, brokers, bookies)
+    create_cluster(ensemble_size, write_quorum, ack_quorum, brokers, bookies, deduplication_enabled)
 
     # run test
     send_count = 0
@@ -311,16 +336,23 @@ while test_run <= test_num:
     partitions = list()
         
     # - WRITE PHASE --------------------
+    log("-------------------------------------------------")
+    log("WRITE PHASE")
+    log("-------------------------------------------------")
     proxy_ip = get_proxy_ip()
     messages_sent = defaultdict(list)
     messages_pos_acked = set()
     messages_neg_acked = set()
+    send_timeout = 30000
+    if deduplication_enabled == "true":
+        send_timeout = 0
     client = pulsar.Client(f'pulsar://{proxy_ip}:6650')
     producer = client.create_producer(f'persistent://vanlightly/cluster-1/ns1/{topic}',
                         block_if_queue_full=True,
                         batching_enabled=True,
                         batching_max_publish_delay_ms=10,
                         max_pending_messages=1000000, #avoid producer slowdown after broker fail-overs
+                        send_timeout_millis=send_timeout,
                         properties={
                             "producer-name": "test-producer-name",
                             "producer-id": "test-producer-id"
@@ -342,6 +374,10 @@ while test_run <= test_num:
         client.close()
 
     # - READ PHASE --------------------
+    time.sleep(10)
+    log("-------------------------------------------------")
+    log("READ PHASE")
+    log("-------------------------------------------------")
     received_count = 0
     out_of_order = 0
     duplicate = 0
@@ -364,10 +400,6 @@ while test_run <= test_num:
         
             conn_attempts += 1
 
-    if chaos_action == "kill-bookie":
-        log("Waiting for 20 seconds before starting reader")
-        time.sleep(20)
-
     try:
         read(reader)
     except KeyboardInterrupt:
@@ -379,7 +411,9 @@ while test_run <= test_num:
     not_received = 0
     received_no_ack = 0
     msgs_with_dups = 0
+    received = 0
     for msg_val, msg_ids in messages_sent.items():
+        received += len(msg_ids)
         if len(msg_ids) == 0 and msg_val in messages_pos_acked:
             not_received += 1
         elif len(msg_ids) == 1 and msg_val not in messages_pos_acked:
@@ -392,7 +426,7 @@ while test_run <= test_num:
     log(f"Final ack count: {str(ack_count)}", True)
     log(f"Final positive ack count: {str(pos_ack_count)}", True)
     log(f"Final negative ack count: {str(neg_ack_count)}", True)
-    log(f"Messages received: {str(received_count)}", True)
+    log(f"Messages received: {str(received)}", True)
     log(f"Acked messages missing: {str(not_received)}", True)
     log(f"Non-acked messages received: {str(received_no_ack)}", True)
     log(f"Out-of-order: {str(out_of_order)}", True)

@@ -60,34 +60,6 @@ containers:
       "bin/apply-config-from-env.py conf/bookkeeper.conf
       && bin/pulsar bookie"
     start_delay: 10
-  bookie4:
-    image: apachepulsar/pulsar
-    hostname: bookie4
-    container_name: bookie4
-    environment: {
-      "dbStorage_writeCacheMaxSizeMb": 128,
-      "dbStorage_readAheadCacheMaxSizeMb": 128,
-      "zkServers": "zk1:2181"
-    }
-    command: >
-      /bin/bash -c
-      "bin/apply-config-from-env.py conf/bookkeeper.conf
-      && bin/pulsar bookie"
-    start_delay: 10
-  bookie5:
-    image: apachepulsar/pulsar
-    hostname: bookie5
-    container_name: bookie5
-    environment: {
-      "dbStorage_writeCacheMaxSizeMb": 128,
-      "dbStorage_readAheadCacheMaxSizeMb": 128,
-      "zkServers": "zk1:2181"
-    }
-    command: >
-      /bin/bash -c
-      "bin/apply-config-from-env.py conf/bookkeeper.conf
-      && bin/pulsar bookie"
-    start_delay: 10
   pulsar1:
     image: apachepulsar/pulsar
     hostname: pulsar1
@@ -98,7 +70,8 @@ containers:
       "zookeeperServers": "zk1:2181",
       "managedLedgerDefaultEnsembleSize": 2,
       "managedLedgerDefaultWriteQuorum": 2,
-      "managedLedgerDefaultAckQuorum": 1
+      "managedLedgerDefaultAckQuorum": 1,
+      "brokerDeduplicationEnabled": true
     }
     command: >
       /bin/bash -c
@@ -115,7 +88,8 @@ containers:
       "zookeeperServers": "zk1:2181",
       "managedLedgerDefaultEnsembleSize": 2,
       "managedLedgerDefaultWriteQuorum": 2,
-      "managedLedgerDefaultAckQuorum": 1
+      "managedLedgerDefaultAckQuorum": 1,
+      "brokerDeduplicationEnabled": true
     }
     command: >
       /bin/bash -c
@@ -132,7 +106,8 @@ containers:
       "zookeeperServers": "zk1:2181",
       "managedLedgerDefaultEnsembleSize": 2,
       "managedLedgerDefaultWriteQuorum": 2,
-      "managedLedgerDefaultAckQuorum": 1
+      "managedLedgerDefaultAckQuorum": 1,
+      "brokerDeduplicationEnabled": true
     }
     command: >
       /bin/bash -c

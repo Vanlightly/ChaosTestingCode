@@ -1,0 +1,2 @@
+pulsar-client==2.1.1
+blockade==0.4.0

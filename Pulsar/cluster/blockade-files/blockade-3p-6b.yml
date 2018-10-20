@@ -88,6 +88,20 @@ containers:
       "bin/apply-config-from-env.py conf/bookkeeper.conf
       && bin/pulsar bookie"
     start_delay: 10
+  bookie6:
+    image: apachepulsar/pulsar
+    hostname: bookie6
+    container_name: bookie6
+    environment: {
+      "dbStorage_writeCacheMaxSizeMb": 128,
+      "dbStorage_readAheadCacheMaxSizeMb": 128,
+      "zkServers": "zk1:2181"
+    }
+    command: >
+      /bin/bash -c
+      "bin/apply-config-from-env.py conf/bookkeeper.conf
+      && bin/pulsar bookie"
+    start_delay: 10
   pulsar1:
     image: apachepulsar/pulsar
     hostname: pulsar1

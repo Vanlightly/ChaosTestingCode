@@ -12,30 +12,53 @@ case "$1" in
         ;;
     kill-broker)
         broker=$(bash find-topic-owner.sh pulsar1 "$2")
+        echo "-------------------------------------------------"
         echo "$broker is the topic owner, killing $broker!!!!!!"
+        echo "-------------------------------------------------"
         blockade kill "$broker"
-        echo "$broker killed!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+        echo "-------------------------------------------------"
+        echo "$broker KILLED!"
+        echo "-------------------------------------------------"
         ;;
     kill-bookie)
-        bookie=$(bash find-bookie-to-kill.sh)
+        bookie=$(bash find-bookie-in-first-ledger.sh)
+        echo "-------------------------------------------------"
         echo "$bookie is in the current ledger ensemble, killing $bookie!!!!!!"
+        echo "-------------------------------------------------"
         blockade kill "$bookie"
-        echo "$bookie killed!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+        echo "-------------------------------------------------"
+        echo "$bookie KILLED!";
+        echo "-------------------------------------------------"
+        ;;
+    kill-bookies)
+        echo "-------------------------------------------------"
+        echo "Identifing first $3 bookies in ensemble"
+        echo "-------------------------------------------------"
+        blockade kill $(bash find-bookies-in-first-ledger.sh $3)
+        echo "-------------------------------------------------"
+        echo "$3 BOOKIES KILLED!";
+        echo "-------------------------------------------------"
         ;;
     isolate-broker-from-zk)
         echo "$3 is the topic owner, isolating $3 from zookeepr!!!!!!"
         blockade partition $4 $5
-        echo "$3 isolated!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+        echo "-------------------------------------------------"
+        echo "$3 ISOLATED!";
+        echo "-------------------------------------------------"
         ;;
     isolate-bookie-from-zk)
         echo "$3 is a bookie in the first ledger, isolating $3 from zookeepr!!!!!!"
         blockade partition $4 $5
-        echo "$3 isolated!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+        echo "-------------------------------------------------"
+        echo "$3 ISOLATED!";
+        echo "-------------------------------------------------"
         ;;
     custom-isolation)
         echo "Performing custom isolation $3"
         blockade partition $3
-        echo "isolated!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+        echo "-------------------------------------------------"
+        echo "ISOLATED!"
+        echo "-------------------------------------------------"
         ;;
     *)
         echo "Chaos action not recognized"
