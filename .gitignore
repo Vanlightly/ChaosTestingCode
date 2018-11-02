@@ -116,6 +116,9 @@ Kafka/cluster/volumes
 Kafka/cluster/.blockade
 Kafka/cluster/kafka-env
 Kafka/client/kafkaclientenv
+Kafka/venv-kafka
+Kafka/automated/test-output/*
+Kafka/automated/prodcuer-output/*
 
 Pulsar/cluster/.blockade
 Pulsar/automated/test-output

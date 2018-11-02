@@ -53,4 +53,4 @@ containers:
     start_delay: 15
 
 network:
-  slow: 250ms 50ms 25% distribution normal
+  slow: 20ms 

@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # $1 action
-# $2 topic
-# $3 verbose logging
+# $2 action specific argument
 
 cd ../cluster
 
@@ -18,6 +17,24 @@ case "$1" in
         blockade kill "$broker"
         echo "-------------------------------------------------"
         echo "$broker KILLED!"
+        echo "-------------------------------------------------"
+        ;;
+    kill-specific-node)
+        echo "-------------------------------------------------"
+        echo "Killing $2!"
+        echo "-------------------------------------------------"
+        blockade kill "$2"
+        echo "-------------------------------------------------"
+        echo "$2 KILLED!"
+        echo "-------------------------------------------------"
+        ;;
+    start-specific-node)
+        echo "-------------------------------------------------"
+        echo "Starting $2!"
+        echo "-------------------------------------------------"
+        blockade start "$2"
+        echo "-------------------------------------------------"
+        echo "$2 STARTED!"
         echo "-------------------------------------------------"
         ;;
     kill-bookie)
@@ -58,6 +75,13 @@ case "$1" in
         blockade partition $3
         echo "-------------------------------------------------"
         echo "ISOLATED!"
+        echo "-------------------------------------------------"
+        ;;
+    resolve-partitions)
+        echo "Resolving partitions"
+        blockade join
+        echo "-------------------------------------------------"
+        echo "PARTITION RESOLVED!"
         echo "-------------------------------------------------"
         ;;
     *)

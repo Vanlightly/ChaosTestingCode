@@ -7,6 +7,7 @@ from datetime import datetime
 import threading
 from collections import defaultdict
 import re
+from gather_info_functions import *
 
 def log(text, to_file=False):
     global output_file
@@ -23,75 +24,8 @@ def write_out_of_order(line):
     global out_of_order_file
     out_of_order_file.write(line + '\n')
 
-def get_proxy_ip():
-    bash_command = "bash ../cluster/get-node-ip.sh proxy"
-    process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
-    output, error = process.communicate()
-    ip = output.decode('ascii').replace('\n', '')
-    return ip
-
 def create_cluster(e, qw, qa, brokers, bookies, deduplication_enabled):
     subprocess.call(["./setup-test-run.sh", e, qw, qa, brokers, bookies, deduplication_enabled])
-
-def get_live_nodes():
-    bash_command = "bash ../cluster/list-live-nodes.sh"
-    process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
-    output, error = process.communicate()
-    nodes_line = output.decode('ascii').replace('\n', '')
-    return nodes_line.split(' ')
-
-def get_live_in_zk_brokers():
-    bash_command = "bash ../cluster/list-brokers.sh"
-    process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
-    output, error = process.communicate()
-    brokers_line = output.decode('ascii').replace('\n', '').replace('[', '').replace(']', '')
-    brokers_list = brokers_line.split(', ')
-    brokers = list()    
-    for broker in brokers_list:
-        brokers.append(broker.split(':')[0])
-
-    return brokers
-
-def get_live_broker():
-    brokers = get_live_in_zk_brokers()
-    return brokers[0]
-
-def get_owner_broker(topic):
-    live_broker = get_live_broker()
-    bash_command = f"bash ../cluster/find-topic-owner.sh {live_broker} {topic}"
-    process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
-    output, error = process.communicate()
-    owner = output.decode('ascii').replace('\n', '')
-    return owner
-
-def get_bookie_in_first_ledger():
-    live_broker = get_live_broker()
-    bash_command = "bash ../cluster/find-bookie-in-first-ledger.sh"
-    process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
-    output, error = process.communicate()
-    bookie = output.decode('ascii').replace('\n', '')
-    return bookie
-
-def get_last_confirmed_entry(topic, attempt=1):
-    broker = get_live_broker()
-    bash_command = f"bash ../cluster/find-last-bk-entry.sh {broker} {topic}"
-    process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
-    output, error = process.communicate()
-    lac_line = output.decode('ascii').replace('\n', '')
-    print(f"LCE. broker {broker} lac_line {lac_line}")
-
-    if "No such container" in lac_line:
-        # most likely, zk has a stale view on the world, let it catch up and try once more
-        if attempt > 3:
-            log("live broker is not really live. Aborting test")
-        else:
-            time.sleep(5)
-            attempt += 1
-            return get_last_confirmed_entry(topic, attempt)
-
-    entry = int(lac_line.split(":")[1].replace("\"", "").replace(",", ""))
-    first = int(lac_line.split(":")[0].replace("\"", ""))
-    return [first, entry]
 
 def get_entry(msg_id):
     id = str(msg_id)    .replace("(", "").replace(")", "").split(",")

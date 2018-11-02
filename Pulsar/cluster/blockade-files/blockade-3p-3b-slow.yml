@@ -1,0 +1,141 @@
+containers:
+  zk1:
+    image: apachepulsar/pulsar
+    hostname: zk1
+    container_name: zk1
+    expose: [2181]
+    command: >
+      /bin/bash -c
+      "bin/apply-config-from-env.py conf/zookeeper.conf
+      && bin/pulsar zookeeper"
+  initialize-cluster-metadata:
+    image: apachepulsar/pulsar
+    command: >
+      bin/pulsar initialize-cluster-metadata
+      --cluster cluster-1
+      --zookeeper zk1:2181
+      --configuration-store zk1:2181
+      --web-service-url http://proxy:8080
+      --broker-service-url pulsar://proxy:6650
+    start_delay: 5
+  bookie1:
+    image: apachepulsar/pulsar
+    hostname: bookie1
+    container_name: bookie1
+    environment: {
+      "dbStorage_writeCacheMaxSizeMb": 128,
+      "dbStorage_readAheadCacheMaxSizeMb": 128,
+      "zkServers": "zk1:2181"
+    }
+    command: >
+      /bin/bash -c
+      "bin/apply-config-from-env.py conf/bookkeeper.conf
+      && bin/pulsar bookie"
+    start_delay: 10
+  bookie2:
+    image: apachepulsar/pulsar
+    hostname: bookie2
+    container_name: bookie2
+    environment: {
+      "dbStorage_writeCacheMaxSizeMb": 128,
+      "dbStorage_readAheadCacheMaxSizeMb": 128,
+      "zkServers": "zk1:2181"
+    }
+    command: >
+      /bin/bash -c
+      "bin/apply-config-from-env.py conf/bookkeeper.conf
+      && bin/pulsar bookie"
+    start_delay: 10
+  bookie3:
+    image: apachepulsar/pulsar
+    hostname: bookie3
+    container_name: bookie3
+    environment: {
+      "dbStorage_writeCacheMaxSizeMb": 128,
+      "dbStorage_readAheadCacheMaxSizeMb": 128,
+      "zkServers": "zk1:2181"
+    }
+    command: >
+      /bin/bash -c
+      "bin/apply-config-from-env.py conf/bookkeeper.conf
+      && bin/pulsar bookie"
+    start_delay: 10
+  pulsar1:
+    image: apachepulsar/pulsar
+    hostname: pulsar1
+    container_name: pulsar1
+    expose: [8080, 6650]
+    environment: {
+      "clusterName": "cluster-1",
+      "zookeeperServers": "zk1:2181",
+      "managedLedgerDefaultEnsembleSize": 2,
+      "managedLedgerDefaultWriteQuorum": 2,
+      "managedLedgerDefaultAckQuorum": 1
+    }
+    command: >
+      /bin/bash -c
+      "bin/apply-config-from-env.py conf/broker.conf
+      && bin/pulsar broker"
+    start_delay: 15
+  pulsar2:
+    image: apachepulsar/pulsar
+    hostname: pulsar2
+    container_name: pulsar2
+    expose: [8080, 6650]
+    environment: {
+      "clusterName": "cluster-1",
+      "zookeeperServers": "zk1:2181",
+      "managedLedgerDefaultEnsembleSize": 2,
+      "managedLedgerDefaultWriteQuorum": 2,
+      "managedLedgerDefaultAckQuorum": 1
+    }
+    command: >
+      /bin/bash -c
+      "bin/apply-config-from-env.py conf/broker.conf
+      && bin/pulsar broker"
+      start_delay: 15
+  pulsar3:
+    image: apachepulsar/pulsar
+    hostname: pulsar3
+    container_name: pulsar3
+    expose: [8080, 6650]
+    environment: {
+      "clusterName": "cluster-1",
+      "zookeeperServers": "zk1:2181",
+      "managedLedgerDefaultEnsembleSize": 2,
+      "managedLedgerDefaultWriteQuorum": 2,
+      "managedLedgerDefaultAckQuorum": 1
+    }
+    command: >
+      /bin/bash -c
+      "bin/apply-config-from-env.py conf/broker.conf
+      && bin/pulsar broker"
+    start_delay: 15
+
+  proxy:
+    image: apachepulsar/pulsar
+    hostname: proxy
+    container_name: proxy
+    expose: [8080, 6650]
+    environment: {
+      "zookeeperServers": "zk1:2181",
+      "configurationStoreServers": "zk1:2181"
+    }
+    command: >
+      /bin/bash -c
+      "bin/apply-config-from-env.py conf/proxy.conf
+      && bin/pulsar proxy"
+    start_delay: 20
+  
+  # dashboard:
+  #   image: apachepulsar/pulsar-dashboard
+  #   hostname: dashboard
+  #   container_name: dashboard
+  #   expose: [80]
+  #   environment: {
+  #     "SERVICE_URL": "http://proxy:8080"
+  #   }
+
+network:
+  driver: udn
+  slow: 100ms

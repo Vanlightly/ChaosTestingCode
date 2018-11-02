@@ -53,8 +53,8 @@ acks_mode = sys.argv[3]
 p = Producer({'bootstrap.servers': '172.17.0.3:9092,172.17.0.4:9093,172.17.0.5:9094',
     'message.send.max.retries': 0,
     #'batch.num.messages': 1000,
-    'stats_cb': my_stats_callback,
-    'statistics.interval.ms': 1000,
+    #'stats_cb': my_stats_callback,
+    #'statistics.interval.ms': 1000,
     'default.topic.config': { 'request.required.acks': acks_mode }})
 
 topic = sys.argv[4]

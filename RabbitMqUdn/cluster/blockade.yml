@@ -41,7 +41,6 @@ containers:
     expose: [1936,5672,15672]
     links: { rabbitmq1: rabbitmq1 }
     start_delay: 20
-    # dns: ["172.17.0.2"]
 
 network:
   driver: udn
