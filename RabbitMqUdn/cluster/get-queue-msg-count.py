@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import requests
 import json
 import sys
@@ -11,7 +9,7 @@ mgmt_node = sys.argv[1]
 queue = sys.argv[2]
 
 def get_node_ip(node_name):
-    bash_command = "bash ../cluster/get-node-ip.sh " + node_name
+    bash_command = "bash get-node-ip.sh " + node_name
     process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
     ip = output.decode('ascii').replace('\n', '')

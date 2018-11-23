@@ -70,8 +70,7 @@ containers:
       "zookeeperServers": "zk1:2181",
       "managedLedgerDefaultEnsembleSize": 2,
       "managedLedgerDefaultWriteQuorum": 2,
-      "managedLedgerDefaultAckQuorum": 1,
-      "brokerDeduplicationEnabled": true
+      "managedLedgerDefaultAckQuorum": 1
     }
     command: >
       /bin/bash -c
@@ -88,8 +87,7 @@ containers:
       "zookeeperServers": "zk1:2181",
       "managedLedgerDefaultEnsembleSize": 2,
       "managedLedgerDefaultWriteQuorum": 2,
-      "managedLedgerDefaultAckQuorum": 1,
-      "brokerDeduplicationEnabled": true
+      "managedLedgerDefaultAckQuorum": 1
     }
     command: >
       /bin/bash -c
@@ -106,8 +104,7 @@ containers:
       "zookeeperServers": "zk1:2181",
       "managedLedgerDefaultEnsembleSize": 2,
       "managedLedgerDefaultWriteQuorum": 2,
-      "managedLedgerDefaultAckQuorum": 1,
-      "brokerDeduplicationEnabled": true
+      "managedLedgerDefaultAckQuorum": 1
     }
     command: >
       /bin/bash -c
@@ -141,4 +138,5 @@ containers:
 
 network:
   driver: udn
-  slow: 20ms
+  flaky: 2%
+  slow: 100ms 50ms 25% distribution normal
