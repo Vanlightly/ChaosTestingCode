@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys
 from command_args import get_args, get_mandatory_arg, get_optional_arg
-from publisher import RabbitPublisher
+from RabbitPublisher import RabbitPublisher
 
 def main():
     args = get_args(sys.argv)

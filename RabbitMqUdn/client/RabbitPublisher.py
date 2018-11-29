@@ -17,6 +17,7 @@ class RabbitPublisher(object):
 
         self.message_type = ""
         self.exchange = ""   
+        self.exchanges = list()
         self.routing_key = ""
         self.count = 0
         self.state_count = 0
@@ -138,6 +139,8 @@ class RabbitPublisher(object):
         rk = self.routing_key
         body = ""
         large_msg = self.repeat_to_length("1234567890", 1000)
+        curr_exchange = 0
+        send_to_exchange = None
         
         while self.curr_pos < self.total:
             if self._channel.is_open:
@@ -163,7 +166,16 @@ class RabbitPublisher(object):
                 else:
                     body = "hello"
                 
-                self._channel.basic_publish(exchange=self.exchange, 
+                if self.exchange != None:
+                    send_to_exchange = self.exchange
+                else:
+                    if curr_exchange >= len(self.exchanges):
+                        curr_exchange = 0
+                    
+                    send_to_exchange = self.exchanges[curr_exchange]
+                    curr_exchange += 1
+                    
+                self._channel.basic_publish(exchange=send_to_exchange, 
                                     routing_key=rk,
                                     body=body,
                                     mandatory=True,
@@ -227,7 +239,7 @@ class RabbitPublisher(object):
         elif isinstance(frame.method, spec.Basic.Return):
             print("Undeliverable message")
         
-        curr_ack = int((self.pos_acks + self.neg_acks) / 10000)
+        curr_ack = int((self.pos_acks + self.neg_acks) / 100)
         if curr_ack > self.last_ack:
             print(f"Pos acks: {self.pos_acks} Neg acks: {self.neg_acks} Undeliverable: {self.undeliverable}")
             self.last_ack = curr_ack
@@ -240,6 +252,10 @@ class RabbitPublisher(object):
     def publish_direct(self, queue, count, state_count, dup_rate, message_type):
         self.publish("", queue, count, state_count, dup_rate, message_type)
     
+    def publish_to_exchanges(self, exchanges, routing_key, count, state_count, dup_rate, message_type):
+        self.exchanges = exchanges
+        self.publish(None, routing_key, count, state_count, dup_rate, message_type)
+
     def publish(self, exchange, routing_key, count, state_count, dup_rate, message_type):
         print(f"Will publish to exchange {exchange} and routing key {routing_key}")
         self.exchange = exchange
