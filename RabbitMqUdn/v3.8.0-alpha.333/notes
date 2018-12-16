@@ -1,6 +1,0 @@
-# build docker images
-
-docker build -t jackvanlightly/rabbitmq-v3.8.0-alpha.333 .
-cd management
-docker build -t jackvanlightly/rabbitmq-mgmt-v3.8.0-alpha.333 .
-

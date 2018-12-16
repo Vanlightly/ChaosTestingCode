@@ -30,6 +30,9 @@ class MultiTopicConsumer:
             self.channel.queue_bind(queue=queue_name, exchange=exchange_name)
 
         self.queue_name = queue_name
+
+    def set_queue(self, queue_name):
+        self.queue_name = queue_name
     
     def check_order(self, message_body):
         body_str = str(message_body, "utf-8")

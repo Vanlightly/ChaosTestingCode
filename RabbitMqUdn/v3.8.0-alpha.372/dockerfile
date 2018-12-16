@@ -36,9 +36,6 @@ ENV PATH $RABBITMQ_HOME/sbin:$PATH
 # gpg: key 6026DFCA: public key "RabbitMQ Release Signing Key <info@rabbitmq.com>" imported
 ENV RABBITMQ_GPG_KEY 0A9AF2115F4687BD29803A206B73A36E6026DFCA
 
-ENV RABBITMQ_VERSION 3.8.0-beta.1
-ENV RABBITMQ_GITHUB_TAG v3.8.0-beta.1
-
 RUN set -ex; \
 	\
 	apk add --no-cache --virtual .build-deps \
@@ -49,8 +46,8 @@ RUN set -ex; \
 		xz \
 	; \
 	\
-	wget -O rabbitmq-server.tar.xz.asc "https://bintray.com/rabbitmq/all-dev/download_file?file_path=rabbitmq-server%2F3.8.0-alpha.333%2Frabbitmq-server-generic-unix-3.8.0-alpha.333.tar.xz.asc"; \
-	wget -O rabbitmq-server.tar.xz     "https://bintray.com/rabbitmq/all-dev/download_file?file_path=rabbitmq-server%2F3.8.0-alpha.333%2Frabbitmq-server-generic-unix-3.8.0-alpha.333.tar.xz"; \
+	wget -O rabbitmq-server.tar.xz.asc "https://bintray.com/rabbitmq/all-dev/download_file?file_path=rabbitmq-server%2F3.8.0-alpha.372%2Frabbitmq-server-generic-unix-3.8.0-alpha.372.tar.xz.asc"; \
+	wget -O rabbitmq-server.tar.xz     "https://bintray.com/rabbitmq/all-dev/download_file?file_path=rabbitmq-server%2F3.8.0-alpha.372%2Frabbitmq-server-generic-unix-3.8.0-alpha.372.tar.xz"; \
 	\
 	export GNUPGHOME="$(mktemp -d)"; \
 	gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$RABBITMQ_GPG_KEY"; \

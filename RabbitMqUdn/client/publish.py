@@ -13,16 +13,19 @@ def main():
     dup_rate = float(get_optional_arg(args, "--dup-rate", "0"))
     routing_key = get_optional_arg(args, "--rk", "hello")
     queue = get_optional_arg(args, "--queue", None)
-        
-    message_type = "hello"
-    
+    message_type = get_optional_arg(args, "--msg-type", "hello")
+            
     publisher = RabbitPublisher(node_count, connect_node)
 
-    if queue != None:
-        print("direct")
-        publisher.publish_direct(queue, count, 1, dup_rate, message_type)
-    else:
-        publisher.publish(exchange, routing_key, count, 1, dup_rate, message_type)
+    try:
+        if queue != None:
+            print("direct")
+            publisher.publish_direct(queue, count, 1, dup_rate, message_type)
+        else:
+            publisher.publish(exchange, routing_key, count, 1, dup_rate, message_type)
+    except:
+        print("Publishing aborted, final stats:")
+        print(publisher.print_final_count())
 
 if __name__ == '__main__':
     main()

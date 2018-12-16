@@ -74,7 +74,7 @@ class RabbitPublisher(object):
         
     def next_node(self):
         self.curr_node += 1
-        if self.curr_node > self.node_count:
+        if self.curr_node >= self.node_count:
             self.curr_node = 0
 
     def connect(self):
@@ -309,3 +309,6 @@ class RabbitPublisher(object):
         if self._connection is not None:
             #print('Closing connection')
             self._connection.close()
+
+    def print_final_count(self):
+        print(f"Final Count => Sent: {self.curr_pos} Pos acks: {self.pos_acks} Neg acks: {self.neg_acks} Undeliverable: {self.undeliverable}")
