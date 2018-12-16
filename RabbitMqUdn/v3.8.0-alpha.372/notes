@@ -4,66 +4,19 @@ docker build -t jackvanlightly/rabbitmq-v3.8.0-alpha.333 .
 cd management
 docker build -t jackvanlightly/rabbitmq-mgmt-v3.8.0-alpha.333 .
 
-######## IGNORE MODE ############
+Test out:
+1. Try and make stale follower a leader
+2. Create multiple quorum queues, partion and heal: see if distribution is ok
 
-###### Scenario 1 #################
-1. Send 10
-2. partition leader
-3. See in logs that new node is promoted leader
-4. Send 20 to old leader (no acks)
-5. Send 5 to follower (no acks - seems it cannot route to new leader)
-6. Send 7 to new leader (acks)
-7. Kill new leader
-8. See that follow is promoted to leader
-9. Heal partition
-10. See that old leader becomes follower
-11. Consume messages from new leader. See 17 messages.
+## 1. Stale follower election
+Passed all tests. Cannot make a stale follower win an election.
 
-###### Scenario 2 - No acks but messages persisted #################
-1. Send 10
-2. partition leader
-3. See in logs that new node is promoted leader
-4. Send 20 to old leader (no acks)
-5. Send 5 to follower (no acks)
-6. Send 7 to new leader (no acks)
-7. Sometimes see that the stats show messages got persisted
-8. Consume the messages and see 22 - the correct amount.
+## 2. Create multiple quorum queues, partion and heal
+Execute the create-multiple-qq.sh script to create 21 queues with leaders distributed equally
+across three nodes.
 
+Then perform:
+$ blockade partition rabbitmq1
+$ blockade join
 
-###### Scenario 3 - Statistics wrong #################
-1. Send 10
-2. partition leader
-3. See in logs that new node is promoted leader
-4. Send 20 to old leader (no acks)
-5. Send 5 to follower (no acks)
-6. Send 7 to new leader (no acks)
-7. Heal partition
-8. See that the number of messages is too large - 32 (2*10 + 5 + 7)
-9. Consume the messages and see the expected 22 messages (not the double amount)
-
-######## AUTOHEAL MODE ############
-
-###### Scenario 1 - Slow fail-over - No acks but messages persisted #################
-1. Send 10
-2. partition leader
-3. See in logs that new node is promoted leader very quickly
-4. Send 20 to old leader (no acks)
-5. Send 5 to follower (no acks)
-6. Send 7 to new leader (no acks)
-7. UI still not showing new leader status. After a while, we see that some messages got persisted.
-Usually the ones sent to the new leader
-
-###### Scenario 2 - Attempt at wrong fail-over #################
-1. Partition a follower
-2. Send 50000 messages
-3. Unpartition follower
-4. Kill leader
-5. Ensure that rejoined follower does not become leader
-
-###### Scenario 3 - Election oddness #################
-1. Partition a follower
-2. Send 1000 messages
-3. Unpartition follower
-4. See that follower becomes new leader
-5. See that there are 1000 messages
-6. Consume the messages, totally out of order
+See the distribution of leaders is concentrated.
