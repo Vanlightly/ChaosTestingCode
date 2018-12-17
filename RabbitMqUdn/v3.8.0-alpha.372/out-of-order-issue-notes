@@ -10,8 +10,12 @@ $ cd cluster
 $ python create-quorum-queue.py rabbitmq1 Test1 3 rabbitmq3
 
 ## STEP 2 - See out-of-order delivery of messages to previously delivered messages
-Terminal 2
-python simple-consumer.py --queue Test1 --node rabbitmq3
+Terminal 2 (client directory)
+$ python publish.py --node rabbitmq3 --queue Test1 --msgs 1000 --msg-type sequence
+direct
+
+Terminal 3 (client directory)
+$ python simple-consumer.py --queue Test1 --node rabbitmq3
 [see 1000 messages in order]
 ctrl C to stop script
 $ python simple-consumer.py --queue Test1 --node rabbitmq3
@@ -26,12 +30,16 @@ ctrl C to stop script
 
 ## Control test - same publisher and consumer with HA queue
 ### STEP 1 - Create queue on existing cluster
-terminal 1
+terminal 1 (cluster directory)
 $ python create-ha-queue.py rabbitmq1 Test2 rabbitmq3
 
 ### STEP 2 - See no delivery of messages of previously delivered messages
-Terminal 2
-python simple-consumer.py --queue Test1 --node rabbitmq3
+Terminal 2 (client directory)
+$ python publish.py --node rabbitmq3 --queue Test1 --msgs 1000 --msg-type sequence
+direct
+
+Terminal 3 (client directory)
+$ python simple-consumer.py --queue Test1 --node rabbitmq3
 [see 1000 messages in order]
 ctrl C to stop script
 $ python simple-consumer.py --queue Test1 --node rabbitmq3

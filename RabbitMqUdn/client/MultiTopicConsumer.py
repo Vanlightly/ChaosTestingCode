@@ -77,8 +77,10 @@ class MultiTopicConsumer:
         try:
             self.channel.start_consuming()
         except KeyboardInterrupt:
+            print("Stopping consumption and closing the connection")
             self.channel.stop_consuming()
             self.connection.close()
+            print("Connection closed")
         except Exception as ex:
             template = "An exception of type {0} occurred. Arguments:{1!r}"
             message = template.format(type(ex).__name__, ex.args)
