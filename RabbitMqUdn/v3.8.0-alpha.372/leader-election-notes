@@ -1,0 +1,193 @@
+EXAMPLE 1 - rabbitmq3 starts out as leader. On third healing of partitioning of rabbitmq1, rabbitmq1 wins election
+
+rabbitmq1
+2018-12-17 07:51:57.508 [warning] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} leader call - leader not known. Command will be forwarded once leader is known.
+2018-12-17 07:51:57.520 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq3} with last indexterm {0,0} for term 0 previous term 0
+2018-12-17 07:51:57.556 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: granting vote for {'%2F_Test1',rabbit@rabbitmq3} with last indexterm {0,0}for term 1 previous term was 0
+2018-12-17 07:51:57.561 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} detected a new leader {'%2F_Test1',rabbit@rabbitmq3} in term 1
+2018-12-17 07:51:57.568 [info] <38721.2149.0> ra: started cluster %2F_Test1 with 3 servers
+0 servers failed to start: []
+Leader: {'%2F_Test1',rabbit@rabbitmq3}
+2018-12-17 07:51:57.569 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: enabling ra cluster changes in 1
+2018-12-17 07:52:33.332 [warning] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: Leader node rabbit@rabbitmq3 may be down, setting election timeout
+2018-12-17 07:52:33.617 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: pre_vote election called for in term 1
+2018-12-17 07:52:33.629 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} follower -> pre_vote in term: 1
+2018-12-17 07:52:33.930 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: pre_vote election called for in term 1
+2018-12-17 07:52:34.144 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: pre_vote election called for in term 1
+...
+2018-12-17 07:52:48.136 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: pre_vote election called for in term 1
+2018-12-17 07:52:48.433 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: pre_vote election called for in term 1
+2018-12-17 07:52:48.528 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} pre_vote -> follower term: 1
+2018-12-17 07:52:48.528 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} detected a new leader {'%2F_Test1',rabbit@rabbitmq3} in term 1
+2018-12-17 07:52:49.352 [warning] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} follower received unhandled msg: {node_event,rabbit@rabbitmq3,up}
+2018-12-17 07:53:27.393 [warning] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: Leader node rabbit@rabbitmq3 may be down, setting election timeout
+2018-12-17 07:53:27.638 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: pre_vote election called for in term 1
+2018-12-17 07:53:27.639 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} follower -> pre_vote in term: 1
+2018-12-17 07:53:27.972 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: pre_vote election called for in term 1
+2018-12-17 07:53:28.254 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: pre_vote election called for in term 1
+...
+2018-12-17 07:53:40.321 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: pre_vote election called for in term 1
+2018-12-17 07:53:40.669 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: pre_vote election called for in term 1
+2018-12-17 07:53:40.844 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} pre_vote -> follower term: 1
+2018-12-17 07:53:40.845 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} detected a new leader {'%2F_Test1',rabbit@rabbitmq3} in term 1
+2018-12-17 07:53:40.867 [warning] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} follower received unhandled msg: {pre_vote_result,1,#Ref<0.610727047.3476291586.88692>,true}
+2018-12-17 07:54:14.443 [warning] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: Leader node rabbit@rabbitmq3 may be down, setting election timeout
+2018-12-17 07:54:14.758 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: pre_vote election called for in term 1
+2018-12-17 07:54:14.758 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} follower -> pre_vote in term: 1
+2018-12-17 07:54:15.060 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: pre_vote election called for in term 1
+2018-12-17 07:54:15.384 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: pre_vote election called for in term 1
+...
+2018-12-17 07:54:26.550 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: pre_vote election called for in term 1
+2018-12-17 07:54:26.892 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: pre_vote election called for in term 1
+2018-12-17 07:54:26.918 [warning] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} pre_vote received unhandled msg: {pre_vote_result,1,#Ref<0.610727047.3476291585.140568>,true}
+2018-12-17 07:54:26.926 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: election called for in term 2
+2018-12-17 07:54:26.940 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} pre_vote -> candidate term: 2
+2018-12-17 07:54:26.964 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} candidate -> leader term: 2
+2018-12-17 07:54:26.975 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: enabling ra cluster changes in 2
+2018-12-17 07:54:27.433 [warning] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} leader received unhandled msg: {request_vote_result,2,true}
+
+rabbitmq2
+2018-12-17 07:51:57.492 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: recovering state machine from 0 to 0
+2018-12-17 07:51:57.529 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq3} with last indexterm {0,0} for term 0 previous term 0
+2018-12-17 07:51:57.594 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting vote for {'%2F_Test1',rabbit@rabbitmq3} with last indexterm {0,0}for term 1 previous term was 0
+2018-12-17 07:51:57.594 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2} detected a new leader {'%2F_Test1',rabbit@rabbitmq3} in term 1
+2018-12-17 07:51:57.607 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: enabling ra cluster changes in 1
+2018-12-17 07:52:58.297 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq1} with last indexterm {1,1} for term 1 previous term 1
+2018-12-17 07:52:58.298 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq1} with last indexterm {1,1} for term 1 previous term 1
+018-12-17 07:52:58.299 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq1} with last indexterm {1,1} for term 1 previous term 1
+2018-12-17 07:52:58.299 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq1} with last indexterm {1,1} for term 1 previous term 1
+2018-12-17 07:52:58.299 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq1} with last indexterm {1,1} for term 1 previous term 1
+...
+2018-12-17 07:52:58.310 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq1} with last indexterm {1,1} for term 1 previous term 1
+2018-12-17 07:52:58.312 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq1} with last indexterm {1,1} for term 1 previous term 1
+[marks rejoining of rabbitmq1]
+2018-12-17 07:53:40.837 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq1} with last indexterm {1,1} for term 1 previous term 1
+2018-12-17 07:53:40.837 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq1} with last indexterm {1,1} for term 1 previous term 1
+...
+2018-12-17 07:53:40.867 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq1} with last indexterm {1,1} for term 1 previous term 1
+2018-12-17 07:53:40.867 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq1} with last indexterm {1,1} for term 1 previous term 1
+[marks rejoining of rabbitmq1]
+2018-12-17 07:54:26.913 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq1} with last indexterm {1,1} for term 1 previous term 1
+2018-12-17 07:54:26.914 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq1} with last indexterm {1,1} for term 1 previous term 1
+...
+2018-12-17 07:54:26.924 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq1} with last indexterm {1,1} for term 1 previous term 1
+2018-12-17 07:54:26.924 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq1} with last indexterm {1,1} for term 1 previous term 1
+2018-12-17 07:54:26.961 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting vote for {'%2F_Test1',rabbit@rabbitmq1} with last indexterm {1,1}for term 2 previous term was 1
+2018-12-17 07:54:26.964 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2} detected a new leader {'%2F_Test1',rabbit@rabbitmq1} in term 2
+2018-12-17 07:54:26.977 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: enabling ra cluster changes in 2
+2018-12-17 07:54:27.395 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: follower request_vote_rpc in 1 but current term 2
+2018-12-17 07:54:27.395 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: follower request_vote_rpc in 1 but current term 2
+...
+2018-12-17 07:54:27.422 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: follower request_vote_rpc in 1 but current term 2
+2018-12-17 07:54:27.422 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: follower request_vote_rpc in 1 but current term 2
+2018-12-17 07:54:27.422 [warning] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2} follower received unhandled msg: {node_event,rabbit@rabbitmq1,up}
+
+rabbitmq3
+2018-12-17 07:51:57.504 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: election triggered by <0.2156.0>
+2018-12-17 07:51:57.506 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: pre_vote election called for in term 0
+2018-12-17 07:51:57.520 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3} follower -> pre_vote in term: 0
+2018-12-17 07:51:57.528 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: election called for in term 1
+2018-12-17 07:51:57.547 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3} pre_vote -> candidate term: 1
+2018-12-17 07:51:57.547 [warning] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3} candidate received unhandled msg: {pre_vote_result,0,#Ref<0.3362249473.3476291585.192877>,true}
+2018-12-17 07:51:57.559 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3} candidate -> leader term: 1
+2018-12-17 07:51:57.563 [info] <0.2149.0> ra: started cluster %2F_Test1 with 3 servers
+0 servers failed to start: []
+Leader: {'%2F_Test1',rabbit@rabbitmq3}
+2018-12-17 07:51:57.569 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: enabling ra cluster changes in 1
+2018-12-17 07:51:57.599 [warning] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3} leader received unhandled msg: {request_vote_result,1,true}
+2018-12-17 07:54:27.394 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3} leader saw request_vote_rpc from {'%2F_Test1',rabbit@rabbitmq1} for term 2 abdicates term: 1!
+2018-12-17 07:54:27.429 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: granting vote for {'%2F_Test1',rabbit@rabbitmq1} with last indexterm {1,1}for term 2 previous term was 2
+2018-12-17 07:54:27.429 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3} detected a new leader {'%2F_Test1',rabbit@rabbitmq1} in term 2
+2018-12-17 07:54:27.429 [warning] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3} follower received unhandled msg: {{'%2F_Test1',rabbit@rabbitmq1},{append_entries_reply,2,false,...}}
+2018-12-17 07:54:27.429 [warning] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3} follower received unhandled msg: {{'%2F_Test1',rabbit@rabbitmq1},{append_entries_reply,2,false,...}}
+...
+2018-12-17 07:54:27.457 [warning] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3} follower received unhandled msg: {{'%2F_Test1',rabbit@rabbitmq2},{append_entries_reply,2,false,...}}
+2018-12-17 07:54:27.457 [warning] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3} follower received unhandled msg: {{'%2F_Test1',rabbit@rabbitmq2},{append_entries_reply,2,false,...}}
+2018-12-17 07:54:27.457 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: enabling ra cluster changes in 2
+2018-12-17 07:54:27.575 [warning] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3} follower received unhandled msg: {node_event,rabbit@rabbitmq1,up}
+
+
+
+EXAMPLE 2 - rabbitmq1 starts out as leader. On third healing of partitioning of rabbitmq3, rabbitmq3 wins election
+
+rabbitmq1
+2018-12-17 08:52:36.734 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} leader saw request_vote_rpc from {'%2F_Test1',rabbit@rabbitmq3} for term 3 abdicates term: 2!
+2018-12-17 08:52:36.779 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: granting vote for {'%2F_Test1',rabbit@rabbitmq3} with last indexterm {2,2}for term 3 previous term was 3
+2018-12-17 08:52:36.779 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} detected a new leader {'%2F_Test1',rabbit@rabbitmq3} in term 3
+2018-12-17 08:52:36.780 [warning] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} follower received unhandled msg: {{'%2F_Test1',rabbit@rabbitmq2},{append_entries_reply,3,false,...}}
+2018-12-17 08:52:36.781 [warning] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} follower received unhandled msg: {{'%2F_Test1',rabbit@rabbitmq2},{append_entries_reply,3,false,...}}
+...
+2018-12-17 08:52:36.802 [warning] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} follower received unhandled msg: {{'%2F_Test1',rabbit@rabbitmq2},{append_entries_reply,3,false,...}}
+2018-12-17 08:52:36.802 [warning] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} follower received unhandled msg: {{'%2F_Test1',rabbit@rabbitmq2},{append_entries_reply,3,false,...}}
+2018-12-17 08:52:36.802 [warning] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} follower received unhandled msg: {node_event,rabbit@rabbitmq3,up}
+2018-12-17 08:52:36.802 [warning] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} follower received unhandled msg: {{'%2F_Test1',rabbit@rabbitmq3},{append_entries_reply,3,false,...}}
+2018-12-17 08:52:36.802 [warning] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} follower received unhandled msg: {{'%2F_Test1',rabbit@rabbitmq3},{append_entries_reply,3,false,...}}
+...
+2018-12-17 08:52:36.807 [warning] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} follower received unhandled msg: {{'%2F_Test1',rabbit@rabbitmq3},{append_entries_reply,3,false,...}}
+2018-12-17 08:52:36.810 [warning] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1} follower received unhandled msg: {{'%2F_Test1',rabbit@rabbitmq3},{append_entries_reply,3,false,...}}
+2018-12-17 08:52:36.812 [info] <0.2681.0> {'%2F_Test1',rabbit@rabbitmq1}: enabling ra cluster changes in 3
+
+rabbitmq2
+2018-12-17 08:50:26.627 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq3} with last indexterm {2,2} for term 2 previous term 2
+2018-12-17 08:50:26.628 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq3} with last indexterm {2,2} for term 2 previous term 2
+...
+2018-12-17 08:50:26.633 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq3} with last indexterm {2,2} for term 2 previous term 2
+2018-12-17 08:50:26.634 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq3} with last indexterm {2,2} for term 2 previous term 2
+2018-12-17 08:51:38.849 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq3} with last indexterm {2,2} for term 2 previous term 2
+2018-12-17 08:51:38.850 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq3} with last indexterm {2,2} for term 2 previous term 2
+...
+2018-12-17 08:51:38.860 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq3} with last indexterm {2,2} for term 2 previous term 2
+2018-12-17 08:51:38.860 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq3} with last indexterm {2,2} for term 2 previous term 2
+2018-12-17 08:52:36.153 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq3} with last indexterm {2,2} for term 2 previous term 2
+2018-12-17 08:52:36.153 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq3} with last indexterm {2,2} for term 2 previous term 2
+...
+2018-12-17 08:52:36.163 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq3} with last indexterm {2,2} for term 2 previous term 2
+2018-12-17 08:52:36.164 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting pre-vote for {'%2F_Test1',rabbit@rabbitmq3} with last indexterm {2,2} for term 2 previous term 2
+2018-12-17 08:52:36.219 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: granting vote for {'%2F_Test1',rabbit@rabbitmq3} with last indexterm {2,2}for term 3 previous term was 2
+2018-12-17 08:52:36.229 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2} detected a new leader {'%2F_Test1',rabbit@rabbitmq3} in term 3
+2018-12-17 08:52:36.247 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: enabling ra cluster changes in 3
+2018-12-17 08:52:36.679 [warning] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2} follower received unhandled msg: {node_event,rabbit@rabbitmq3,up}
+2018-12-17 08:52:36.738 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: follower request_vote_rpc in 2 but current term 3
+2018-12-17 08:52:36.738 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: follower request_vote_rpc in 2 but current term 3
+...
+2018-12-17 08:52:36.756 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: follower request_vote_rpc in 2 but current term 3
+2018-12-17 08:52:36.756 [info] <0.2202.0> {'%2F_Test1',rabbit@rabbitmq2}: follower request_vote_rpc in 2 but current term 3
+
+
+
+rabbitmq3
+2018-12-17 08:50:13.555 [warning] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: Leader node rabbit@rabbitmq1 may be down, setting election timeout
+2018-12-17 08:50:13.865 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: pre_vote election called for in term 2
+2018-12-17 08:50:13.882 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3} follower -> pre_vote in term: 2
+2018-12-17 08:50:14.167 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: pre_vote election called for in term 2
+2018-12-17 08:50:14.451 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: pre_vote election called for in term 2
+...
+2018-12-17 08:50:25.746 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: pre_vote election called for in term 2
+2018-12-17 08:50:26.008 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: pre_vote election called for in term 2
+2018-12-17 08:50:26.117 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3} pre_vote -> follower term: 2
+2018-12-17 08:50:26.118 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3} detected a new leader {'%2F_Test1',rabbit@rabbitmq1} in term 2
+2018-12-17 08:50:26.571 [warning] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3} follower received unhandled msg: {node_event,rabbit@rabbitmq1,up}
+2018-12-17 08:51:25.639 [warning] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: Leader node rabbit@rabbitmq1 may be down, setting election timeout
+2018-12-17 08:51:25.974 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: pre_vote election called for in term 2
+2018-12-17 08:51:25.975 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3} follower -> pre_vote in term: 2
+2018-12-17 08:51:26.200 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: pre_vote election called for in term 2
+2018-12-17 08:51:26.546 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: pre_vote election called for in term 2
+...
+2018-12-17 08:51:37.692 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: pre_vote election called for in term 2
+2018-12-17 08:51:37.971 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: pre_vote election called for in term 2
+2018-12-17 08:51:38.323 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3} pre_vote -> follower term: 2
+2018-12-17 08:51:38.324 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3} detected a new leader {'%2F_Test1',rabbit@rabbitmq1} in term 2
+2018-12-17 08:51:38.653 [warning] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3} follower received unhandled msg: {node_event,rabbit@rabbitmq1,up}
+2018-12-17 08:52:24.709 [warning] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: Leader node rabbit@rabbitmq1 may be down, setting election timeout
+2018-12-17 08:52:24.989 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: pre_vote election called for in term 2
+2018-12-17 08:52:24.990 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3} follower -> pre_vote in term: 2
+2018-12-17 08:52:25.266 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: pre_vote election called for in term 2
+2018-12-17 08:52:25.547 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: pre_vote election called for in term 2
+...
+2018-12-17 08:52:35.645 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: pre_vote election called for in term 2
+2018-12-17 08:52:35.973 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: pre_vote election called for in term 2
+2018-12-17 08:52:36.165 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: election called for in term 3
+2018-12-17 08:52:36.198 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3} pre_vote -> candidate term: 3
+2018-12-17 08:52:36.221 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3} candidate -> leader term: 3
+2018-12-17 08:52:36.241 [info] <0.2154.0> {'%2F_Test1',rabbit@rabbitmq3}: enabling ra cluster changes in 3
+
