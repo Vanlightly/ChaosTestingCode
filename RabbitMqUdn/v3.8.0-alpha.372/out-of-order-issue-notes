@@ -45,10 +45,10 @@ With 10000 messages, it is usually the sixth execution that yields 0 messages.
 
 
 
-
-(venv-rabbit) [jack@localhost client]$ python publish.py --node rabbitmq3 --queue Test2 --msgs 1000 --msg-type sequence
+## Example results of quorum queue test:
+(venv-rabbit) [jack@localhost client]$ python publish.py --node rabbitmq3 --queue Test1 --msgs 1000 --msg-type sequence
 direct
-Will publish to exchange  and routing key Test2
+Will publish to exchange  and routing key Test1
 Attempting to connect to 172.26.0.4
 Connection opened: <SelectConnection OPEN socket=('172.26.0.1', 50768)->('172.26.0.4', 5672) params=<URLParameters host=172.26.0.4 port=5672 virtual_host=/ ssl=False>>
 Channel opened, publishing to commence
@@ -63,8 +63,8 @@ Pos acks: 1000 Neg acks: 0 Undeliverable: 0
 Final Count => Pos acks: 1000 Neg acks: 0 Undeliverable: 0
 
 
-(venv-rabbit) [jack@localhost client]$ python simple-consumer.py --queue Test2 --node rabbitmq2
-Consuming queue: Test2
+(venv-rabbit) [jack@localhost client]$ python simple-consumer.py --queue Test1 --node rabbitmq2
+Consuming queue: Test1
 b'a=1'
 b'a=2'
 b'a=3'
@@ -143,8 +143,8 @@ b'a=997'
 b'a=998'
 b'a=999'
 b'a=1000'
-^C(venv-rabbit) [jack@localhost client]$ python simple-consumer.py --queue Test2 --node rabbitmq1
-Consuming queue: Test2
+^C(venv-rabbit) [jack@localhost client]$ python simple-consumer.py --queue Test1 --node rabbitmq1
+Consuming queue: Test1
 b'a=742'
 b'a=446'
 b'a=551'
@@ -562,8 +562,8 @@ b'a=948'
 b'a=879'
 b'a=705'
 b'a=463'
-^C(venv-rabbit) [jack@localhost client]$ python simple-consumer.py --queue Test2 --node rabbitmq3
-Consuming queue: Test2
+^C(venv-rabbit) [jack@localhost client]$ python simple-consumer.py --queue Test1 --node rabbitmq3
+Consuming queue: Test1
 b'a=876'
 b'a=705'
 b'a=858'
