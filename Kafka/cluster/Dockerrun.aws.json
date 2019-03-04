@@ -1,0 +1,79 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions": [
+        {
+            "environment": [
+                {
+                    "name": "KAFKA_BROKER_ID",
+                    "value": "0"
+                },
+                {
+                    "name": "KAFKA_ZOOKEEPER_CONNECT",
+                    "value": "zookeeper:2181"
+                },
+                {
+                    "name": "KAFKA_ADVERTISED_LISTENERS",
+                    "value": "PLAINTEXT://ec2-13-231-38-82.ap-northeast-1.compute.amazonaws.com:9092"
+                },
+                {
+                    "name": "KAFKA_INTER_BROKER_LISTENER_NAME",
+                    "value": "PLAINTEXT"
+                },
+                {
+                    "name": "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR",
+                    "value": "1"
+                },
+                {
+                    "name": "JAVA_OPTS",
+                    "value": "-Xms128 -Xmx512m"
+                },
+                {
+                    "name": "KAFKA_HEAP_OPTS",
+                    "value": "-Xms128m -Xmx512m"
+                },
+                {
+                    "name": "KAFKA_CREATE_TOPICS",
+                    "value": "test-topic1:1:1"
+                }
+            ],
+            "essential": true,
+            "image": "confluentinc/cp-kafka:latest",
+            "memory": 256,
+            "name": "kafka",
+            "hostname": "kafka",
+            "links": [
+                "zookeeper"
+            ],"portMappings": [
+                {
+                    "containerPort": 9092,
+                    "hostPort": 9092
+                }
+            ]
+        },
+        {
+            "environment": [
+                {
+                    "name": "ZOOKEEPER_CLIENT_PORT",
+                    "value": "2181"
+                },
+                {
+                    "name": "ZOOKEEPER_TICK_TIME",
+                    "value": "2000"
+                }
+            ],
+            "essential": true,
+            "image": "confluentinc/cp-zookeeper:latest",
+            "memory": 256,
+            "name": "zookeeper",
+            "hostname": "zookeeper",
+            "portMappings": [
+                {
+                    "containerPort": 2181,
+                    "hostPort": 2181
+                }
+            ]
+        }
+    ],
+    "family": "",
+    "volumes": []
+}

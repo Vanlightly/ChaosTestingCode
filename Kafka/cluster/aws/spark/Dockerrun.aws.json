@@ -1,0 +1,138 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions": [
+        {
+            "command": [
+                "bin/spark-class",
+                "org.apache.spark.deploy.master.Master",
+                "-h",
+                "master"
+            ],
+            "environment": [
+                {
+                    "name": "MASTER",
+                    "value": "spark://master:7077"
+                },
+                {
+                    "name": "SPARK_CONF_DIR",
+                    "value": "/conf"
+                },
+                {
+                    "name": "SPARK_PUBLIC_DNS",
+                    "value": "ec2-52-196-175-89.ap-northeast-1.compute.amazonaws.com"
+                }
+            ],
+            "essential": true,
+            "image": "gettyimages/spark",
+            "memory": 256,
+            "mountPoints": [
+                {
+                    "containerPath": "/conf",
+                    "sourceVolume": "_ConfMaster"
+                },
+                {
+                    "containerPath": "/tmp/data",
+                    "sourceVolume": "_Data"
+                }
+            ],
+            "name": "master",
+            "hostname": "master",
+            "portMappings": [
+                {
+                    "containerPort": 4040,
+                    "hostPort": 4040
+                },
+                {
+                    "containerPort": 6066,
+                    "hostPort": 6066
+                },
+                {
+                    "containerPort": 7077,
+                    "hostPort": 7077
+                },
+                {
+                    "containerPort": 8080,
+                    "hostPort": 8080
+                }
+            ]
+        },
+        {
+            "command": [
+                "bin/spark-class",
+                "org.apache.spark.deploy.worker.Worker",
+                "spark://master:7077"
+            ],
+            "environment": [
+                {
+                    "name": "SPARK_CONF_DIR",
+                    "value": "/conf"
+                },
+                {
+                    "name": "SPARK_WORKER_CORES",
+                    "value": "2"
+                },
+                {
+                    "name": "SPARK_WORKER_MEMORY",
+                    "value": "1g"
+                },
+                {
+                    "name": "SPARK_WORKER_PORT",
+                    "value": "8881"
+                },
+                {
+                    "name": "SPARK_WORKER_WEBUI_PORT",
+                    "value": "8081"
+                },
+                {
+                    "name": "SPARK_PUBLIC_DNS",
+                    "value": "ec2-52-196-175-89.ap-northeast-1.compute.amazonaws.com"
+                }
+            ],
+            "essential": true,
+            "image": "gettyimages/spark",
+            "links": [
+                "master"
+            ],
+            "memory": 256,
+            "mountPoints": [
+                {
+                    "containerPath": "/conf",
+                    "sourceVolume": "_ConfWorker"
+                },
+                {
+                    "containerPath": "/tmp/data",
+                    "sourceVolume": "_Data"
+                }
+            ],
+            "name": "worker",
+            "hostname": "worker",
+            "portMappings": [
+                {
+                    "containerPort": 8081,
+                    "hostPort": 8081
+                }
+            ]
+        }
+    ],
+    "family": "",
+    "volumes": [
+        {
+            "host": {
+                "sourcePath": "/conf/master"
+            },
+            "name": "_ConfMaster"
+        },
+        {
+            "host": {
+                "sourcePath": "/data"
+            },
+            "name": "_Data"
+        },
+        {
+            "host": {
+                "sourcePath": "/conf/worker"
+            },
+            "name": "_ConfWorker"
+        }
+    ]
+}
