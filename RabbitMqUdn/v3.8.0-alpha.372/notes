@@ -1,0 +1,22 @@
+# build docker images
+
+docker build -t jackvanlightly/rabbitmq-v3.8.0-alpha.372 .
+cd management
+docker build -t jackvanlightly/rabbitmq-mgmt-v3.8.0-alpha.372 .
+
+Test out:
+1. Try and make stale follower a leader
+2. Create multiple quorum queues, partion and heal: see if distribution is ok
+
+## 1. Stale follower election
+Passed all tests. Cannot make a stale follower win an election.
+
+## 2. Create multiple quorum queues, partion and heal
+Execute the create-multiple-qq.sh script to create 21 queues with leaders distributed equally
+across three nodes.
+
+Then perform:
+$ blockade partition rabbitmq1
+$ blockade join
+
+See the distribution of leaders is concentrated.

@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+
+  rabbitmq1:
+    image: rabbitmq:3.7-management
+    hostname: rabbitmq1
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=12345
+    volumes:
+      - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.config
+
+  rabbitmq2:
+    image: rabbitmq:3.7-management
+    hostname: rabbitmq2
+    depends_on:
+      - rabbitmq1
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=12345
+    volumes:
+      - ./cluster-entrypoint.sh:/usr/local/bin/cluster-entrypoint.sh
+      - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.config
+    entrypoint: /usr/local/bin/cluster-entrypoint.sh
+
+  rabbitmq3:
+    image: rabbitmq:3.7-management
+    hostname: rabbitmq3
+    depends_on:
+      - rabbitmq1
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=12345
+    volumes:
+      - ./cluster-entrypoint.sh:/usr/local/bin/cluster-entrypoint.sh
+      - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.config
+    entrypoint: /usr/local/bin/cluster-entrypoint.sh
