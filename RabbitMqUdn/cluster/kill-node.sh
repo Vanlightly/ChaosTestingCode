@@ -1,5 +1,20 @@
 #!/bin/bash
 
-CONTAINER_ID=$(blockade status | grep $1 | awk '{ print $2 }')
-docker exec -it $CONTAINER_ID bash -c 'echo Killing $(ps aux | grep rabbitmq-server | grep -v grep | awk '"'"'{ print $2 }'"'"')'
-docker exec -it $CONTAINER_ID bash -c 'kill -9 $(ps aux | grep rabbitmq-server | grep -v grep | awk '"'"'{ print $2 }'"'"')'
+set -e
+
+cd ../cluster
+
+if [ $1 = "rabbitmq1" ]; then
+    echo "CHAOS: killing rabbitmq1"
+    blockade kill rabbitmq1
+    echo "CHAOS: rabbitmq1 killed"
+elif [ $1 = "rabbitmq2" ]; then
+    echo "CHAOS: killing rabbitmq2"
+    blockade kill rabbitmq2
+    echo "CHAOS: rabbitmq2 killed"
+
+elif [ $1 = "rabbitmq3" ]; then
+    echo "CHAOS: killing rabbitmq3"
+    blockade kill rabbitmq3
+    echo "CHAOS: rabbitmq3 killed"
+fi

@@ -20,3 +20,7 @@ $ blockade partition rabbitmq1
 $ blockade join
 
 See the distribution of leaders is concentrated.
+
+
+
+

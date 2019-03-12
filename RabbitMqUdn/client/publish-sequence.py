@@ -1,13 +1,25 @@
 #!/usr/bin/env python
 import sys
+import subprocess
 from command_args import get_args, get_mandatory_arg, get_optional_arg
 from RabbitPublisher import RabbitPublisher
+
+def get_live_nodes():
+    bash_command = "bash ../cluster/list-live-nodes.sh"
+    process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
+    output, error = process.communicate()
+    nodes_line = output.decode('ascii').replace('\n', '')
+    nodes = list()
+    for node in nodes_line.split(' '):
+        if node != '' and node.isspace() == False:
+            nodes.append(node)
+
+    return nodes
 
 def main():
     args = get_args(sys.argv)
 
     connect_node = get_optional_arg(args, "--node", "rabbitmq1")
-    node_count = int(get_optional_arg(args, "--cluster-size", "3"))
     exchange = get_optional_arg(args, "--ex", "")
     count = int(get_mandatory_arg(args, "--msgs"))
     state_count = int(get_mandatory_arg(args, "--keys"))
@@ -24,11 +36,14 @@ def main():
             exit(1)
         message_type = "partitioned-sequence"
 
-    publisher = RabbitPublisher(node_count, connect_node)
+    live_nodes = get_live_nodes()
+    
+    publisher = RabbitPublisher("1", live_nodes, connect_node, 1000, 100, 100)
 
     if queue != None:
         print("direct to queue publishing")
         publisher.publish_direct(queue, count, state_count, dup_rate, message_type)
+
     elif len(exchanges_arg) > 0:
         print("multi-exchange publishing")
         exchanges = exchanges_arg.split(",")

@@ -4,7 +4,7 @@ set -e
 
 if [ $1 = "rabbitmq1" ]; then
     blockade restart rabbitmq1
-    echo "rabbitmq1 restarted"
+    echo "CHAOS: rabbitmq1 restarted"
 elif [ $1 = "rabbitmq2" ]; then
     # node 2 does not have rabbitmq-server as pid 1 and so stopping the container causes an unclean shutdown
     # therefore we do a controlled stop first
@@ -13,7 +13,7 @@ elif [ $1 = "rabbitmq2" ]; then
     
     # restart the container
     blockade restart rabbitmq2
-    echo "rabbitmq2 restarted"
+    echo "CHAOS: rabbitmq2 restarted"
 
 elif [ $1 = "rabbitmq3" ]; then
     # node 3 does not have rabbitmq-server as pid 1 and so stopping the container causes an unclean shutdown
@@ -23,5 +23,5 @@ elif [ $1 = "rabbitmq3" ]; then
         
     # restart the container
     blockade restart rabbitmq3
-    echo "rabbitmq3 restarted"
+    echo "CHAOS: rabbitmq3 restarted"
 fi

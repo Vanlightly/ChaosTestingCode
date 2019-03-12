@@ -85,13 +85,13 @@ python ordering-consumer.py --queue q1 --exchanges topic1,topic2,topic3,topic4,t
 ## RabbitMQ v3.8 Quorum Queue Testing
 
 ### Create a docker image
-Note that there are a 3.8.0-beta1 and 3.8.0-alpha.372 dockerfiles. Each use the latest erlang image as a base.
+Note that there are the 3.8.0-beta2 binary is available. Each use the latest erlang image as a base.
 
 ```
-$ cd RabbitMqUdn/v3.8.0-alpha.372
-$ docker build -t jackvanlightly/rabbitmq-v3.8.0-alpha.372 .
+$ cd RabbitMqUdn/v3.8.0-beta
+$ docker build -t jackvanlightly/rabbitmq-v3.8.0-beta.2.erl.alpine .
 $ cd management
-$ docker build -t jackvanlightly/rabbitmq-mgmt-v3.8.0-alpha.372 .
+$ docker build -t jackvanlightly/rabbitmq-mgmt-v3.8.0-beta.2.erl.alpine .
 ```
 
 ### Quorum Queues Test Failure using Blockade

@@ -1,6 +1,6 @@
 containers:
   rabbitmq1:
-    image: jackvanlightly/rabbitmq-mgmt-v3.8.0-alpha.372:latest
+    image: jackvanlightly/rabbitmq-mgmt-v3.8.0-beta.2.erl.alpine:latest
     hostname: rabbitmq1
     container_name: rabbitmq1
     environment: { "RABBITMQ_ERLANG_COOKIE": 12345 }
@@ -10,7 +10,7 @@ containers:
     expose: [1936,5672,15672]
 
   rabbitmq2:
-    image: jackvanlightly/rabbitmq-mgmt-v3.8.0-alpha.372:latest
+    image: jackvanlightly/rabbitmq-mgmt-v3.8.0-beta.2.erl.alpine:latest
     hostname: rabbitmq2
     container_name: rabbitmq2
     environment: { "RABBITMQ_ERLANG_COOKIE": 12345 }
@@ -23,20 +23,20 @@ containers:
     start_delay: 10
   
   rabbitmq3:
-    image: jackvanlightly/rabbitmq-mgmt-v3.8.0-alpha.372:latest
+    image: jackvanlightly/rabbitmq-mgmt-v3.8.0-beta.2.erl.alpine:latest
     hostname: rabbitmq3
     container_name: rabbitmq3
     environment: { "RABBITMQ_ERLANG_COOKIE": 12345 }
     volumes: { 
-      # "volumes/03/data": "/var/lib/rabbitmq/mnesia", 
+      #"volumes/03/data": "/var/lib/rabbitmq/mnesia", 
       "./rabbitmq.config": "/etc/rabbitmq/rabbitmq.config", 
       "./cluster-entrypoint.sh": "/usr/local/bin/cluster-entrypoint.sh" 
     }
     command: sh -c "/usr/local/bin/cluster-entrypoint.sh"
     expose: [1936,5672,15672]
-    start_delay: 20
+    start_delay: 1
 
 network:
   driver: udn
-  flaky: 2%
-  slow: 100ms 50ms 25% distribution normal
+  flaky: 5%
+  slow: 200ms 50ms 25% distribution normal
