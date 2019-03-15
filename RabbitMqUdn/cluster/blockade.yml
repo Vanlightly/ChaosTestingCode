@@ -1,6 +1,6 @@
 containers:
   rabbitmq1:
-    image: jackvanlightly/rabbitmq-mgmt-v3.8.0-beta.2.erl.alpine:latest
+    image: jackvanlightly/rabbitmq-mgmt-v3.8.0-beta.3.erl.alpine:latest
     hostname: rabbitmq1
     container_name: rabbitmq1
     environment: { "RABBITMQ_ERLANG_COOKIE": 12345 }
@@ -10,7 +10,7 @@ containers:
     expose: [1936,5672,15672]
 
   rabbitmq2:
-    image: jackvanlightly/rabbitmq-mgmt-v3.8.0-beta.2.erl.alpine:latest
+    image: jackvanlightly/rabbitmq-mgmt-v3.8.0-beta.3.erl.alpine:latest
     hostname: rabbitmq2
     container_name: rabbitmq2
     environment: { "RABBITMQ_ERLANG_COOKIE": 12345 }
@@ -23,7 +23,7 @@ containers:
     start_delay: 10
   
   rabbitmq3:
-    image: jackvanlightly/rabbitmq-mgmt-v3.8.0-beta.2.erl.alpine:latest
+    image: jackvanlightly/rabbitmq-mgmt-v3.8.0-beta.3.erl.alpine:latest
     hostname: rabbitmq3
     container_name: rabbitmq3
     environment: { "RABBITMQ_ERLANG_COOKIE": 12345 }

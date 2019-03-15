@@ -1,4 +1,4 @@
-FROM jackvanlightly/rabbitmq-v3.8.0-beta.2.erl.alpine:latest
+FROM jackvanlightly/rabbitmq-v3.8.0-beta.3.erl.alpine:latest
 
 RUN rabbitmq-plugins enable --offline rabbitmq_management
 
@@ -12,7 +12,7 @@ RUN set -eux; \
 					case lists:suffix("/rabbitmqadmin", FileInArchive) of \
 						true -> GetBin(); \
 						false -> Acc \
-					edocker build -t jackvanlightly/rabbitmq-v3.8.0-nd; \
+					end; \
 				_ -> Acc \
 			end \
 		end, "", init:get_plain_arguments()), \

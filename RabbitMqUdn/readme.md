@@ -31,12 +31,12 @@ There is a RabbitPublisher python class that performs various message publishing
 
 Send 10000 messages to the queue "myqueue"
 ```
-python publish.py --queue myqueue --msgs 10000
+python publish.py --queue myqueue --msgs 1python create-quorum-queue.py rabbitmq1 Test1 3 rabbitmq3
 ```
 
-Send 10000 messages to the exchange "orders"
+Send 10000 messages to the exchange "orderpython create-quorum-queue.py rabbitmq1 Test1 3 rabbitmq3
 ```
-python publish.py --ex orders --msgs 10000
+python publish.py --ex orders --msgs 10000python create-quorum-queue.py rabbitmq1 Test1 3 rabbitmq3
 ```
 
 Send 10000 messages to the exchanges orders1, orders2 and orders3
@@ -85,7 +85,7 @@ python ordering-consumer.py --queue q1 --exchanges topic1,topic2,topic3,topic4,t
 ## RabbitMQ v3.8 Quorum Queue Testing
 
 ### Create a docker image
-Note that there are the 3.8.0-beta2 binary is available. Each use the latest erlang image as a base.
+Note that the 3.8.0-beta 2 and 3 binaries are available. Each use the latest erlang image as a base.
 
 ```
 $ cd RabbitMqUdn/v3.8.0-beta
@@ -99,7 +99,7 @@ $ docker build -t jackvanlightly/rabbitmq-mgmt-v3.8.0-beta.2.erl.alpine .
 ### Test steps using python client and blockade
 Create a quorum queue Test1 with rep factor of 3, with leader on rabbitmq3.
 
-First ensure that the clutser/blockade-files/blockade-rmq-3b-3.8.yml has the correct image of RabbitMQ that you want to test. Then run the following:
+First ensure that the cluster/blockade-files/blockade-rmq-3b-3.8.yml has the correct image of RabbitMQ that you want to test. Then run the following:
 
 ```
 $ cd RabbitMqUdn/automated
