@@ -96,7 +96,7 @@ $ docker build -t jackvanlightly/rabbitmq-mgmt-v3.8.0-beta.2.erl.alpine .
 
 ### Quorum Queues Test Failure using Blockade
 
-### Test steps using python client and blockade
+### Manual test steps using python client and blockade
 Create a quorum queue Test1 with rep factor of 3, with leader on rabbitmq3.
 
 First ensure that the cluster/blockade-files/blockade-rmq-3b-3.8.yml has the correct image of RabbitMQ that you want to test. Then run the following:
@@ -109,3 +109,8 @@ $ python create-quorum-queue.py rabbitmq1 Test1 3 rabbitmq3
 ```
 
 You can now perform various tests on the Test1 quorum queue.
+
+Note that create-quorum-queue-sac.py creates a quorum queue with Single Active Consumer enabled.
+
+### Automated test
+The script client/quorum-queue-test.py runs an automated randomized test.

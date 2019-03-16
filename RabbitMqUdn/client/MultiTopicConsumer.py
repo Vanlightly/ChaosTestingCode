@@ -165,10 +165,11 @@ class MultiTopicConsumer:
                 if self.connection is None or self.connection.is_closed:
                     self.reconnect()
 
-                console_out(f"Consuming queue: {self.queue_name}", self.get_actor())
-                self.channel.basic_consume(self.callback,
+                tag = self.channel.basic_consume(self.callback,
                             queue=self.queue_name,
                             no_ack=False)
+                
+                console_out(f"Consuming queue: {self.queue_name} with consumer tag: {tag}", self.get_actor())
 
                 self.channel.start_consuming()
             except KeyboardInterrupt:

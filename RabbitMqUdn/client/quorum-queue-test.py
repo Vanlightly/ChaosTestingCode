@@ -68,7 +68,7 @@ def main():
     actions = int(get_mandatory_arg(args, "--actions"))
     in_flight_max = int(get_optional_arg(args, "--in-flight-max", 10))
     grace_period_sec = int(get_mandatory_arg(args, "--grace-period-sec"))
-    queue = get_optional_arg(args, "--queue", None)
+    queue = get_mandatory_arg(args, "--queue")
     message_type = "sequence"
     node_names = ["rabbitmq1", "rabbitmq2", "rabbitmq3"]
 
@@ -118,7 +118,7 @@ def main():
         console_out("publisher started", "TEST RUNNER")
 
         for action_num in range(0, actions):
-            wait_sec = random.randint(10, 120)
+            wait_sec = random.randint(5, 60)
             console_out(f"waiting for {wait_sec} seconds before next action", "TEST RUNNER")
             time.sleep(wait_sec)
 
@@ -136,8 +136,7 @@ def main():
         console_out("starting grace period for consumer to catch up", "TEST RUNNER")
         ctr = 0
         while ctr < grace_period_sec:
-            if consumer.get_received_count() >= publisher.get_pos_ack_count() and
-                len(publisher.get_msg_set().difference(consumer.get_msg_set())) == 0:
+            if consumer.get_received_count() >= publisher.get_pos_ack_count() and len(publisher.get_msg_set().difference(consumer.get_msg_set())) == 0:
                 break
             time.sleep(1)
             ctr += 1
