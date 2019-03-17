@@ -1,6 +1,6 @@
-#TEST RUN: beta-3 test run 2 16/03/2019
+# TEST RUN: beta-3 test run 2 16/03/2019
 
-##Configuration
+## Configuration
 - 3 nodes
 - Pika 0.12
 - 1 quorum queue with rep-factor of 3 and Single Active Consumer enabled
