@@ -1,3 +1,5 @@
+UPDATE: This was beta 2. I accidently ran it against a beta 2 cluster.
+
 I started test run at 16:30 and left it to run. It finished at 20:57:56. 
 I came back the next day to review the test log and saw no issues. 
 

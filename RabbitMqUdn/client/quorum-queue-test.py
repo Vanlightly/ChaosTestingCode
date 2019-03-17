@@ -162,8 +162,12 @@ def main():
   
         if consumer.received_out_of_order() == True:
             console_out("FAILED TEST: OUT OF ORDER MESSAGES", "TEST RUNNER")
-            sucess = False
-            
+            success = False
+        
+        if len(lost_msgs) > 0:
+            console_out("FAILED TEST: LOST MESSAGES", "TEST RUNNER")
+            success = False
+
         if success == True:
             console_out("TEST OK", "TEST RUNNER")
 

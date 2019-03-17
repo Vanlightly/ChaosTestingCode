@@ -109,10 +109,12 @@ class MultiTopicConsumer:
             
             if last_value + 1 < curr_value:
                 jump = curr_value - last_value
-                console_out(f"{message_body} Jump forward {jump} {duplicate} {redelivered_str}", self.get_actor())
+                last = f"Last-acked={last_value}"
+                console_out(f"{message_body} {last} JUMP FORWARD {jump} {duplicate} {redelivered_str}", self.get_actor())
             elif last_value > curr_value:
                 jump = last_value - curr_value
-                console_out(f"{message_body} Jump back {jump} {duplicate} {redelivered_str}", self.get_actor())
+                last = f"Last-acked={last_value}"
+                console_out(f"{message_body} {last} JUMP BACK {jump} {duplicate} {redelivered_str}", self.get_actor())
                 if is_dup == False:
                     self.out_of_order = True
             elif self.receive_ctr % self.print_mod == 0:
@@ -123,7 +125,7 @@ class MultiTopicConsumer:
             if curr_value == 1:
                 console_out(f"Latest msg: {message_body} {duplicate} {redelivered_str}", self.get_actor())
             else:
-                console_out(f"{message_body} Jump forward {curr_value} {duplicate} {redelivered_str}", self.get_actor())
+                console_out(f"{message_body} JUMP FORWARD {curr_value} {duplicate} {redelivered_str}", self.get_actor())
                 self.out_of_order = True
         
         self.keys[key] = curr_value

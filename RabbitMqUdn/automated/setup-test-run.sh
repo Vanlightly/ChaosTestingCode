@@ -20,8 +20,17 @@ if [[ $1 == "3" ]]; then
         echo "Only versions 3.7 and 3.8 are supported at this time"
         exit 1
     fi
+elif [[ $1 == "5" ]]; then
+    if [[ $2 == "3.7" ]]; then
+        cp ./blockade-files/blockade-rmq-5b-3.7.yml blockade.yml
+    elif [[ $2 == "3.8" ]]; then
+        cp ./blockade-files/blockade-rmq-5b-3.8.yml blockade.yml
+    else
+        echo "Only versions 3.7 and 3.8 are supported at this time"
+        exit 1
+    fi
 else
-    echo "Only a three broker cluster is supported at this time"
+    echo "Only a three or five broker cluster is supported at this time"
     exit 1
 fi
 

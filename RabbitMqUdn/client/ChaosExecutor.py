@@ -9,7 +9,7 @@ import random
 
 class ChaosExecutor(object):
     def __init__(self, node_names):
-        self.chaos_actions = ["node", "partition", "network", "node", "partition"]
+        self.chaos_actions = ["node", "node", "partition", "partition", "network"]
         self.partition_state = "healed"
         self.network_state = "fast"
         self.network_actions = ["slow-network-one", "slow-network-all", "flaky-network-one", "flaky-network-all"]
@@ -38,6 +38,9 @@ class ChaosExecutor(object):
     def execute_chaos_action(self):
         chaos_action = self.chaos_actions[random.randint(0, len(self.chaos_actions)-1)]
         live_nodes = self.get_live_nodes()
+
+        if len(live_nodes) == 1:
+            chaos_action = "node"
         
         if chaos_action == "node":
             action_taken = False

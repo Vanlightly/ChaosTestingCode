@@ -114,3 +114,7 @@ Note that create-quorum-queue-sac.py creates a quorum queue with Single Active C
 
 ### Automated test
 The script client/quorum-queue-test.py runs an automated randomized test.
+
+```
+python -u quorum-queue-test.py --queue q --tests 20 --actions 20 --grace-period-sec 300 --in-flight-max 100  2>&1 | tee test.log
+```
