@@ -36,7 +36,7 @@ containers:
     expose: [1936,5672,15672]
     start_delay: 1
 
-rabbitmq4:
+  rabbitmq4:
     image: jackvanlightly/rabbitmq-mgmt-v3.8.0-beta.3.erl.alpine:latest
     hostname: rabbitmq4
     container_name: rabbitmq4
@@ -50,7 +50,7 @@ rabbitmq4:
     expose: [1936,5672,15672]
     start_delay: 1
 
-rabbitmq5:
+  rabbitmq5:
     image: jackvanlightly/rabbitmq-mgmt-v3.8.0-beta.3.erl.alpine:latest
     hostname: rabbitmq5
     container_name: rabbitmq5
