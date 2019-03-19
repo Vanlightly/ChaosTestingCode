@@ -112,9 +112,37 @@ You can now perform various tests on the Test1 quorum queue.
 
 Note that create-quorum-queue-sac.py creates a quorum queue with Single Active Consumer enabled.
 
-### Automated test
-The script client/quorum-queue-test.py runs an automated randomized test.
+### Automated tests
+The script client/quorum-queue-test.py runs an automated randomized test and verifies the following invariants:
+- no message loss
+- no out-of-order messages
+
+A note on message ordering:
+
+Messages are received out-of-order if messages jump forwards then backwards then forwards.
+For example:
+1,2,5,6,3,4,7,8,9,10
+
+Valid mis-ordering, according to AMQP are:
+Messages can jump back and be duplicates, for example:
+
+1,2,3,4,5,3,4,5,6,7,8,9,10
+
+Messages can jump forward only (this could indicate message loss but not an ordering issue):
+
+1,2,3,4,8,9,10
 
 ```
-python -u quorum-queue-test.py --queue q --tests 20 --actions 20 --grace-period-sec 300 --in-flight-max 100  2>&1 | tee test.log
+$ python -u quorum-queue-test.py --queue q --tests 20 --actions 20 --grace-period-sec 300 --in-flight-max 100  2>&1 | tee test.log
+```
+
+The script client/sac-test.py runs an automated randomized test of SAC. Currently does not monitor,
+invariants as it is still being developed. Just eye balling the logs at the moment.
+
+Invariants that it will verify will be:
+- no two consumers can be "single active" at a time
+- given time on a stable cluster, an active consumer fail-over will always occur
+
+```
+$ python -u sac-test.py --queue beta3 --tests 10 --actions 20 --grace-period-sec 300 --in-flight-max 200 --cluster 3  2>&1 | tee test-sac.log
 ```

@@ -13,8 +13,10 @@ fi
 echo Creating blockade cluster
 if [[ $1 == "3" ]]; then
     if [[ $2 == "3.7" ]]; then
+        echo "Creating 3 node cluster of version 3.7"
         cp ./blockade-files/blockade-rmq-3b-3.7.yml blockade.yml
     elif [[ $2 == "3.8" ]]; then
+        echo "Creating 3 node cluster of version 3.8"
         cp ./blockade-files/blockade-rmq-3b-3.8.yml blockade.yml
     else
         echo "Only versions 3.7 and 3.8 are supported at this time"
@@ -22,8 +24,10 @@ if [[ $1 == "3" ]]; then
     fi
 elif [[ $1 == "5" ]]; then
     if [[ $2 == "3.7" ]]; then
+        echo "Creating 5 node cluster of version 3.7"
         cp ./blockade-files/blockade-rmq-5b-3.7.yml blockade.yml
     elif [[ $2 == "3.8" ]]; then
+        echo "Creating 5 node cluster of version 3.8"
         cp ./blockade-files/blockade-rmq-5b-3.8.yml blockade.yml
     else
         echo "Only versions 3.7 and 3.8 are supported at this time"

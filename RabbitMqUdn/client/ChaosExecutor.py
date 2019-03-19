@@ -10,6 +10,7 @@ import random
 class ChaosExecutor(object):
     def __init__(self, node_names):
         self.chaos_actions = ["node", "node", "partition", "partition", "network"]
+        self.sac_actions = ["node", "partition"]
         self.partition_state = "healed"
         self.network_state = "fast"
         self.network_actions = ["slow-network-one", "slow-network-all", "flaky-network-one", "flaky-network-all"]
@@ -109,3 +110,30 @@ class ChaosExecutor(object):
         if self.partition_state != "healed":
             subprocess.call(["bash", "../cluster/heal-partitions.sh"])
             self.partition_state = "healed"
+
+    def single_action_and_repair(self, duration_seconds):
+        chaos_action = self.sac_actions[random.randint(0, len(self.sac_actions)-1)]
+        live_nodes = self.get_live_nodes()
+
+        if chaos_action == "node":
+            node_index = random.randint(0, len(live_nodes)-1)
+            victim = live_nodes[node_index]
+            subprocess.call(["bash", "../cluster/kill-node.sh", victim])
+
+            # 33% chance of killing two nodes
+            if random.randint(0, 2) == 2:
+                live_nodes = self.get_live_nodes()
+                node_index = random.randint(0, len(live_nodes)-1)
+                victim = live_nodes[node_index]
+                subprocess.call(["bash", "../cluster/kill-node.sh", victim])
+
+        elif chaos_action == "partition":
+            victim = self.choose_live_victim()
+            subprocess.call(["bash", "../cluster/isolate-node.sh", victim])
+            self.partition_state = "partitioned"
+
+        subprocess.call(["bash", "../cluster/cluster-status.sh"])
+        time.sleep(duration_seconds)
+        self.repair()
+        subprocess.call(["bash", "../cluster/cluster-status.sh"])
+        time.sleep(duration_seconds)

@@ -71,7 +71,7 @@ def main():
     cluster_size = get_optional_arg(args, "--cluster", "3")
     queue = get_mandatory_arg(args, "--queue")
     message_type = "sequence"
-
+    
     for x in range(tests):
 
         print("")
@@ -102,50 +102,97 @@ def main():
         time.sleep(10)
 
         publisher = RabbitPublisher(str(x), live_nodes, pub_node, in_flight_max, 120, print_mod)
-        consumer = MultiTopicConsumer(str(x), live_nodes, True, print_mod, con_node)
-        consumer.connect()
-        consumer.set_queue(queue_name)
+        consumer1 = MultiTopicConsumer(str(x) + "-con0", live_nodes, False, print_mod, con_node)
+        consumer1.connect()
+        consumer1.set_queue(queue_name)
+
+        consumer2 = MultiTopicConsumer(str(x) + "-con1", live_nodes, False, print_mod, con_node)
+        consumer2.connect()
+        consumer2.set_queue(queue_name)
+
+        consumer3 = MultiTopicConsumer(str(x) + "-con2", live_nodes, False, print_mod, con_node)
+        consumer3.connect()
+        consumer3.set_queue(queue_name)
 
         stats = QueueStats('jack', 'jack', queue_name)
         chaos = ChaosExecutor(live_nodes)
 
-        con_thread = threading.Thread(target=consumer.consume)
-        con_thread.start()
-        console_out("consumer started", "TEST RUNNER")
+        con_thread1 = threading.Thread(target=consumer1.consume)
+        con_thread1.start()
+        console_out("consumer 1 started", "TEST RUNNER")
+
+        con_thread2 = threading.Thread(target=consumer2.consume)
+        con_thread2.start()
+        console_out("consumer 2 started", "TEST RUNNER")
+
+        con_thread3 = threading.Thread(target=consumer3.consume)
+        con_thread3.start()
+        console_out("consumer 3 started", "TEST RUNNER")
 
         pub_thread = threading.Thread(target=publisher.publish_direct,args=(queue_name, count, 1, 0, "sequence"))
         pub_thread.start()
         console_out("publisher started", "TEST RUNNER")
 
-        for action_num in range(0, actions):
-            wait_sec = random.randint(5, 60)
-            console_out(f"waiting for {wait_sec} seconds before next action", "TEST RUNNER")
-            time.sleep(wait_sec)
+        consumers = [consumer1, consumer2, consumer3]
+        consumerThreads = [con_thread1, con_thread2, con_thread3]
 
-            console_out(f"execute chaos action {str(action_num)} of test {str(x)}", "TEST RUNNER")
-            chaos.execute_chaos_action()
-            subprocess.call(["bash", "../cluster/cluster-status.sh"])
+        init_wait_sec = 20
+        console_out(f"Will execute first action in {init_wait_sec} seconds", "TEST RUNNER")
+        time.sleep(init_wait_sec)
+
+        for action_num in range(0, actions):
+            console_out(f"execute action {str(action_num)} of test {str(x)}", "TEST RUNNER")
+            if random.randint(0, 1) == 1:
+                console_out(f"execute chaos and repair action", "TEST RUNNER")
+                chaos.single_action_and_repair(120)
+            else:
+                con_index = random.randint(0, 2)
+                con = consumers[con_index]
+                if con.terminate == True:
+                    console_out(f"Starting consumer {con_index}", "TEST RUNNER")
+                    con.connect()
+                    consumerThreads[con_index] = threading.Thread(target=con.consume)
+                    consumerThreads[con_index].start()
+                else:
+                    console_out(f"Stopping consumer {con_index}", "TEST RUNNER")
+                    try:
+                        con.stop()
+                        consumerThreads[con_index].join()
+                    except Exception as e:
+                        template = "An exception of type {0} occurred. Arguments:{1!r}"
+                        message = template.format(type(ex).__name__, ex.args)
+                        console_out(f"Failed to stop consumer correctly: {message}", "TEST RUNNER")
+
+
+                time.sleep(60)
+                
+
 
         time.sleep(60)
-        console_out("repairing cluster", "TEST RUNNER")
-        chaos.repair()
-        console_out("repaired cluster", "TEST RUNNER")
+        console_out("Resuming consumers", "TEST RUNNER")
+        for con in consumers:
+            if con.terminate == True:
+                console_out(f"Starting consumer {con_index}", "TEST RUNNER")
+                con.connect()
+                con.consume()
         
-        publisher.stop(True)
-
         console_out("starting grace period for consumer to catch up", "TEST RUNNER")
         ctr = 0
+        
+        receive_total = 0
+        received_set = set()
         while ctr < grace_period_sec:
-            if consumer.get_received_count() >= publisher.get_pos_ack_count() and len(publisher.get_msg_set().difference(consumer.get_msg_set())) == 0:
+            for con in consumers:
+                receive_total += con.get_received_count()
+                received_set = received_set.union(con.get_msg_set())
+
+            if receive_total >= publisher.get_pos_ack_count() and len(publisher.get_msg_set().difference(received_set)) == 0:
                 break
             time.sleep(1)
             ctr += 1
 
         confirmed_set = publisher.get_msg_set()
-        received_set = consumer.get_msg_set()
-
         lost_msgs = confirmed_set.difference(received_set)
-
 
         console_out("RESULTS------------------------------------", "TEST RUNNER")
 
@@ -156,26 +203,21 @@ def main():
 
         console_out(f"Confirmed count: {publisher.get_pos_ack_count()} Received count: {consumer.get_received_count()}", "TEST RUNNER")
         success = True
-        if publisher.get_pos_ack_count() > consumer.get_received_count():
-            console_out("FAILED TEST: LOST MESSAGES", "TEST RUNNER")
-            success = False
   
-        if consumer.received_out_of_order() == True:
-            console_out("FAILED TEST: OUT OF ORDER MESSAGES", "TEST RUNNER")
-            success = False
-        
         if len(lost_msgs) > 0:
             console_out("FAILED TEST: LOST MESSAGES", "TEST RUNNER")
             success = False
-
-        if success == True:
+        else:
             console_out("TEST OK", "TEST RUNNER")
 
         console_out("RESULTS END------------------------------------", "TEST RUNNER")
 
         try:
-            consumer.stop()
-            con_thread.join()
+            for con in consumers:
+                con.stop()
+            con_thread1.join()
+            con_thread2.join()
+            con_thread3.join()
             pub_thread.join()
         except Exception as e:
             console_out("Failed to clean up test correctly: " + str(e), "TEST RUNNER")

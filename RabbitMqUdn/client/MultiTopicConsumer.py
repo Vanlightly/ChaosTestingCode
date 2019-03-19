@@ -23,6 +23,7 @@ class MultiTopicConsumer:
         self.consumer_id = consumer_id
         self.connected_node = connect_node
         self.msg_set = set()
+        self.consumer_tag = ""
 
         self.nodes = list()
         for node_name in self.node_names:
@@ -131,18 +132,23 @@ class MultiTopicConsumer:
         self.keys[key] = curr_value
 
     def callback(self, ch, method, properties, body):
-        ch.basic_ack(delivery_tag = method.delivery_tag)
-        self.receive_ctr += 1
+        if self.terminate == False:
+            ch.basic_ack(delivery_tag = method.delivery_tag)
+            self.receive_ctr += 1
 
-        if self.check_ordering:
-            self.check_order(body, method.redelivered)
-        elif self.receive_ctr % self.print_mod == 0:
-            console_out(f"{body}", self.get_actor())
+            if self.check_ordering:
+                self.check_order(body, method.redelivered)
+            elif self.receive_ctr % self.print_mod == 0:
+                console_out(f"{body}", self.get_actor())
 
     def disconnect(self):
         try:
+            if self.channel is not None and self.channel.is_open:
+                self.channel.stop_consuming()
+
             if self.connection is not None and self.connection.is_open:
                 self.connection.close()
+                console_out(f"Closed connection", self.get_actor())
 
             return True
         except Exception as e:
@@ -159,6 +165,7 @@ class MultiTopicConsumer:
         self.connect()
 
     def consume(self):
+        self.terminate = False
         while True:
             try:
                 if self.terminate == True:
@@ -167,11 +174,11 @@ class MultiTopicConsumer:
                 if self.connection is None or self.connection.is_closed:
                     self.reconnect()
 
-                tag = self.channel.basic_consume(self.callback,
+                self.consumer_tag = self.channel.basic_consume(self.callback,
                             queue=self.queue_name,
                             no_ack=False)
                 
-                console_out(f"Consuming queue: {self.queue_name} with consumer tag: {tag}", self.get_actor())
+                console_out(f"Consuming queue: {self.queue_name} with consumer tag: {self.consumer_tag}", self.get_actor())
 
                 self.channel.start_consuming()
             except KeyboardInterrupt:
@@ -225,7 +232,7 @@ class MultiTopicConsumer:
 
     def stop(self):
         self.terminate = True
-        self.connection.close()
+        self.disconnect()
 
     def get_msg_set(self):
         return self.msg_set
