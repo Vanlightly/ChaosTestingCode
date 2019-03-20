@@ -23,6 +23,16 @@ The detection mechanisms are:
 
 Both detection mechanisms are not perfect and can result in false positives due to ordering and message loss bugs. So manual review of the logs of a failed run is required.
 
+## Log output
+You can tell the consumers apart as they are numbered in the following format: [run]-con-[number]. There are always three consumers (0, 1, and 2) that are either connected or not-connected.
+
+For example: CONSUMER(9-con-1) indicates that it is the consumer 1 of run 9.
+
+Publisher and consumers log every 5000th message sent/received. Consumers also log every message that is:
+- a duplicate
+- redelivered=true
+- out-of-order
+
 ## Test Results Summary
 
 No cases of two consumers concurrently in active state detected. However, other known and not known bugs were detected.
