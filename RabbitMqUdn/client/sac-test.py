@@ -57,7 +57,9 @@ def create_queue(mgmt_node, queue_name, replication_factor):
         console_out("Could not create queue. Will retry. " + str(e), "TEST RUNNER")
         return False
 
-
+def get_init_node(live_nodes, index):
+    next_index =  index % len(live_nodes)
+    return live_nodes[next_index]
 
 def main():
     args = get_args(sys.argv)
@@ -86,11 +88,8 @@ def main():
         console_out(f"Live nodes: {live_nodes}", "TEST RUNNER")
 
         pub_node = live_nodes[random.randint(0, len(live_nodes)-1)]
-        con_node = live_nodes[random.randint(0, len(live_nodes)-1)]
-        console_out(f"publish to: {pub_node}", "TEST RUNNER")
-        console_out(f"consume from: {con_node}", "TEST RUNNER")
-
-        print_mod = in_flight_max
+        
+        print_mod = 5000
         queue_name = queue + "_" + str(x)
         
         queue_created = False
@@ -102,15 +101,21 @@ def main():
         time.sleep(10)
 
         publisher = RabbitPublisher(str(x), live_nodes, pub_node, in_flight_max, 120, print_mod)
-        consumer1 = MultiTopicConsumer(str(x) + "-con0", live_nodes, False, print_mod, con_node)
+        consumer1_node = get_init_node(live_nodes, 1)
+        console_out(f"Consumer 0 will first connect to {consumer1_node}", "TEST RUNNER")
+        consumer1 = MultiTopicConsumer(str(x) + "-con-0", live_nodes, True, print_mod, consumer1_node)
         consumer1.connect()
         consumer1.set_queue(queue_name)
-
-        consumer2 = MultiTopicConsumer(str(x) + "-con1", live_nodes, False, print_mod, con_node)
+#
+        consumer2_node = get_init_node(live_nodes, 2)
+        console_out(f"Consumer 1 will first connect to {consumer2_node}", "TEST RUNNER")
+        consumer2 = MultiTopicConsumer(str(x) + "-con-1", live_nodes, True, print_mod, consumer2_node)
         consumer2.connect()
         consumer2.set_queue(queue_name)
 
-        consumer3 = MultiTopicConsumer(str(x) + "-con2", live_nodes, False, print_mod, con_node)
+        consumer3_node = get_init_node(live_nodes, 3)
+        console_out(f"Consumer 2 will first connect to {consumer3_node}", "TEST RUNNER")
+        consumer3 = MultiTopicConsumer(str(x) + "-con-2", live_nodes, True, print_mod, consumer3_node)
         consumer3.connect()
         consumer3.set_queue(queue_name)
 
@@ -134,7 +139,7 @@ def main():
         console_out("publisher started", "TEST RUNNER")
 
         consumers = [consumer1, consumer2, consumer3]
-        consumerThreads = [con_thread1, con_thread2, con_thread3]
+        consumer_threads = [con_thread1, con_thread2, con_thread3]
 
         init_wait_sec = 20
         console_out(f"Will execute first action in {init_wait_sec} seconds", "TEST RUNNER")
@@ -142,7 +147,13 @@ def main():
 
         for action_num in range(0, actions):
             console_out(f"execute action {str(action_num)} of test {str(x)}", "TEST RUNNER")
-            if random.randint(0, 1) == 1:
+
+            running_cons = 0
+            for con in consumers:
+                if con.terminate == False:
+                    running_cons += 1
+
+            if running_cons > 1 and random.randint(0, 1) == 1:
                 console_out(f"execute chaos and repair action", "TEST RUNNER")
                 chaos.single_action_and_repair(120)
             else:
@@ -150,14 +161,15 @@ def main():
                 con = consumers[con_index]
                 if con.terminate == True:
                     console_out(f"Starting consumer {con_index}", "TEST RUNNER")
-                    con.connect()
-                    consumerThreads[con_index] = threading.Thread(target=con.consume)
-                    consumerThreads[con_index].start()
+                    conn_ok = con.connect()
+                    if conn_ok:
+                        consumer_threads[con_index] = threading.Thread(target=con.consume)
+                        consumer_threads[con_index].start()
                 else:
                     console_out(f"Stopping consumer {con_index}", "TEST RUNNER")
                     try:
                         con.stop()
-                        consumerThreads[con_index].join()
+                        consumer_threads[con_index].join()
                     except Exception as e:
                         template = "An exception of type {0} occurred. Arguments:{1!r}"
                         message = template.format(type(ex).__name__, ex.args)
@@ -170,12 +182,15 @@ def main():
 
         time.sleep(60)
         console_out("Resuming consumers", "TEST RUNNER")
-        for con in consumers:
-            if con.terminate == True:
+        for con_index in range(0, len(consumers)):
+            if consumers[con_index].terminate == True:
                 console_out(f"Starting consumer {con_index}", "TEST RUNNER")
-                con.connect()
-                con.consume()
+                conn_ok = consumers[con_index].connect()
+                if conn_ok:
+                    consumer_threads[con_index] = threading.Thread(target=consumers[con_index].consume)
+                    consumer_threads[con_index].start()
         
+        publisher.stop(True)
         console_out("starting grace period for consumer to catch up", "TEST RUNNER")
         ctr = 0
         
@@ -192,22 +207,22 @@ def main():
             ctr += 1
 
         confirmed_set = publisher.get_msg_set()
-        lost_msgs = confirmed_set.difference(received_set)
+        not_consumed_msgs = confirmed_set.difference(received_set)
 
         console_out("RESULTS------------------------------------", "TEST RUNNER")
+        console_out(f"Confirmed count: {publisher.get_pos_ack_count()} Received count: {receive_total}", "TEST RUNNER")
 
-        if len(lost_msgs) > 0:
-            console_out(f"Lost messages count: {len(lost_msgs)}", "TEST RUNNER")
-            for msg in lost_msgs:
-                console_out(f"Lost message: {msg}", "TEST RUNNER")
-
-        console_out(f"Confirmed count: {publisher.get_pos_ack_count()} Received count: {consumer.get_received_count()}", "TEST RUNNER")
         success = True
-  
-        if len(lost_msgs) > 0:
-            console_out("FAILED TEST: LOST MESSAGES", "TEST RUNNER")
+        if len(not_consumed_msgs) > 0:
+            console_out(f"FAILED TEST: Potential failure to promote Waiting to Active. Not consumed count: {len(not_consumed_msgs)}", "TEST RUNNER")
             success = False
-        else:
+
+        for con_index in range(0, len(consumers)):
+            if consumers[con_index].received_out_of_order() == True:
+                success = False
+                console_out(f"FAILED TEST: Consumer {con_index} received out-of-order messages", "TEST RUNNER")
+
+        if success:
             console_out("TEST OK", "TEST RUNNER")
 
         console_out("RESULTS END------------------------------------", "TEST RUNNER")
@@ -215,9 +230,10 @@ def main():
         try:
             for con in consumers:
                 con.stop()
-            con_thread1.join()
-            con_thread2.join()
-            con_thread3.join()
+
+            for con_thread in consumer_threads:
+                con_thread.join()
+
             pub_thread.join()
         except Exception as e:
             console_out("Failed to clean up test correctly: " + str(e), "TEST RUNNER")

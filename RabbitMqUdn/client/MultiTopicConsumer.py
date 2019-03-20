@@ -49,9 +49,11 @@ class MultiTopicConsumer:
         return -1
         
     def next_node(self):
-        self.curr_node += 1
-        if self.curr_node >= len(self.node_names):
-            self.curr_node = 0
+        new_node = self.curr_node
+        while new_node == self.curr_node:
+            new_node = random.randint(0, len(self.node_names)-1)
+
+        self.curr_node = new_node
 
     def get_actor(self):
         return f"CONSUMER({self.consumer_id})->{self.connected_node}"
@@ -63,15 +65,22 @@ class MultiTopicConsumer:
         return self.out_of_order;
 
     def connect(self):
-        self.connected_node = self.nodes[self.curr_node]
-        credentials = pika.PlainCredentials('jack', 'jack')
-        parameters = pika.ConnectionParameters(self.connected_node,
-                                            5672,
-                                            '/',
-                                            credentials)
-        self.connection = pika.BlockingConnection(parameters)
-        self.channel = self.connection.channel()
-        self.channel.basic_qos(prefetch_count=10)
+        try:
+            self.connected_node = self.nodes[self.curr_node]
+            credentials = pika.PlainCredentials('jack', 'jack')
+            parameters = pika.ConnectionParameters(self.connected_node,
+                                                5672,
+                                                '/',
+                                                credentials)
+            self.connection = pika.BlockingConnection(parameters)
+            self.channel = self.connection.channel()
+            self.channel.basic_qos(prefetch_count=10)
+            return True
+        except Exception as e:
+            template = "An exception of type {0} occurred. Arguments:{1!r}"
+            message = template.format(type(e).__name__, e.args)
+            console_out("Failed trying to connect. " + message, self.get_actor())
+            return False 
 
     def declare(self, queue_name, exchanges):
         self.channel.queue_declare(queue=queue_name, durable=True)
@@ -116,7 +125,7 @@ class MultiTopicConsumer:
                 jump = last_value - curr_value
                 last = f"Last-acked={last_value}"
                 console_out(f"{message_body} {last} JUMP BACK {jump} {duplicate} {redelivered_str}", self.get_actor())
-                if is_dup == False:
+                if is_dup == False and redelivered == False:
                     self.out_of_order = True
             elif self.receive_ctr % self.print_mod == 0:
                 console_out(f"Sample msg: {message_body} {duplicate} {redelivered_str}", self.get_actor())
@@ -127,7 +136,7 @@ class MultiTopicConsumer:
                 console_out(f"Latest msg: {message_body} {duplicate} {redelivered_str}", self.get_actor())
             else:
                 console_out(f"{message_body} JUMP FORWARD {curr_value} {duplicate} {redelivered_str}", self.get_actor())
-                self.out_of_order = True
+                # self.out_of_order = True
         
         self.keys[key] = curr_value
 
@@ -172,6 +181,9 @@ class MultiTopicConsumer:
                     break
 
                 if self.connection is None or self.connection.is_closed:
+                    self.reconnect()
+
+                if self.channel is None or self.channel.is_closed:
                     self.reconnect()
 
                 self.consumer_tag = self.channel.basic_consume(self.callback,
