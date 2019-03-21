@@ -9,27 +9,24 @@ from printer import console_out
 
 class MultiTopicConsumer:
     
-    def __init__(self, consumer_id, node_names, check_ordering, print_mod, connect_node):
+    def __init__(self, consumer_id, node_names, message_monitor, connect_node):
         self.node_names = node_names
         self.connection = None
         self.channel = None
         self.queue_name = ""
-        self.check_ordering = check_ordering
-        self.keys = dict()
-        self.print_mod = print_mod
-        self.receive_ctr = 0
-        self.out_of_order = False;
+        self.message_monitor = message_monitor
         self.terminate = False
         self.consumer_id = consumer_id
         self.connected_node = connect_node
-        self.msg_set = set()
         self.consumer_tag = ""
+        self.actor = "-"
 
         self.nodes = list()
         for node_name in self.node_names:
             self.nodes.append(self.get_node_ip(node_name))
 
         self.curr_node = self.get_node_index(connect_node)
+        self.set_actor()
     
     def get_node_ip(self, node_name):
         bash_command = "bash ../cluster/get-node-ip.sh " + node_name
@@ -55,14 +52,11 @@ class MultiTopicConsumer:
 
         self.curr_node = new_node
 
+    def set_actor(self):
+        self.actor = f"CONSUMER({self.consumer_id})->{self.connected_node}"
+    
     def get_actor(self):
-        return f"CONSUMER({self.consumer_id})->{self.connected_node}"
-
-    def get_received_count(self):
-        return self.receive_ctr;
-
-    def received_out_of_order(self):
-        return self.out_of_order;
+        return self.actor
 
     def connect(self):
         try:
@@ -94,61 +88,11 @@ class MultiTopicConsumer:
     def set_queue(self, queue_name):
         self.queue_name = queue_name
     
-    def check_order(self, message_body, redelivered):
-        body_str = str(message_body, "utf-8")
-        parts = body_str.split('=')
-        key = parts[0]
-        curr_value = int(parts[1])
-
-        if body_str in self.msg_set:
-            duplicate = f"DUPLICATE"
-            is_dup = True
-        else:
-            duplicate = ""
-            is_dup = False
-
-        if redelivered:
-            redelivered_str = "REDELIVERED"
-        else:
-            redelivered_str = ""
-
-        self.msg_set.add(body_str)
-
-        if key in self.keys:
-            last_value = self.keys[key]
-            
-            if last_value + 1 < curr_value:
-                jump = curr_value - last_value
-                last = f"Last-acked={last_value}"
-                console_out(f"{message_body} {last} JUMP FORWARD {jump} {duplicate} {redelivered_str}", self.get_actor())
-            elif last_value > curr_value:
-                jump = last_value - curr_value
-                last = f"Last-acked={last_value}"
-                console_out(f"{message_body} {last} JUMP BACK {jump} {duplicate} {redelivered_str}", self.get_actor())
-                if is_dup == False and redelivered == False:
-                    self.out_of_order = True
-            elif self.receive_ctr % self.print_mod == 0:
-                console_out(f"Sample msg: {message_body} {duplicate} {redelivered_str}", self.get_actor())
-            elif is_dup or redelivered:
-                console_out(f"Msg: {message_body} {duplicate} {redelivered_str}", self.get_actor())
-        else:
-            if curr_value == 1:
-                console_out(f"Latest msg: {message_body} {duplicate} {redelivered_str}", self.get_actor())
-            else:
-                console_out(f"{message_body} JUMP FORWARD {curr_value} {duplicate} {redelivered_str}", self.get_actor())
-                # self.out_of_order = True
-        
-        self.keys[key] = curr_value
-
     def callback(self, ch, method, properties, body):
         if self.terminate == False:
             ch.basic_ack(delivery_tag = method.delivery_tag)
-            self.receive_ctr += 1
-
-            if self.check_ordering:
-                self.check_order(body, method.redelivered)
-            elif self.receive_ctr % self.print_mod == 0:
-                console_out(f"{body}", self.get_actor())
+            self.message_monitor.append(body, self.consumer_tag, self.consumer_id, self.get_actor(), method.redelivered)
+            
 
     def disconnect(self):
         try:
@@ -171,7 +115,7 @@ class MultiTopicConsumer:
         self.channel = None
         console_out("Connection is closed. Opening new connection", self.get_actor())
         self.next_node()
-        self.connect()
+        return self.connect()
 
     def consume(self):
         self.terminate = False
@@ -180,11 +124,10 @@ class MultiTopicConsumer:
                 if self.terminate == True:
                     break
 
-                if self.connection is None or self.connection.is_closed:
-                    self.reconnect()
-
-                if self.channel is None or self.channel.is_closed:
-                    self.reconnect()
+                if self.connection is None or self.connection.is_closed or self.channel is None or self.channel.is_closed:
+                    if self.reconnect() == False:
+                        time.sleep(5)
+                        continue
 
                 self.consumer_tag = self.channel.basic_consume(self.callback,
                             queue=self.queue_name,
@@ -192,6 +135,7 @@ class MultiTopicConsumer:
                 
                 console_out(f"Consuming queue: {self.queue_name} with consumer tag: {self.consumer_tag}", self.get_actor())
 
+                self.set_actor()
                 self.channel.start_consuming()
             except KeyboardInterrupt:
                 console_out("Stopping consumption and closing the connection", self.get_actor())
@@ -245,7 +189,4 @@ class MultiTopicConsumer:
     def stop(self):
         self.terminate = True
         self.disconnect()
-
-    def get_msg_set(self):
-        return self.msg_set
         

@@ -82,21 +82,21 @@ python ordering-consumer.py --queue q1 --exchanges topic1,topic2,topic3,topic4,t
 ```
 
 
-## RabbitMQ v3.8 Quorum Queue Testing
+## RabbitMQ v3.8 Testing
 
 ### Create a docker image
 Note that the 3.8.0-beta 2 and 3 binaries are available. Each use the latest erlang image as a base.
 
 ```
-$ cd RabbitMqUdn/v3.8.0-beta
-$ docker build -t jackvanlightly/rabbitmq-v3.8.0-beta.2.erl.alpine .
+$ cd RabbitMqUdn/v3.8.0-beta.3
+$ docker build -t jackvanlightly/rabbitmq-v3.8.0-beta.3.erl.alpine .
 $ cd management
-$ docker build -t jackvanlightly/rabbitmq-mgmt-v3.8.0-beta.2.erl.alpine .
+$ docker build -t jackvanlightly/rabbitmq-mgmt-v3.8.0-beta.3.erl.alpine .
 ```
 
-### Quorum Queues Test Failure using Blockade
+### Quorum Queues Test
 
-### Manual test steps using python client and blockade
+#### Manual test steps using python client and blockade
 Create a quorum queue Test1 with rep factor of 3, with leader on rabbitmq3.
 
 First ensure that the cluster/blockade-files/blockade-rmq-3b-3.8.yml has the correct image of RabbitMQ that you want to test. Then run the following:
@@ -112,7 +112,7 @@ You can now perform various tests on the Test1 quorum queue.
 
 Note that create-quorum-queue-sac.py creates a quorum queue with Single Active Consumer enabled.
 
-### Automated tests
+#### Automated tests
 The script client/quorum-queue-test.py runs an automated randomized test and verifies the following invariants:
 - no message loss
 - no out-of-order messages
@@ -132,17 +132,48 @@ Messages can jump forward only (this could indicate message loss but not an orde
 
 1,2,3,4,8,9,10
 
+Messages can jump back when redelivered=true.
+
 ```
 $ python -u quorum-queue-test.py --queue q --tests 20 --actions 20 --grace-period-sec 300 --in-flight-max 100  2>&1 | tee test.log
 ```
 
-The script client/sac-test.py runs an automated randomized test of SAC. Currently does not monitor,
-invariants as it is still being developed. Just eye balling the logs at the moment.
+### Single Active Consumer Test
 
-Invariants that it will verify will be:
-- no two consumers can be "single active" at a time
-- given time on a stable cluster, an active consumer fail-over will always occur
+#### Test Design
+One publisher sends messages with a monotonically increasing integer. Three consumers, each at first connected to a different broker in the cluster.
 
+Consumers post all their consumed (and acked) messages to an in-memory queue which is read by the MessageMonitor class. This class is responsible for:
+- detecting active consumer change
+- detecting out-of-order messages
+- printing messages that are duplicates and redelivered=true
+- printing each 5000th message
+
+The test consists of X number separate runs, each with a new cluster. Each run consists of:
+- the publisher sending messages constantly
+- the three consumers trying to consume constantly
+- 10 minutes of chaos and consumer actions. Those actions can be starting/stopping consumers, or performing a chaos and repair action, such as killing a node then 2 minutes later bringing it back up.
+
+The invariants/properties being tested are:
+1. ONE ACTIVE: only one active consumer at a time (safety property)
+2. EVENTUAL FAIL-OVER: If the active consumer fails, given time, another consumer will become the new active consumer (liveness property)
+
+The detection mechanisms are:
+- ONE ACTIVE: When the MessageMonitor sees that the monotonic integer jumps backwards and redelivered=false and it is not a duplicate. This is not a perfect detection mechanism as it can be a false positive (due to the violation of FIFO delivery guarantees which is a different invariant)
+- EVENTUAL FAIL-OVER: A grace period is provided at the end of the test run to allow consumption to catch up with the publisher. If consumption does not catch up it indicates that potentially, a failover did not take place.
+
+Both detection mechanisms are not perfect and can result in false positives due to ordering and message loss bugs. So manual review of the logs of a failed run is required.
+
+#### Running the test
+
+The test can be run again mirrored or quorum queues.
+
+Quorum queues
 ```
-$ python -u sac-test.py --queue beta3 --tests 10 --actions 20 --grace-period-sec 300 --in-flight-max 200 --cluster 3  2>&1 | tee test-sac.log
+$ python -u sac-test.py --queue beta3 --tests 10 --actions 20 --grace-period-sec 300 --in-flight-max 200 --cluster 3 --consumers 5 --queue-type quorum  2>&1 | tee test-sac.log
+```
+
+Mirrored queues
+```
+$ python -u sac-test.py --queue beta3 --tests 10 --actions 20 --grace-period-sec 300 --in-flight-max 200 --cluster 3 --consumers 5 --queue-type mirrored  2>&1 | tee test-sac.log
 ```

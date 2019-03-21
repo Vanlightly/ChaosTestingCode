@@ -15,6 +15,7 @@ class ChaosExecutor(object):
         self.network_state = "fast"
         self.network_actions = ["slow-network-one", "slow-network-all", "flaky-network-one", "flaky-network-all"]
         self.node_names = node_names
+        self.stop_random = False
 
     def get_live_nodes(self):
         bash_command = "bash ../cluster/list-live-nodes.sh"
@@ -111,6 +112,13 @@ class ChaosExecutor(object):
             subprocess.call(["bash", "../cluster/heal-partitions.sh"])
             self.partition_state = "healed"
 
+    def stop_random_single_action_and_repair(self):
+        self.stop_random = True
+    
+    def start_random_single_action_and_repair(self, duration_seconds):
+        while self.stop_random == False:
+            self.single_action_and_repair(duration_seconds)
+
     def single_action_and_repair(self, duration_seconds):
         chaos_action = self.sac_actions[random.randint(0, len(self.sac_actions)-1)]
         live_nodes = self.get_live_nodes()
@@ -133,7 +141,13 @@ class ChaosExecutor(object):
             self.partition_state = "partitioned"
 
         subprocess.call(["bash", "../cluster/cluster-status.sh"])
-        time.sleep(duration_seconds)
+        self.wait_for(duration_seconds)
         self.repair()
         subprocess.call(["bash", "../cluster/cluster-status.sh"])
-        time.sleep(duration_seconds)
+        self.wait_for(duration_seconds)
+
+    def wait_for(self, seconds):
+        ctr = 0
+        while self.stop_random == False and ctr < seconds:
+            ctr += 1
+            time.sleep(1)
