@@ -9,19 +9,28 @@ class KafkaConsumer:
         self.broker_manager = broker_manager
         self.msg_monitor = msg_monitor
         self.consumer_id = consumer_id
-        self.actor = f"CONSUMER(Test:{test_number} Id:{consumer_id})"
+        self.actor = f"CONSUMER(Test:{test_number} Id:C{consumer_id})"
         self.terminate = False
         self.topic = None
 
-    def on_assignment(self, con, partitions):
+    def get_partitions(self, partitions):
+        ps = list()
         for p in partitions:
-            p.offset = 0
-        console_out(f"Assigned partitions {partitions}", self.actor)
+            #p.offset = 0
+            ps.append(str(p.partition))
+
+        if len(ps) == 0:
+            return "none"
+        else:
+            return ",".join(ps)
+
+    def on_assignment(self, con, partitions):
+        console_out(f"Assigned partitions: {self.get_partitions(partitions)}", self.actor)
         self.consumer.assign(partitions)
 
     def on_revoke(self, con, partitions):
         self.consumer.unassign()
-        console_out(f"Unassigned partitions {partitions}", self.actor)
+        console_out(f"Unassigned partitions: {self.get_partitions(partitions)}", self.actor)
 
     def create_consumer(self, group_id, topic):
         self.terminate = False
@@ -30,10 +39,10 @@ class KafkaConsumer:
                             'api.version.request': True,
                             'enable.auto.commit': True,
                             'group.id': group_id,
-                            'auto.offset.reset': 'earliest'
-                            #'default.topic.config': {
-                            #    'auto.offset.reset': 'smallest'
-                            #}
+                            'auto.offset.reset': 'earliest',
+                            'default.topic.config': {
+                                'auto.offset.reset': 'smallest'
+                            }
         })
         self.topic = topic
 

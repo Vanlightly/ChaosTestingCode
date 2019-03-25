@@ -14,10 +14,8 @@ class KafkaProducer(object):
     
     def __init__(self, test_number, producer_id, broker_manager, acks_mode, in_flight_limit, print_mod):
         
-        self._stopping = False
-
         self.broker_manager = broker_manager
-        self.producer_id = f"PRODUCER(Test:{test_number} Id:{producer_id})"
+        self.producer_id = f"PRODUCER(Test:{test_number} Id:P{producer_id})"
         self.producer = None
         self.acks_mode = acks_mode
         self.message_type = None
@@ -90,6 +88,8 @@ class KafkaProducer(object):
 
             while len(self.pending_ack) > self.in_flight_limit:
                 time.sleep(0.2)
+                if self.terminate:
+                    break
                 self.producer.poll(0)
 
             self.producer.produce(topic, value=body.encode('utf-8'),key=self.keys[self.key_index], callback=self.delivery_report)
@@ -102,11 +102,14 @@ class KafkaProducer(object):
                 self.val += 1
 
     def print_final_count(self):
-        console_out(f"Final Count => Sent: {self.curr_pos} Pos acks: {self.pos_acks} Neg acks: {self.neg_acks} Undeliverable: {self.undeliverable} No Acks: {self.no_acks}", self.get_actor())
+        console_out(f"Final Count => Sent: {self.curr_pos} Pos acks: {self.pos_acks} Neg acks: {self.neg_acks}", self.get_actor())
 
     def get_msg_set(self):
         return self.msg_set
 
+    def get_pos_ack_count(self):
+        return self.pos_acks
+    
     def stop_producing(self):
         self.terminate = True
         self.print_final_count()

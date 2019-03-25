@@ -109,21 +109,21 @@ def main():
         console_out("Resuming consumers", "TEST RUNNER")
         consumer_manager.resume_all_consumers()
         
-        publisher.stop(True)
+        producer.stop_producing()
         console_out("starting grace period for consumer to catch up", "TEST RUNNER")
         ctr = 0
         
         while ctr < grace_period_sec:
-            if msg_monitor.get_unique_count() >= publisher.get_pos_ack_count() and len(publisher.get_msg_set().difference(msg_monitor.get_msg_set())) == 0:
+            if msg_monitor.get_unique_count() >= producer.get_pos_ack_count() and len(producer.get_msg_set().difference(msg_monitor.get_msg_set())) == 0:
                 break
             time.sleep(1)
             ctr += 1
 
-        confirmed_set = publisher.get_msg_set()
+        confirmed_set = producer.get_msg_set()
         lost_msgs = confirmed_set.difference(msg_monitor.get_msg_set())
 
         console_out("RESULTS------------------------------------", "TEST RUNNER")
-        console_out(f"Confirmed count: {publisher.get_pos_ack_count()} Received count: {msg_monitor.get_receive_count()} Unique received: {msg_monitor.get_unique_count()}", "TEST RUNNER")
+        console_out(f"Confirmed count: {producer.get_pos_ack_count()} Received count: {msg_monitor.get_receive_count()} Unique received: {msg_monitor.get_unique_count()}", "TEST RUNNER")
 
         success = True
         if len(lost_msgs) > 0:

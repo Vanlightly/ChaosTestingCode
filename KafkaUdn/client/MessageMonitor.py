@@ -56,10 +56,10 @@ class MessageMonitor:
 
         if key in self.consumer_ids:
             if self.consumer_ids[key] != consumer_id:
-                console_out(f"CONSUMER CHANGE FOR KEY {key}! Last id: {self.consumer_ids[key]} New id: {consumer_id} Msg: {message_body} {duplicate}", actor)
+                console_out(f"CONSUMER CHANGE FOR SEQUENCE {key.upper()}! Last id: {self.consumer_ids[key]} New id: {consumer_id} Msg: {message_body} {duplicate}", actor)
                 self.consumer_ids[key] = consumer_id
         else:
-            console_out(f"CONSUMER {consumer_id} CONSUMING KEY {key}! Msg: {message_body} {duplicate}", actor)
+            console_out(f"CONSUMER {consumer_id} CONSUMING SEQUENCE {key.upper()}! Msg: {message_body} {duplicate}", actor)
             self.consumer_ids[key] = consumer_id
 
         if key in self.keys:
