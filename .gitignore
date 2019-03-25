@@ -125,5 +125,6 @@ Pulsar/automated/test-output
 Pulsar/venv-pulsar
 
 KafkaUdn/venv-kafka
+KafkaUdn/cluster/.blockade
 
 
