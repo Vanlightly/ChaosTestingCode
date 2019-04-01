@@ -2,7 +2,6 @@
 import pika
 import sys
 import time
-import datetime
 import subprocess
 import random
 import threading
@@ -35,53 +34,45 @@ def main():
     chaos_min_interval = int(get_optional_arg(args, "--chaos-min-interval", "30"))
     chaos_max_interval = int(get_optional_arg(args, "--chaos-max-interval", "120"))
     message_type = "sequence"
-    queue_type = "quorum"
+    queue_type = get_mandatory_arg(args, "--queue-type")
 
     sac_enabled = True
     if sac.upper() == "FALSE":
         sac_enabled = False
 
-    for test_number in range(1, tests+1):
+    for test_number in range(tests):
 
         print("")
-        console_out(f"TEST RUN: {str(test_number)} of {tests}--------------------------", "TEST RUNNER")
-        setup_complete = False
+        console_out(f"TEST RUN: {str(test_number)} --------------------------", "TEST RUNNER")
+        subprocess.call(["bash", "../automated/setup-test-run.sh", cluster_size, "3.8"])
+        console_out(f"Waiting for cluster...", "TEST RUNNER")
+        time.sleep(30)
+        console_out(f"Cluster status:", "TEST RUNNER")
+        subprocess.call(["bash", "../cluster/cluster-status.sh"])
         
-        while not setup_complete:
-            subprocess.call(["bash", "../automated/setup-test-run.sh", cluster_size, "3.8"])
-            console_out(f"Waiting for cluster...", "TEST RUNNER")
-            time.sleep(30)
-            console_out(f"Cluster status:", "TEST RUNNER")
-            subprocess.call(["bash", "../cluster/cluster-status.sh"])
-            
-            broker_manager = BrokerManager()
-            broker_manager.load_initial_nodes()
-            initial_nodes = broker_manager.get_initial_nodes()
-            
-            console_out(f"Initial nodes: {initial_nodes}", "TEST RUNNER")
+        broker_manager = BrokerManager()
+        broker_manager.load_initial_nodes()
+        initial_nodes = broker_manager.get_initial_nodes()
+        
+        console_out(f"Initial nodes: {initial_nodes}", "TEST RUNNER")
 
-            pub_node = broker_manager.get_random_init_node()
-            con_node = broker_manager.get_random_init_node()
-            console_out(f"publish to: {pub_node}", "TEST RUNNER")
-            console_out(f"consume from: {con_node}", "TEST RUNNER")
+        pub_node = broker_manager.get_random_init_node()
+        con_node = broker_manager.get_random_init_node()
+        console_out(f"publish to: {pub_node}", "TEST RUNNER")
+        console_out(f"consume from: {con_node}", "TEST RUNNER")
 
-            print_mod = in_flight_max * 5
-            queue_name = queue + "_" + str(test_number)
-            
-            mgmt_node = broker_manager.get_random_init_node()
-            queue_created = False
-            qc_ctr = 0
-            while queue_created == False and qc_ctr < 20:    
-                qc_ctr += 1
-                if sac_enabled:
-                    queue_created = broker_manager.create_sac_queue(mgmt_node, queue_name, cluster_size, queue_type)
-                else:
-                    queue_created = broker_manager.create_queue(mgmt_node, queue_name, cluster_size, queue_type)
-                
-                if queue_created:
-                    setup_complete = True
-                else:
-                    time.sleep(5)
+        print_mod = in_flight_max * 5
+        queue_name = queue + "_" + str(test_number)
+        
+        mgmt_node = broker_manager.get_random_init_node()
+        queue_created = False
+        while queue_created == False:    
+            if sac_enabled:
+                queue_created = broker_manager.create_sac_queue(mgmt_node, queue_name, cluster_size, queue_type)
+            else:
+                queue_created = broker_manager.create_queue(mgmt_node, queue_name, cluster_size, queue_type)
+            if queue_created == False:
+                time.sleep(5)
 
         time.sleep(10)
 
@@ -107,12 +98,12 @@ def main():
         pub_thread.start()
         console_out("publisher started", "TEST RUNNER")
 
-        for action_num in range(1, actions+1):
+        for action_num in range(0, actions):
             wait_sec = random.randint(chaos_min_interval, chaos_max_interval)
             console_out(f"waiting for {wait_sec} seconds before next action", "TEST RUNNER")
             time.sleep(wait_sec)
 
-            console_out(f"execute chaos action {str(action_num)}/{actions} of test {str(test_number)}", "TEST RUNNER")
+            console_out(f"execute chaos action {str(action_num)} of test {str(test_number)}", "TEST RUNNER")
             chaos.execute_chaos_action()
             subprocess.call(["bash", "../cluster/cluster-status.sh"])
 
@@ -126,11 +117,8 @@ def main():
         console_out("starting grace period for consumer to catch up", "TEST RUNNER")
         ctr = 0
         
-        while True:
-            ms_since_last_msg = datetime.datetime.now() - msg_monitor.get_last_msg_time()
+        while ctr < grace_period_sec:
             if msg_monitor.get_unique_count() >= publisher.get_pos_ack_count() and len(publisher.get_msg_set().difference(msg_monitor.get_msg_set())) == 0:
-                break
-            elif ctr > grace_period_sec and ms_since_last_msg.total_seconds() > 15:
                 break
             time.sleep(1)
             ctr += 1
@@ -163,6 +151,7 @@ def main():
 
         try:
             consumer_manager.stop_all_consumers()
+            con_thread.join()
             pub_thread.join()
         except Exception as e:
             console_out("Failed to clean up test correctly: " + str(e), "TEST RUNNER")

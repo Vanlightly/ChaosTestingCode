@@ -53,7 +53,7 @@ class MultiTopicConsumer:
         self.curr_node = new_node
 
     def set_actor(self):
-        self.actor = f"CONSUMER({self.consumer_id})->{self.connected_node}"
+        self.actor = f"{self.consumer_id}->{self.connected_node}"
     
     def get_actor(self):
         return self.actor
@@ -137,12 +137,12 @@ class MultiTopicConsumer:
 
                 self.set_actor()
                 self.channel.start_consuming()
-            except KeyboardInterrupt:
-                console_out("Stopping consumption and closing the connection", self.get_actor())
-                self.channel.stop_consuming()
-                self.connection.close()
-                console_out("Connection closed", self.get_actor())
-                break
+            # except KeyboardInterrupt:
+            #     console_out("Stopping consumption and closing the connection", self.get_actor())
+            #     self.channel.stop_consuming()
+            #     self.connection.close()
+            #     console_out("Connection closed", self.get_actor())
+            #     break
             except pika.exceptions.ConnectionClosed:
                 console_out("Connection was closed, retrying...", self.get_actor())
                 time.sleep(5)
@@ -176,7 +176,8 @@ class MultiTopicConsumer:
             except Exception as ex:
                 template = "An exception of type {0} occurred. Arguments:{1!r}"
                 message = template.format(type(ex).__name__, ex.args)
-                console_out(message, self.get_actor())
+                if "object has no attribute 'clear'" not in message: # seems like a bug in Pika
+                    console_out(message, self.get_actor())
                 time.sleep(5)
                 if self.disconnect():
                     self.connected_node = "none"

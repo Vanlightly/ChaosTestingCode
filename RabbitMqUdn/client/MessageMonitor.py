@@ -1,4 +1,5 @@
 import time
+import datetime
 from collections import deque
 
 from printer import console_out
@@ -7,14 +8,15 @@ class MessageMonitor:
     def __init__(self, print_mod):
         self.msg_queue = deque()
         self.msg_set = set()
-        self.last_consumer_id = ""
-        self.last_consumer_tag = ""
+        self.last_consumer_ids = dict()
+        self.last_consumer_tags = dict()
         self.keys = dict()
         self.receive_ctr = 0
         self.print_mod = print_mod
         self.out_of_order = False
         self.concurrent_consumers = False
         self.stop = False
+        self.last_msg_time = datetime.datetime.now()
 
     def append(self, message_body, consumer_tag, consumer_id, actor, redelivered):
         self.msg_queue.append((message_body, consumer_tag, consumer_id, actor, redelivered))
@@ -40,16 +42,22 @@ class MessageMonitor:
         console_out("Monitor exited", "MONITOR")
 
     def consume(self, message_body, consumer_tag, consumer_id, actor, redelivered):
+        self.last_msg_time = datetime.datetime.now()
         self.receive_ctr += 1
         body_str = str(message_body, "utf-8")
         parts = body_str.split('=')
         key = parts[0]
         curr_value = int(parts[1])
 
-        if self.last_consumer_tag != consumer_tag:
-            console_out(f"CONSUMER CHANGE! Last id: {self.last_consumer_id} New id: {consumer_id} Last tag: {self.last_consumer_tag} New tag: {consumer_tag}", actor)
-            self.last_consumer_id = consumer_id
-            self.last_consumer_tag = consumer_tag
+        if key in self.last_consumer_tags:
+            if self.last_consumer_tags[key] != consumer_tag:
+                console_out(f"CONSUMER CHANGE FOR SEQUENCE {key.upper()}! Last id: {self.last_consumer_ids[key]} New id: {consumer_id} Last tag: {self.last_consumer_tags[key]} New tag: {consumer_tag}", actor)
+                self.last_consumer_ids[key] = consumer_id
+                self.last_consumer_tags[key] = consumer_tag
+        else:
+            console_out(f"CONSUMER STARTING CONSUMING SEQUENCE {key.upper()}! Consumer Id: {consumer_id} Consumer tag: {consumer_tag}", actor)
+            self.last_consumer_ids[key] = consumer_id
+            self.last_consumer_tags[key] = consumer_tag
         
         if body_str in self.msg_set:
             duplicate = f"DUPLICATE"
@@ -105,3 +113,6 @@ class MessageMonitor:
 
     def get_out_of_order(self):
         return self.out_of_order
+
+    def get_last_msg_time(self):
+        return self.last_msg_time

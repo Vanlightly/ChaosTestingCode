@@ -17,6 +17,14 @@ class ChaosExecutor(object):
         self.node_names = node_names
         self.stop_random = False
 
+    def only_partitions(self):
+        self.chaos_actions = ["partition"]
+        self.sac_actions = ["partition"]
+
+    def only_kill_nodes(self):
+        self.chaos_actions = ["node"]
+        self.sac_actions = ["node"]
+
     def get_live_nodes(self):
         bash_command = "bash ../cluster/list-live-nodes.sh"
         process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
@@ -115,11 +123,12 @@ class ChaosExecutor(object):
     def stop_random_single_action_and_repair(self):
         self.stop_random = True
     
-    def start_random_single_action_and_repair(self, duration_seconds):
+    def start_random_single_action_and_repair(self, min_duration_seconds, max_duration_seconds):
         while self.stop_random == False:
-            self.single_action_and_repair(duration_seconds)
+            self.single_action_and_repair(min_duration_seconds, max_duration_seconds)
 
-    def single_action_and_repair(self, duration_seconds):
+    def single_action_and_repair(self, min_duration_seconds, max_duration_seconds):
+        duration_seconds = random.randint(min_duration_seconds, max_duration_seconds)
         chaos_action = self.sac_actions[random.randint(0, len(self.sac_actions)-1)]
         live_nodes = self.get_live_nodes()
 
@@ -151,3 +160,7 @@ class ChaosExecutor(object):
         while self.stop_random == False and ctr < seconds:
             ctr += 1
             time.sleep(1)
+
+    def kill_connections(self):
+        cmd = f"sudo timeout 10s sudo tcpkill -i docker0 -9 port 5672"
+        subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)

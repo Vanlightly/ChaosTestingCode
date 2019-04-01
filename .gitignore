@@ -111,6 +111,7 @@ RabbitMQ/cluster/volumes
 RabbitMqUdn/cluster/.blockade
 RabbitMqUdn/venv-rabbit
 RabbitMqUdn/cluster/volumes
+RabbitMqUdn/client/logs
 
 Kafka/cluster/volumes
 Kafka/cluster/.blockade

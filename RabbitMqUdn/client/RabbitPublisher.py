@@ -23,7 +23,7 @@ class RabbitPublisher(object):
         self.exchanges = list()
         self.routing_key = ""
         self.count = 0
-        self.state_count = 0
+        self.sequence_count = 0
         self.dup_rate = 0.0
         self.total = 0
         self.expected = 0
@@ -41,8 +41,8 @@ class RabbitPublisher(object):
         self.neg_acks = 0
         self.undeliverable = 0
         self.no_acks = 0
-        self.state_index = 0
-        self.states = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
+        self.key_index = 0
+        self.keys = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
         self.val = 1
         self.waiting_for_acks = False
         self.waiting_for_acks_sec = 0
@@ -59,6 +59,8 @@ class RabbitPublisher(object):
             self.nodes.append(self.get_node_ip(node_name))
 
         self.curr_node = self.get_node_index(connect_node)
+        self.actor = ""
+        self.set_actor()
 
     def reset_ack_tracking(self):
         pending_count = len(self.pending_messages)
@@ -95,11 +97,15 @@ class RabbitPublisher(object):
         if self.curr_node >= len(self.node_names):
             self.curr_node = 0
 
+    def set_actor(self):
+        self.actor = f"{self.publisher_id}->{self.connected_node}"
+
     def get_actor(self):
-        return f"PUBLISHER({self.publisher_id})->{self.connected_node}"
+        return self.actor
 
     def connect(self):
         self.connected_node = self.nodes[self.curr_node]
+        self.set_actor()
         console_out("Attempting to connect to " + self.nodes[self.curr_node], self.get_actor())
         parameters = pika.URLParameters('amqp://jack:jack@' + self.nodes[self.curr_node] + ':5672/%2F')
         return pika.SelectConnection(parameters,
@@ -151,15 +157,16 @@ class RabbitPublisher(object):
                 self._connection.close()
 
     def stop(self, full_stop):
-        if self._stopping == False:
-            
-            if full_stop ==  True:
+        if not self._stopping:
+            if full_stop:
                 self._stopping = True
 
             self.close_connection()
-            console_out("Reopening a new connection in 10 seconds", self.get_actor())
-            self.next_node()
-            self._connection.ioloop.add_timeout(10, self._connection.ioloop.stop)
+
+            if not full_stop:
+                console_out("Reopening a new connection in 10 seconds", self.get_actor())
+                self.next_node()
+                self._connection.ioloop.add_timeout(10, self._connection.ioloop.stop)
 
     def close_channel(self):
         if self._channel is not None:
@@ -220,11 +227,11 @@ class RabbitPublisher(object):
                 corr_id = str(uuid.uuid4())
                 
                 if self.message_type == "partitioned-sequence":
-                    rk = self.states[self.state_index]
-                    body = f"{self.states[self.state_index]}={self.val}"
+                    rk = self.keys[self.key_index]
+                    body = f"{self.keys[self.key_index]}={self.val}"
                     self.msg_map[self.seq_no] = body
                 elif self.message_type == "sequence":
-                    body = f"{self.states[self.state_index]}={self.val}"
+                    body = f"{self.keys[self.key_index]}={self.val}"
                     self.msg_map[self.seq_no] = body
                 elif self.message_type == "large-msgs":
                     body = large_msg
@@ -260,9 +267,9 @@ class RabbitPublisher(object):
                                                             correlation_id=corr_id))
 
                 self.pending_messages.append(self.seq_no)
-                self.state_index += 1
-                if self.state_index == self.state_count:
-                    self.state_index = 0
+                self.key_index += 1
+                if self.key_index == self.sequence_count:
+                    self.key_index = 0
                     self.val += 1
                 
             else:
@@ -319,26 +326,26 @@ class RabbitPublisher(object):
             self.stop(True)
             
 
-    def publish_direct(self, queue, count, state_count, dup_rate, message_type):
-        self.publish("", queue, count, state_count, dup_rate, message_type)
+    def publish_direct(self, queue, count, sequence_count, dup_rate, message_type):
+        self.publish("", queue, count, sequence_count, dup_rate, message_type)
     
-    def publish_to_exchanges(self, exchanges, routing_key, count, state_count, dup_rate, message_type):
+    def publish_to_exchanges(self, exchanges, routing_key, count, sequence_count, dup_rate, message_type):
         self.exchanges = exchanges
-        self.publish(None, routing_key, count, state_count, dup_rate, message_type)
+        self.publish(None, routing_key, count, sequence_count, dup_rate, message_type)
 
-    def publish(self, exchange, routing_key, count, state_count, dup_rate, message_type):
+    def publish(self, exchange, routing_key, count, sequence_count, dup_rate, message_type):
         self._stopping = False
         console_out(f"Will publish to exchange {exchange} and routing key {routing_key}", self.get_actor())
         self.exchange = exchange
         self.routing_key = routing_key
         self.count = count
-        self.state_count = state_count
+        self.sequence_count = sequence_count
         self.dup_rate = dup_rate
 
         if count == -1:
             self.total = 100000000
         else:
-            self.total = count * state_count
+            self.total = count * sequence_count
 
         self.expected = self.total
         self.message_type = message_type
@@ -346,7 +353,7 @@ class RabbitPublisher(object):
         if self.message_type == "partitioned-sequence":
             console_out("Routing key is ignored with the sequence type", self.get_actor())
 
-        if self.state_count > 10:
+        if self.sequence_count > 10:
             console_out("Key count limit is 10", self.get_actor())
             exit(1)
 
@@ -358,11 +365,8 @@ class RabbitPublisher(object):
         while not self._stopping:
             self._connection = None
 
-            try:
-                self._connection = self.connect()
-                self._connection.ioloop.start()
-            except KeyboardInterrupt:
-                self.stop(True)
+            self._connection = self.connect()
+            self._connection.ioloop.start()
 
     def print_final_count(self):
         console_out(f"Final Count => Sent: {self.curr_pos} Pos acks: {self.pos_acks} Neg acks: {self.neg_acks} Undeliverable: {self.undeliverable} No Acks: {self.no_acks}", self.get_actor())

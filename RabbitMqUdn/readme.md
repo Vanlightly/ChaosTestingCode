@@ -170,10 +170,13 @@ The test can be run again mirrored or quorum queues.
 
 Quorum queues
 ```
-$ python -u sac-test.py --queue beta3 --tests 10 --actions 20 --grace-period-sec 300 --in-flight-max 200 --cluster 3 --consumers 5 --queue-type quorum  2>&1 | tee test-sac.log
+$ python -u sac-test.py --queue beta3 --tests 10 --run-minutes 10 --grace-period-sec 300 --in-flight-max 200 --cluster 3 --consumers 5 --queue-type quorum  2>&1 | tee test-sac.log
 ```
 
 Mirrored queues
 ```
 $ python -u sac-test.py --queue beta3 --tests 10 --actions 20 --grace-period-sec 300 --in-flight-max 200 --cluster 3 --consumers 5 --queue-type mirrored  2>&1 | tee test-sac.log
 ```
+
+### Random Test
+A test script that is highly configurable, to perform automated or manual testing on quorum or mirrored queues, with or without SAC enabled. See the client/examples/random folder for examples.
