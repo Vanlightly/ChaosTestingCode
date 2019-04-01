@@ -1,6 +1,6 @@
 #! /bin/bash
 
-cd ..
+cd ../..
 
 python -u random-test.py --queue $1 \
 --tests 1 \

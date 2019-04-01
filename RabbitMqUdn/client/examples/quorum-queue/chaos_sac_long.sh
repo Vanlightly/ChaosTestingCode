@@ -1,5 +1,7 @@
 #! /bin/bash
 
+cd ../..
+
 python -u quorum-queue-test.py \
 --queue $1 \
 --tests 20 \
@@ -9,4 +11,4 @@ python -u quorum-queue-test.py \
 --chaos mixed \
 --chaos-min-interval 30
 --chaos-max-interval 120
---sac true 2>&1 | tee ../../logs/$1.log
+--sac true 2>&1 | tee logs/$1.log
