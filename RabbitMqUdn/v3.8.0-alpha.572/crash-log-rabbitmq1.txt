@@ -1,0 +1,476 @@
+----------------------------------------------------------
+## rabbitmq1----------------------------------------------
+
+2019-04-01 18:36:37.247 [info] <0.8.0> Feature flags: list of feature flags found:
+2019-04-01 18:36:37.247 [info] <0.8.0> Feature flags:   [ ] empty_basic_get_metric
+2019-04-01 18:36:37.248 [info] <0.8.0> Feature flags:   [ ] implicit_default_bindings
+2019-04-01 18:36:37.248 [info] <0.8.0> Feature flags:   [ ] quorum_queue
+2019-04-01 18:36:37.248 [info] <0.8.0> Feature flags: feature flag states written to disk: yes
+2019-04-01 18:36:37.277 [info] <0.249.0> ra: meta data store initialised. 0 record(s) recovered
+2019-04-01 18:36:37.278 [info] <0.254.0> WAL: recovering []
+2019-04-01 18:36:37.280 [info] <0.258.0> 
+ Starting RabbitMQ 3.8.0-alpha.572 on Erlang 21.3
+ Copyright (C) 2007-2019 Pivotal Software, Inc.
+ Licensed under the MPL.  See https://www.rabbitmq.com/
+
+  ##  ##
+  ##  ##      RabbitMQ 3.8.0-alpha.572. Copyright (C) 2007-2019 Pivotal Software, Inc.
+  ##########  Licensed under the MPL.  See https://www.rabbitmq.com/
+  ######  ##
+  ##########  Logs: <stdout>
+
+              Starting broker...
+2019-04-01 18:36:37.281 [info] <0.258.0> 
+ node           : rabbit@rabbitmq1
+ home dir       : /var/lib/rabbitmq
+ config file(s) : /etc/rabbitmq/rabbitmq.config
+ cookie hash    : gnzLDuqKcGxMNKFokfhOew==
+ log(s)         : <stdout>
+ database dir   : /var/lib/rabbitmq/mnesia/rabbit@rabbitmq1
+2019-04-01 18:36:37.302 [info] <0.258.0> Running boot step pre_boot defined by app rabbit
+2019-04-01 18:36:37.302 [info] <0.258.0> Running boot step rabbit_core_metrics defined by app rabbit
+2019-04-01 18:36:37.304 [info] <0.258.0> Running boot step rabbit_alarm defined by app rabbit
+2019-04-01 18:36:37.309 [info] <0.264.0> Memory high watermark set to 3180 MiB (3334930432 bytes) of 7951 MiB (8337326080 bytes) total
+2019-04-01 18:36:37.315 [info] <0.266.0> Enabling free disk space monitoring
+2019-04-01 18:36:37.315 [info] <0.266.0> Disk free limit set to 50MB
+2019-04-01 18:36:37.319 [info] <0.258.0> Running boot step code_server_cache defined by app rabbit
+2019-04-01 18:36:37.320 [info] <0.258.0> Running boot step file_handle_cache defined by app rabbit
+2019-04-01 18:36:37.321 [info] <0.269.0> Limiting to approx 1048476 file handles (943626 sockets)
+2019-04-01 18:36:37.321 [info] <0.270.0> FHC read buffering:  OFF
+2019-04-01 18:36:37.321 [info] <0.270.0> FHC write buffering: ON
+2019-04-01 18:36:37.322 [info] <0.258.0> Running boot step worker_pool defined by app rabbit
+2019-04-01 18:36:37.323 [info] <0.258.0> Running boot step database defined by app rabbit
+2019-04-01 18:36:37.324 [info] <0.258.0> Node database directory at /var/lib/rabbitmq/mnesia/rabbit@rabbitmq1 is empty. Assuming we need to join an existing cluster or initialise from scratch...
+2019-04-01 18:36:37.324 [info] <0.258.0> Configured peer discovery backend: rabbit_peer_discovery_classic_config
+2019-04-01 18:36:37.324 [info] <0.258.0> Will try to lock with peer discovery backend rabbit_peer_discovery_classic_config
+2019-04-01 18:36:37.324 [info] <0.258.0> Peer discovery backend does not support locking, falling back to randomized delay
+2019-04-01 18:36:37.324 [info] <0.258.0> Peer discovery backend rabbit_peer_discovery_classic_config does not support registration, skipping randomized startup delay.
+2019-04-01 18:36:37.325 [info] <0.258.0> All discovered existing cluster peers: 
+2019-04-01 18:36:37.325 [info] <0.258.0> Discovered no peer nodes to cluster with
+2019-04-01 18:36:37.328 [info] <0.43.0> Application mnesia exited with reason: stopped
+2019-04-01 18:36:37.545 [info] <0.258.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-01 18:36:37.576 [info] <0.258.0> Waiting for Mnesia tables for 30000 ms, 0 retries left
+2019-04-01 18:36:37.576 [info] <0.258.0> Feature flag `empty_basic_get_metric`: supported, attempt to enable...
+2019-04-01 18:36:37.576 [info] <0.258.0> Feature flag `empty_basic_get_metric`: mark as enabled=state_changing
+2019-04-01 18:36:37.593 [info] <0.258.0> Feature flags: list of feature flags found:
+2019-04-01 18:36:37.593 [info] <0.258.0> Feature flags:   [~] empty_basic_get_metric
+2019-04-01 18:36:37.593 [info] <0.258.0> Feature flags:   [ ] implicit_default_bindings
+2019-04-01 18:36:37.593 [info] <0.258.0> Feature flags:   [ ] quorum_queue
+2019-04-01 18:36:37.594 [info] <0.258.0> Feature flags: feature flag states written to disk: yes
+2019-04-01 18:36:37.606 [info] <0.258.0> Feature flag `empty_basic_get_metric`: mark as enabled=true
+2019-04-01 18:36:37.621 [info] <0.258.0> Feature flags: list of feature flags found:
+2019-04-01 18:36:37.621 [info] <0.258.0> Feature flags:   [x] empty_basic_get_metric
+2019-04-01 18:36:37.622 [info] <0.258.0> Feature flags:   [ ] implicit_default_bindings
+2019-04-01 18:36:37.622 [info] <0.258.0> Feature flags:   [ ] quorum_queue
+2019-04-01 18:36:37.622 [info] <0.258.0> Feature flags: feature flag states written to disk: yes
+2019-04-01 18:36:37.637 [info] <0.258.0> Feature flag `implicit_default_bindings`: supported, attempt to enable...
+2019-04-01 18:36:37.637 [info] <0.258.0> Feature flag `implicit_default_bindings`: mark as enabled=state_changing
+2019-04-01 18:36:37.655 [info] <0.258.0> Feature flags: list of feature flags found:
+2019-04-01 18:36:37.655 [info] <0.258.0> Feature flags:   [x] empty_basic_get_metric
+2019-04-01 18:36:37.655 [info] <0.258.0> Feature flags:   [~] implicit_default_bindings
+2019-04-01 18:36:37.655 [info] <0.258.0> Feature flags:   [ ] quorum_queue
+2019-04-01 18:36:37.655 [info] <0.258.0> Feature flags: feature flag states written to disk: yes
+2019-04-01 18:36:37.674 [info] <0.258.0> Waiting for Mnesia tables for 30000 ms, 0 retries left
+2019-04-01 18:36:37.674 [info] <0.258.0> Feature flag `implicit_default_bindings`: mark as enabled=true
+2019-04-01 18:36:37.692 [info] <0.258.0> Feature flags: list of feature flags found:
+2019-04-01 18:36:37.692 [info] <0.258.0> Feature flags:   [x] empty_basic_get_metric
+2019-04-01 18:36:37.692 [info] <0.258.0> Feature flags:   [x] implicit_default_bindings
+2019-04-01 18:36:37.692 [info] <0.258.0> Feature flags:   [ ] quorum_queue
+2019-04-01 18:36:37.693 [info] <0.258.0> Feature flags: feature flag states written to disk: yes
+2019-04-01 18:36:37.706 [info] <0.258.0> Feature flag `quorum_queue`: supported, attempt to enable...
+2019-04-01 18:36:37.706 [info] <0.258.0> Feature flag `quorum_queue`: mark as enabled=state_changing
+2019-04-01 18:36:37.727 [info] <0.258.0> Feature flags: list of feature flags found:
+2019-04-01 18:36:37.727 [info] <0.258.0> Feature flags:   [x] empty_basic_get_metric
+2019-04-01 18:36:37.728 [info] <0.258.0> Feature flags:   [x] implicit_default_bindings
+2019-04-01 18:36:37.728 [info] <0.258.0> Feature flags:   [~] quorum_queue
+2019-04-01 18:36:37.729 [info] <0.258.0> Feature flags: feature flag states written to disk: yes
+2019-04-01 18:36:37.740 [info] <0.258.0> Waiting for Mnesia tables for 30000 ms, 0 retries left
+2019-04-01 18:36:37.740 [info] <0.258.0> Feature flag `quorum_queue`:   migrating Mnesia table rabbit_queue...
+2019-04-01 18:36:37.765 [info] <0.258.0> Feature flag `quorum_queue`:   migrating Mnesia table rabbit_durable_queue...
+2019-04-01 18:36:37.803 [info] <0.258.0> Feature flag `quorum_queue`:   Mnesia tables migration done
+2019-04-01 18:36:37.803 [info] <0.258.0> Feature flag `quorum_queue`: mark as enabled=true
+2019-04-01 18:36:37.819 [info] <0.258.0> Feature flags: list of feature flags found:
+2019-04-01 18:36:37.819 [info] <0.258.0> Feature flags:   [x] empty_basic_get_metric
+2019-04-01 18:36:37.819 [info] <0.258.0> Feature flags:   [x] implicit_default_bindings
+2019-04-01 18:36:37.819 [info] <0.258.0> Feature flags:   [x] quorum_queue
+2019-04-01 18:36:37.820 [info] <0.258.0> Feature flags: feature flag states written to disk: yes
+2019-04-01 18:36:37.832 [info] <0.258.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-01 18:36:37.877 [info] <0.258.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-01 18:36:37.877 [info] <0.258.0> Peer discovery backend rabbit_peer_discovery_classic_config does not support registration, skipping registration.
+2019-04-01 18:36:37.877 [info] <0.258.0> Running boot step database_sync defined by app rabbit
+2019-04-01 18:36:37.878 [info] <0.258.0> Running boot step feature_flags defined by app rabbit
+2019-04-01 18:36:37.878 [info] <0.258.0> Running boot step codec_correctness_check defined by app rabbit
+2019-04-01 18:36:37.878 [info] <0.258.0> Running boot step external_infrastructure defined by app rabbit
+2019-04-01 18:36:37.878 [info] <0.258.0> Running boot step rabbit_registry defined by app rabbit
+2019-04-01 18:36:37.878 [info] <0.258.0> Running boot step rabbit_auth_mechanism_cr_demo defined by app rabbit
+2019-04-01 18:36:37.879 [info] <0.258.0> Running boot step rabbit_queue_location_random defined by app rabbit
+2019-04-01 18:36:37.880 [info] <0.258.0> Running boot step rabbit_event defined by app rabbit
+2019-04-01 18:36:37.880 [info] <0.258.0> Running boot step rabbit_auth_mechanism_amqplain defined by app rabbit
+2019-04-01 18:36:37.880 [info] <0.258.0> Running boot step rabbit_auth_mechanism_plain defined by app rabbit
+2019-04-01 18:36:37.881 [info] <0.258.0> Running boot step rabbit_exchange_type_direct defined by app rabbit
+2019-04-01 18:36:37.881 [info] <0.258.0> Running boot step rabbit_exchange_type_fanout defined by app rabbit
+2019-04-01 18:36:37.881 [info] <0.258.0> Running boot step rabbit_exchange_type_headers defined by app rabbit
+2019-04-01 18:36:37.882 [info] <0.258.0> Running boot step rabbit_exchange_type_topic defined by app rabbit
+2019-04-01 18:36:37.882 [info] <0.258.0> Running boot step rabbit_mirror_queue_mode_all defined by app rabbit
+2019-04-01 18:36:37.882 [info] <0.258.0> Running boot step rabbit_mirror_queue_mode_exactly defined by app rabbit
+2019-04-01 18:36:37.883 [info] <0.258.0> Running boot step rabbit_mirror_queue_mode_nodes defined by app rabbit
+2019-04-01 18:36:37.883 [info] <0.258.0> Running boot step rabbit_priority_queue defined by app rabbit
+2019-04-01 18:36:37.883 [info] <0.258.0> Priority queues enabled, real BQ is rabbit_variable_queue
+2019-04-01 18:36:37.883 [info] <0.258.0> Running boot step rabbit_queue_location_client_local defined by app rabbit
+2019-04-01 18:36:37.884 [info] <0.258.0> Running boot step rabbit_queue_location_min_masters defined by app rabbit
+2019-04-01 18:36:37.884 [info] <0.258.0> Running boot step kernel_ready defined by app rabbit
+2019-04-01 18:36:37.884 [info] <0.258.0> Running boot step rabbit_sysmon_minder defined by app rabbit
+2019-04-01 18:36:37.885 [info] <0.258.0> Running boot step rabbit_epmd_monitor defined by app rabbit
+2019-04-01 18:36:37.888 [info] <0.258.0> Running boot step guid_generator defined by app rabbit
+2019-04-01 18:36:37.890 [info] <0.258.0> Running boot step rabbit_node_monitor defined by app rabbit
+2019-04-01 18:36:37.891 [info] <0.482.0> Starting rabbit_node_monitor
+2019-04-01 18:36:37.891 [info] <0.258.0> Running boot step delegate_sup defined by app rabbit
+2019-04-01 18:36:37.892 [info] <0.258.0> Running boot step rabbit_memory_monitor defined by app rabbit
+2019-04-01 18:36:37.893 [info] <0.258.0> Running boot step core_initialized defined by app rabbit
+2019-04-01 18:36:37.893 [info] <0.258.0> Running boot step upgrade_queues defined by app rabbit
+2019-04-01 18:36:37.927 [info] <0.258.0> message_store upgrades: 1 to apply
+2019-04-01 18:36:37.928 [info] <0.258.0> message_store upgrades: Applying rabbit_variable_queue:move_messages_to_vhost_store
+2019-04-01 18:36:37.928 [info] <0.258.0> message_store upgrades: No durable queues found. Skipping message store migration
+2019-04-01 18:36:37.928 [info] <0.258.0> message_store upgrades: Removing the old message store data
+2019-04-01 18:36:37.931 [info] <0.258.0> message_store upgrades: All upgrades applied successfully
+2019-04-01 18:36:37.969 [info] <0.258.0> Running boot step rabbit_connection_tracking_handler defined by app rabbit
+2019-04-01 18:36:37.969 [info] <0.258.0> Running boot step rabbit_exchange_parameters defined by app rabbit
+2019-04-01 18:36:37.970 [info] <0.258.0> Running boot step rabbit_mirror_queue_misc defined by app rabbit
+2019-04-01 18:36:37.971 [info] <0.258.0> Running boot step rabbit_policies defined by app rabbit
+2019-04-01 18:36:37.972 [info] <0.258.0> Running boot step rabbit_policy defined by app rabbit
+2019-04-01 18:36:37.972 [info] <0.258.0> Running boot step rabbit_queue_location_validator defined by app rabbit
+2019-04-01 18:36:37.973 [info] <0.258.0> Running boot step rabbit_quorum_memory_manager defined by app rabbit
+2019-04-01 18:36:37.973 [info] <0.258.0> Running boot step rabbit_vhost_limit defined by app rabbit
+2019-04-01 18:36:37.974 [info] <0.258.0> Running boot step rabbit_mgmt_reset_handler defined by app rabbitmq_management
+2019-04-01 18:36:37.974 [info] <0.258.0> Running boot step rabbit_mgmt_db_handler defined by app rabbitmq_management_agent
+2019-04-01 18:36:37.974 [info] <0.258.0> Management plugin: using rates mode 'basic'
+2019-04-01 18:36:37.974 [info] <0.258.0> Running boot step recovery defined by app rabbit
+2019-04-01 18:36:37.976 [info] <0.258.0> Running boot step load_definitions defined by app rabbitmq_management
+2019-04-01 18:36:37.976 [info] <0.258.0> Running boot step empty_db_check defined by app rabbit
+2019-04-01 18:36:37.977 [info] <0.258.0> Adding vhost '/'
+2019-04-01 18:36:38.042 [info] <0.517.0> Making sure data directory '/var/lib/rabbitmq/mnesia/rabbit@rabbitmq1/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L' for vhost '/' exists
+2019-04-01 18:36:38.051 [info] <0.517.0> Starting message stores for vhost '/'
+2019-04-01 18:36:38.052 [info] <0.521.0> Message store "628WB79CIFDYO9LJI6DKMI09L/msg_store_transient": using rabbit_msg_store_ets_index to provide index
+2019-04-01 18:36:38.054 [info] <0.517.0> Started message store of type transient for vhost '/'
+2019-04-01 18:36:38.055 [info] <0.524.0> Message store "628WB79CIFDYO9LJI6DKMI09L/msg_store_persistent": using rabbit_msg_store_ets_index to provide index
+2019-04-01 18:36:38.057 [warning] <0.524.0> Message store "628WB79CIFDYO9LJI6DKMI09L/msg_store_persistent": rebuilding indices from scratch
+2019-04-01 18:36:38.062 [info] <0.517.0> Started message store of type persistent for vhost '/'
+2019-04-01 18:36:38.066 [info] <0.258.0> Creating user 'jack'
+2019-04-01 18:36:38.068 [info] <0.258.0> Setting user tags for user 'jack' to [administrator]
+2019-04-01 18:36:38.077 [info] <0.258.0> Setting permissions for 'jack' in '/' to '.*', '.*', '.*'
+2019-04-01 18:36:38.086 [info] <0.258.0> Running boot step rabbit_looking_glass defined by app rabbit
+2019-04-01 18:36:38.086 [info] <0.258.0> Running boot step rabbit_core_metrics_gc defined by app rabbit
+2019-04-01 18:36:38.087 [info] <0.258.0> Running boot step background_gc defined by app rabbit
+2019-04-01 18:36:38.087 [info] <0.258.0> Running boot step connection_tracking defined by app rabbit
+2019-04-01 18:36:38.097 [info] <0.258.0> Setting up a table for connection tracking on this node: tracked_connection_on_node_rabbit@rabbitmq1
+2019-04-01 18:36:38.107 [info] <0.258.0> Setting up a table for per-vhost connection counting on this node: tracked_connection_per_vhost_on_node_rabbit@rabbitmq1
+2019-04-01 18:36:38.108 [info] <0.258.0> Running boot step routing_ready defined by app rabbit
+2019-04-01 18:36:38.108 [info] <0.258.0> Running boot step pre_flight defined by app rabbit
+2019-04-01 18:36:38.108 [info] <0.258.0> Running boot step notify_cluster defined by app rabbit
+2019-04-01 18:36:38.109 [info] <0.258.0> Running boot step networking defined by app rabbit
+2019-04-01 18:36:38.112 [info] <0.570.0> started TCP listener on [::]:5672
+2019-04-01 18:36:38.113 [info] <0.258.0> Running boot step direct_client defined by app rabbit
+2019-04-01 18:36:38.150 [info] <0.620.0> Management plugin: HTTP (non-TLS) listener started on port 15672
+2019-04-01 18:36:38.151 [info] <0.726.0> Statistics database started.
+ completed with 3 plugins.
+2019-04-01 18:36:38.321 [info] <0.8.0> Server startup complete; 3 plugins started.
+ * rabbitmq_management
+ * rabbitmq_web_dispatch
+ * rabbitmq_management_agent
+2019-04-01 18:37:00.474 [info] <0.482.0> node rabbit@rabbitmq2 up
+2019-04-01 18:37:02.950 [info] <0.482.0> node rabbit@rabbitmq3 up
+2019-04-01 18:37:03.722 [info] <0.482.0> node rabbit@rabbitmq2 down: connection_closed
+2019-04-01 18:37:06.889 [info] <0.482.0> node rabbit@rabbitmq3 down: connection_closed
+2019-04-01 18:37:06.889 [warning] <0.482.0> Cluster minority/secondary status detected - awaiting recovery
+2019-04-01 18:37:06.890 [info] <0.1083.0> RabbitMQ is asked to stop...
+2019-04-01 18:37:07.197 [info] <0.1083.0> Stopping RabbitMQ applications and their dependencies in the following order:
+    rabbitmq_management
+    amqp_client
+    rabbitmq_web_dispatch
+    cowboy
+    cowlib
+    rabbitmq_management_agent
+    rabbit
+    mnesia
+    rabbit_common
+    sysmon_handler
+    os_mon
+    ra
+2019-04-01 18:37:07.198 [info] <0.1083.0> Stopping application 'rabbitmq_management'
+2019-04-01 18:37:07.201 [warning] <0.616.0> RabbitMQ HTTP listener registry could not find context rabbitmq_management_tls
+2019-04-01 18:37:07.204 [info] <0.43.0> Application rabbitmq_management exited with reason: stopped
+2019-04-01 18:37:07.204 [info] <0.1083.0> Stopping application 'amqp_client'
+2019-04-01 18:37:07.208 [info] <0.43.0> Application amqp_client exited with reason: stopped
+2019-04-01 18:37:07.208 [info] <0.1083.0> Stopping application 'rabbitmq_web_dispatch'
+2019-04-01 18:37:07.215 [info] <0.43.0> Application rabbitmq_web_dispatch exited with reason: stopped
+2019-04-01 18:37:07.215 [info] <0.1083.0> Stopping application 'cowboy'
+2019-04-01 18:37:07.218 [info] <0.1083.0> Stopping application 'cowlib'
+2019-04-01 18:37:07.218 [info] <0.43.0> Application cowboy exited with reason: stopped
+2019-04-01 18:37:07.219 [info] <0.43.0> Application cowlib exited with reason: stopped
+2019-04-01 18:37:07.219 [info] <0.1083.0> Stopping application 'rabbitmq_management_agent'
+2019-04-01 18:37:07.226 [info] <0.43.0> Application rabbitmq_management_agent exited with reason: stopped
+2019-04-01 18:37:07.226 [info] <0.1083.0> Stopping application 'rabbit'
+2019-04-01 18:37:07.227 [info] <0.258.0> Peer discovery backend rabbit_peer_discovery_classic_config does not support registration, skipping unregistration.
+2019-04-01 18:37:07.228 [info] <0.570.0> stopped TCP listener on [::]:5672
+2019-04-01 18:37:07.230 [info] <0.472.0> Closing all connections in vhost '/' on node 'rabbit@rabbitmq1' because the vhost is stopping
+2019-04-01 18:37:07.231 [info] <0.524.0> Stopping message store for directory '/var/lib/rabbitmq/mnesia/rabbit@rabbitmq1/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L/msg_store_persistent'
+2019-04-01 18:37:07.252 [info] <0.524.0> Message store for directory '/var/lib/rabbitmq/mnesia/rabbit@rabbitmq1/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L/msg_store_persistent' is stopped
+2019-04-01 18:37:07.253 [info] <0.521.0> Stopping message store for directory '/var/lib/rabbitmq/mnesia/rabbit@rabbitmq1/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L/msg_store_transient'
+2019-04-01 18:37:07.274 [info] <0.521.0> Message store for directory '/var/lib/rabbitmq/mnesia/rabbit@rabbitmq1/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L/msg_store_transient' is stopped
+2019-04-01 18:37:07.283 [info] <0.43.0> Application rabbit exited with reason: stopped
+2019-04-01 18:37:07.283 [info] <0.1083.0> Stopping application 'mnesia'
+2019-04-01 18:37:07.288 [info] <0.43.0> Application mnesia exited with reason: stopped
+2019-04-01 18:37:07.288 [info] <0.1083.0> Stopping application 'rabbit_common'
+2019-04-01 18:37:07.288 [info] <0.43.0> Application rabbit_common exited with reason: stopped
+2019-04-01 18:37:07.288 [info] <0.1083.0> Stopping application 'sysmon_handler'
+2019-04-01 18:37:07.291 [info] <0.43.0> Application sysmon_handler exited with reason: stopped
+2019-04-01 18:37:07.291 [info] <0.1083.0> Stopping application 'os_mon'
+2019-04-01 18:37:07.303 [info] <0.43.0> Application os_mon exited with reason: stopped
+2019-04-01 18:37:07.304 [info] <0.1083.0> Stopping application 'ra'
+2019-04-01 18:37:07.309 [info] <0.43.0> Application ra exited with reason: stopped
+2019-04-01 18:37:07.309 [info] <0.1083.0> Successfully stopped RabbitMQ and its dependencies
+2019-04-01 18:37:10.488 [info] <0.1083.0> Stopping application 'syslog'
+2019-04-01 18:37:10.488 [info] <0.1083.0> Stopping application 'lager'
+2019-04-01 18:37:12.047 [info] <0.1247.0> ra: meta data store initialised. 0 record(s) recovered
+2019-04-01 18:37:12.055 [info] <0.1252.0> WAL: recovering ["/var/lib/rabbitmq/mnesia/rabbit@rabbitmq1/quorum/rabbit@rabbitmq1/00000001.wal"]
+2019-04-01 18:37:12.072 [info] <0.1262.0> 
+ Starting RabbitMQ 3.8.0-alpha.572 on Erlang 21.3
+ Copyright (C) 2007-2019 Pivotal Software, Inc.
+ Licensed under the MPL.  See https://www.rabbitmq.com/
+
+  ##  ##
+  ##  ##      RabbitMQ 3.8.0-alpha.572. Copyright (C) 2007-2019 Pivotal Software, Inc.
+  ##########  Licensed under the MPL.  See https://www.rabbitmq.com/
+  ######  ##
+  ##########  Logs: <stdout>
+
+              Starting broker...
+2019-04-01 18:37:12.073 [info] <0.1262.0> 
+ node           : rabbit@rabbitmq1
+ home dir       : /var/lib/rabbitmq
+ config file(s) : /etc/rabbitmq/rabbitmq.config
+ cookie hash    : gnzLDuqKcGxMNKFokfhOew==
+ log(s)         : <stdout>
+ database dir   : /var/lib/rabbitmq/mnesia/rabbit@rabbitmq1
+2019-04-01 18:37:12.163 [info] <0.1262.0> Running boot step pre_boot defined by app rabbit
+2019-04-01 18:37:12.163 [info] <0.1262.0> Running boot step rabbit_core_metrics defined by app rabbit
+2019-04-01 18:37:12.164 [info] <0.1262.0> Running boot step rabbit_alarm defined by app rabbit
+2019-04-01 18:37:12.178 [info] <0.1308.0> Memory high watermark set to 3180 MiB (3334930432 bytes) of 7951 MiB (8337326080 bytes) total
+2019-04-01 18:37:12.192 [info] <0.1310.0> Enabling free disk space monitoring
+2019-04-01 18:37:12.192 [info] <0.1310.0> Disk free limit set to 50MB
+2019-04-01 18:37:12.204 [info] <0.1262.0> Running boot step code_server_cache defined by app rabbit
+2019-04-01 18:37:12.204 [info] <0.1262.0> Running boot step file_handle_cache defined by app rabbit
+2019-04-01 18:37:12.205 [info] <0.1313.0> Limiting to approx 1048476 file handles (943626 sockets)
+2019-04-01 18:37:12.205 [info] <0.1314.0> FHC read buffering:  OFF
+2019-04-01 18:37:12.205 [info] <0.1314.0> FHC write buffering: ON
+2019-04-01 18:37:12.209 [info] <0.1262.0> Running boot step worker_pool defined by app rabbit
+2019-04-01 18:37:12.210 [info] <0.1262.0> Running boot step database defined by app rabbit
+2019-04-01 18:37:12.237 [info] <0.1262.0> Waiting for Mnesia tables for 30000 ms, 0 retries left
+2019-04-01 18:37:12.237 [info] <0.1262.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-01 18:37:12.352 [info] <0.1262.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-01 18:37:12.352 [info] <0.1262.0> Peer discovery backend rabbit_peer_discovery_classic_config does not support registration, skipping registration.
+2019-04-01 18:37:12.352 [info] <0.1262.0> Running boot step database_sync defined by app rabbit
+2019-04-01 18:37:12.352 [info] <0.1262.0> Running boot step feature_flags defined by app rabbit
+2019-04-01 18:37:12.354 [info] <0.1262.0> Running boot step codec_correctness_check defined by app rabbit
+2019-04-01 18:37:12.355 [info] <0.1262.0> Running boot step external_infrastructure defined by app rabbit
+2019-04-01 18:37:12.355 [info] <0.1262.0> Running boot step rabbit_registry defined by app rabbit
+2019-04-01 18:37:12.356 [info] <0.1262.0> Running boot step rabbit_auth_mechanism_cr_demo defined by app rabbit
+2019-04-01 18:37:12.356 [info] <0.1262.0> Running boot step rabbit_queue_location_random defined by app rabbit
+2019-04-01 18:37:12.356 [info] <0.1262.0> Running boot step rabbit_event defined by app rabbit
+2019-04-01 18:37:12.357 [info] <0.1262.0> Running boot step rabbit_auth_mechanism_amqplain defined by app rabbit
+2019-04-01 18:37:12.357 [info] <0.1262.0> Running boot step rabbit_auth_mechanism_plain defined by app rabbit
+2019-04-01 18:37:12.358 [info] <0.1262.0> Running boot step rabbit_exchange_type_direct defined by app rabbit
+2019-04-01 18:37:12.358 [info] <0.1262.0> Running boot step rabbit_exchange_type_fanout defined by app rabbit
+2019-04-01 18:37:12.359 [info] <0.1262.0> Running boot step rabbit_exchange_type_headers defined by app rabbit
+2019-04-01 18:37:12.359 [info] <0.1262.0> Running boot step rabbit_exchange_type_topic defined by app rabbit
+2019-04-01 18:37:12.359 [info] <0.1262.0> Running boot step rabbit_mirror_queue_mode_all defined by app rabbit
+2019-04-01 18:37:12.359 [info] <0.1262.0> Running boot step rabbit_mirror_queue_mode_exactly defined by app rabbit
+2019-04-01 18:37:12.360 [info] <0.1262.0> Running boot step rabbit_mirror_queue_mode_nodes defined by app rabbit
+2019-04-01 18:37:12.360 [info] <0.1262.0> Running boot step rabbit_priority_queue defined by app rabbit
+2019-04-01 18:37:12.361 [info] <0.1262.0> Running boot step rabbit_queue_location_client_local defined by app rabbit
+2019-04-01 18:37:12.361 [info] <0.1262.0> Running boot step rabbit_queue_location_min_masters defined by app rabbit
+2019-04-01 18:37:12.361 [info] <0.1262.0> Running boot step kernel_ready defined by app rabbit
+2019-04-01 18:37:12.361 [info] <0.1262.0> Running boot step rabbit_sysmon_minder defined by app rabbit
+2019-04-01 18:37:12.361 [info] <0.1262.0> Running boot step rabbit_epmd_monitor defined by app rabbit
+2019-04-01 18:37:12.363 [info] <0.1262.0> Running boot step guid_generator defined by app rabbit
+2019-04-01 18:37:12.370 [info] <0.1262.0> Running boot step rabbit_node_monitor defined by app rabbit
+2019-04-01 18:37:12.376 [info] <0.1344.0> Starting rabbit_node_monitor
+2019-04-01 18:37:12.376 [info] <0.1262.0> Running boot step delegate_sup defined by app rabbit
+2019-04-01 18:37:12.377 [info] <0.1262.0> Running boot step rabbit_memory_monitor defined by app rabbit
+2019-04-01 18:37:12.378 [info] <0.1262.0> Running boot step core_initialized defined by app rabbit
+2019-04-01 18:37:12.378 [info] <0.1262.0> Running boot step upgrade_queues defined by app rabbit
+2019-04-01 18:37:12.460 [info] <0.1262.0> Running boot step rabbit_connection_tracking_handler defined by app rabbit
+2019-04-01 18:37:12.460 [info] <0.1262.0> Running boot step rabbit_exchange_parameters defined by app rabbit
+2019-04-01 18:37:12.461 [info] <0.1262.0> Running boot step rabbit_mirror_queue_misc defined by app rabbit
+2019-04-01 18:37:12.462 [info] <0.1262.0> Running boot step rabbit_policies defined by app rabbit
+2019-04-01 18:37:12.465 [info] <0.1262.0> Running boot step rabbit_policy defined by app rabbit
+2019-04-01 18:37:12.466 [info] <0.1262.0> Running boot step rabbit_queue_location_validator defined by app rabbit
+2019-04-01 18:37:12.467 [info] <0.1262.0> Running boot step rabbit_quorum_memory_manager defined by app rabbit
+2019-04-01 18:37:12.467 [info] <0.1262.0> Running boot step rabbit_vhost_limit defined by app rabbit
+2019-04-01 18:37:12.468 [info] <0.1262.0> Running boot step rabbit_mgmt_reset_handler defined by app rabbitmq_management
+2019-04-01 18:37:12.468 [info] <0.1262.0> Running boot step rabbit_mgmt_db_handler defined by app rabbitmq_management_agent
+2019-04-01 18:37:12.468 [info] <0.1262.0> Management plugin: using rates mode 'basic'
+2019-04-01 18:37:12.468 [info] <0.1262.0> Running boot step recovery defined by app rabbit
+2019-04-01 18:37:12.470 [info] <0.1371.0> Making sure data directory '/var/lib/rabbitmq/mnesia/rabbit@rabbitmq1/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L' for vhost '/' exists
+2019-04-01 18:37:12.478 [info] <0.1371.0> Starting message stores for vhost '/'
+2019-04-01 18:37:12.479 [info] <0.1375.0> Message store "628WB79CIFDYO9LJI6DKMI09L/msg_store_transient": using rabbit_msg_store_ets_index to provide index
+2019-04-01 18:37:12.487 [info] <0.1371.0> Started message store of type transient for vhost '/'
+2019-04-01 18:37:12.488 [info] <0.1378.0> Message store "628WB79CIFDYO9LJI6DKMI09L/msg_store_persistent": using rabbit_msg_store_ets_index to provide index
+2019-04-01 18:37:12.495 [info] <0.1371.0> Started message store of type persistent for vhost '/'
+2019-04-01 18:37:12.499 [info] <0.1262.0> Running boot step load_definitions defined by app rabbitmq_management
+2019-04-01 18:37:12.499 [info] <0.1262.0> Running boot step empty_db_check defined by app rabbit
+2019-04-01 18:37:12.499 [info] <0.1262.0> Running boot step rabbit_looking_glass defined by app rabbit
+2019-04-01 18:37:12.499 [info] <0.1262.0> Running boot step rabbit_core_metrics_gc defined by app rabbit
+2019-04-01 18:37:12.501 [info] <0.1262.0> Running boot step background_gc defined by app rabbit
+2019-04-01 18:37:12.501 [info] <0.1262.0> Running boot step connection_tracking defined by app rabbit
+2019-04-01 18:37:12.501 [info] <0.1262.0> Setting up a table for connection tracking on this node: tracked_connection_on_node_rabbit@rabbitmq1
+2019-04-01 18:37:12.502 [info] <0.1262.0> Setting up a table for per-vhost connection counting on this node: tracked_connection_per_vhost_on_node_rabbit@rabbitmq1
+2019-04-01 18:37:12.502 [info] <0.1262.0> Running boot step routing_ready defined by app rabbit
+2019-04-01 18:37:12.502 [info] <0.1262.0> Running boot step pre_flight defined by app rabbit
+2019-04-01 18:37:12.503 [info] <0.1262.0> Running boot step notify_cluster defined by app rabbit
+2019-04-01 18:37:12.503 [info] <0.1262.0> Running boot step networking defined by app rabbit
+2019-04-01 18:37:12.511 [info] <0.1415.0> started TCP listener on [::]:5672
+2019-04-01 18:37:12.517 [info] <0.1262.0> Running boot step direct_client defined by app rabbit
+2019-04-01 18:37:12.658 [info] <0.1464.0> Management plugin: HTTP (non-TLS) listener started on port 15672
+2019-04-01 18:37:12.658 [info] <0.1570.0> Statistics database started.
+2019-04-01 18:37:13.740 [info] <0.1083.0> Server startup complete; 3 plugins started.
+ * rabbitmq_management
+ * rabbitmq_web_dispatch
+ * rabbitmq_management_agent
+ completed with 3 plugins.
+2019-04-01 18:37:29.782 [info] <0.1344.0> node rabbit@rabbitmq3 up
+2019-04-01 18:37:30.097 [info] <0.1344.0> rabbit on node rabbit@rabbitmq2 up
+2019-04-01 18:37:32.862 [info] <0.1344.0> rabbit on node rabbit@rabbitmq3 up
+2019-04-01 18:37:36.092 [info] <0.1702.0> queue 'q_4' in vhost '/': leader call - leader not known. Command will be forwarded once leader is known.
+2019-04-01 18:37:36.137 [info] <0.1702.0> queue 'q_4' in vhost '/': granting vote for {'%2F_q_4',rabbit@rabbitmq3} with last indexterm {0,0} for term 1 previous term was 0
+2019-04-01 18:37:36.137 [info] <0.1702.0> queue 'q_4' in vhost '/': detected a new leader {'%2F_q_4',rabbit@rabbitmq3} in term 1
+2019-04-01 18:37:36.138 [warning] <0.1702.0> queue 'q_4' in vhost '/': follower received unhandled msg: {node_event,rabbit@rabbitmq3,up}
+2019-04-01 18:40:40.346 [info] <0.1998.0> accepting AMQP connection <0.1998.0> (192.168.80.1:54706 -> 192.168.80.2:5672)
+2019-04-01 18:40:40.351 [info] <0.1998.0> connection <0.1998.0> (192.168.80.1:54706 -> 192.168.80.2:5672): user 'jack' authenticated and granted access to vhost '/'
+2019-04-01 18:40:46.518 [info] <0.1344.0> rabbit on node rabbit@rabbitmq2 down
+2019-04-01 18:40:46.518 [error] <0.1111.0> ** Node rabbit@rabbitmq2 not responding **
+** Removing (timedout) connection **
+2019-04-01 18:40:46.518 [warning] <0.1702.0> queue 'q_4' in vhost '/': follower received unhandled msg: {nodedown,rabbit@rabbitmq2}
+2019-04-01 18:40:46.553 [info] <0.1344.0> Node rabbit@rabbitmq2 is down, deleting its listeners
+2019-04-01 18:40:46.560 [info] <0.1344.0> node rabbit@rabbitmq2 down: net_tick_timeout
+2019-04-01 18:45:20.271 [info] <0.8.0> Feature flags: list of feature flags found:
+2019-04-01 18:45:20.271 [info] <0.8.0> Feature flags:   [x] empty_basic_get_metric
+2019-04-01 18:45:20.274 [info] <0.8.0> Feature flags:   [x] implicit_default_bindings
+2019-04-01 18:45:20.274 [info] <0.8.0> Feature flags:   [x] quorum_queue
+2019-04-01 18:45:20.275 [info] <0.8.0> Feature flags: feature flag states written to disk: yes
+dets: file "/var/lib/rabbitmq/mnesia/rabbit@rabbitmq1/quorum/rabbit@rabbitmq1/meta.dets" not properly closed, repairing ...
+2019-04-01 18:45:41.624 [info] <0.292.0> ra: meta data store initialised. 1 record(s) recovered
+2019-04-01 18:45:41.630 [info] <0.297.0> WAL: recovering ["/var/lib/rabbitmq/mnesia/rabbit@rabbitmq1/quorum/rabbit@rabbitmq1/00000002.wal"]
+2019-04-01 18:45:42.862 [info] <0.302.0> 
+ Starting RabbitMQ 3.8.0-alpha.572 on Erlang 21.3
+ Copyright (C) 2007-2019 Pivotal Software, Inc.
+ Licensed under the MPL.  See https://www.rabbitmq.com/
+
+  ##  ##
+  ##  ##      RabbitMQ 3.8.0-alpha.572. Copyright (C) 2007-2019 Pivotal Software, Inc.
+  ##########  Licensed under the MPL.  See https://www.rabbitmq.com/
+  ######  ##
+  ##########  Logs: <stdout>
+
+              Starting broker...
+2019-04-01 18:45:42.863 [info] <0.302.0> 
+ node           : rabbit@rabbitmq1
+ home dir       : /var/lib/rabbitmq
+ config file(s) : /etc/rabbitmq/rabbitmq.config
+ cookie hash    : gnzLDuqKcGxMNKFokfhOew==
+ log(s)         : <stdout>
+ database dir   : /var/lib/rabbitmq/mnesia/rabbit@rabbitmq1
+2019-04-01 18:45:42.891 [info] <0.302.0> Running boot step pre_boot defined by app rabbit
+2019-04-01 18:45:42.891 [info] <0.302.0> Running boot step rabbit_core_metrics defined by app rabbit
+2019-04-01 18:45:42.895 [info] <0.302.0> Running boot step rabbit_alarm defined by app rabbit
+2019-04-01 18:45:42.913 [info] <0.308.0> Memory high watermark set to 3180 MiB (3334930432 bytes) of 7951 MiB (8337326080 bytes) total
+2019-04-01 18:45:42.918 [info] <0.310.0> Enabling free disk space monitoring
+2019-04-01 18:45:42.918 [info] <0.310.0> Disk free limit set to 50MB
+2019-04-01 18:45:42.931 [info] <0.302.0> Running boot step code_server_cache defined by app rabbit
+2019-04-01 18:45:42.931 [info] <0.302.0> Running boot step file_handle_cache defined by app rabbit
+2019-04-01 18:45:42.932 [info] <0.313.0> Limiting to approx 1048476 file handles (943626 sockets)
+2019-04-01 18:45:42.932 [info] <0.314.0> FHC read buffering:  OFF
+2019-04-01 18:45:42.932 [info] <0.314.0> FHC write buffering: ON
+2019-04-01 18:45:42.933 [info] <0.302.0> Running boot step worker_pool defined by app rabbit
+2019-04-01 18:45:42.933 [info] <0.302.0> Running boot step database defined by app rabbit
+2019-04-01 18:45:56.941 [info] <0.302.0> Waiting for Mnesia tables for 30000 ms, 0 retries left
+2019-04-01 18:46:26.943 [error] <0.302.0> Feature flag `quorum_queue`: migration function crashed: {error,{timeout_waiting_for_tables,[rabbit_durable_queue]}}
+[{rabbit_table,wait,3,[{file,"src/rabbit_table.erl"},{line,117}]},{rabbit_core_ff,quorum_queue_migration,3,[{file,"src/rabbit_core_ff.erl"},{line,52}]},{rabbit_feature_flags,run_migration_fun,3,[{file,"src/rabbit_feature_flags.erl"},{line,1484}]},{rabbit_feature_flags,'-verify_which_feature_flags_are_actually_enabled/0-fun-2-',3,[{file,"src/rabbit_feature_flags.erl"},{line,2123}]},{maps,fold_1,3,[{file,"maps.erl"},{line,257}]},{rabbit_feature_flags,verify_which_feature_flags_are_actually_enabled,0,[{file,"src/rabbit_feature_flags.erl"},{line,2121}]},{rabbit_feature_flags,sync_feature_flags_with_cluster,3,[{file,"src/rabbit_feature_flags.erl"},{line,1942}]},{rabbit_mnesia,ensure_feature_flags_are_in_sync,2,[{file,"src/rabbit_mnesia.erl"},{line,626}]}]
+2019-04-01 18:46:26.943 [info] <0.302.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-01 18:46:56.945 [warning] <0.302.0> Error while waiting for Mnesia tables: {timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]}
+2019-04-01 18:46:56.945 [info] <0.302.0> Waiting for Mnesia tables for 30000 ms, 8 retries left
+2019-04-01 18:47:26.946 [warning] <0.302.0> Error while waiting for Mnesia tables: {timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]}
+2019-04-01 18:47:26.946 [info] <0.302.0> Waiting for Mnesia tables for 30000 ms, 7 retries left
+2019-04-01 18:47:56.948 [warning] <0.302.0> Error while waiting for Mnesia tables: {timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]}
+2019-04-01 18:47:56.948 [info] <0.302.0> Waiting for Mnesia tables for 30000 ms, 6 retries left
+2019-04-01 18:48:26.949 [warning] <0.302.0> Error while waiting for Mnesia tables: {timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]}
+2019-04-01 18:48:26.949 [info] <0.302.0> Waiting for Mnesia tables for 30000 ms, 5 retries left
+2019-04-01 18:48:56.951 [warning] <0.302.0> Error while waiting for Mnesia tables: {timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]}
+2019-04-01 18:48:56.951 [info] <0.302.0> Waiting for Mnesia tables for 30000 ms, 4 retries left
+2019-04-01 18:50:34.066 [info] <0.8.0> Feature flags: list of feature flags found:
+2019-04-01 18:50:34.066 [info] <0.8.0> Feature flags:   [x] empty_basic_get_metric
+2019-04-01 18:50:34.067 [info] <0.8.0> Feature flags:   [x] implicit_default_bindings
+2019-04-01 18:50:34.067 [info] <0.8.0> Feature flags:   [x] quorum_queue
+2019-04-01 18:50:34.067 [info] <0.8.0> Feature flags: feature flag states written to disk: yes
+2019-04-01 18:50:48.217 [info] <0.288.0> ra: meta data store initialised. 1 record(s) recovered
+2019-04-01 18:50:48.218 [info] <0.293.0> WAL: recovering ["/var/lib/rabbitmq/mnesia/rabbit@rabbitmq1/quorum/rabbit@rabbitmq1/00000003.wal"]
+2019-04-01 18:50:48.220 [info] <0.297.0> 
+ Starting RabbitMQ 3.8.0-alpha.572 on Erlang 21.3
+ Copyright (C) 2007-2019 Pivotal Software, Inc.
+ Licensed under the MPL.  See https://www.rabbitmq.com/
+
+  ##  ##
+  ##  ##      RabbitMQ 3.8.0-alpha.572. Copyright (C) 2007-2019 Pivotal Software, Inc.
+  ##########  Licensed under the MPL.  See https://www.rabbitmq.com/
+  ######  ##
+  ##########  Logs: <stdout>
+
+              Starting broker...
+2019-04-01 18:50:48.221 [info] <0.297.0> 
+ node           : rabbit@rabbitmq1
+ home dir       : /var/lib/rabbitmq
+ config file(s) : /etc/rabbitmq/rabbitmq.config
+ cookie hash    : gnzLDuqKcGxMNKFokfhOew==
+ log(s)         : <stdout>
+ database dir   : /var/lib/rabbitmq/mnesia/rabbit@rabbitmq1
+2019-04-01 18:50:48.241 [info] <0.297.0> Running boot step pre_boot defined by app rabbit
+2019-04-01 18:50:48.242 [info] <0.297.0> Running boot step rabbit_core_metrics defined by app rabbit
+2019-04-01 18:50:48.243 [info] <0.297.0> Running boot step rabbit_alarm defined by app rabbit
+2019-04-01 18:50:48.248 [info] <0.303.0> Memory high watermark set to 3180 MiB (3334930432 bytes) of 7951 MiB (8337326080 bytes) total
+2019-04-01 18:50:48.252 [info] <0.305.0> Enabling free disk space monitoring
+2019-04-01 18:50:48.252 [info] <0.305.0> Disk free limit set to 50MB
+2019-04-01 18:50:48.256 [info] <0.297.0> Running boot step code_server_cache defined by app rabbit
+2019-04-01 18:50:48.257 [info] <0.297.0> Running boot step file_handle_cache defined by app rabbit
+2019-04-01 18:50:48.257 [info] <0.308.0> Limiting to approx 1048476 file handles (943626 sockets)
+2019-04-01 18:50:48.257 [info] <0.309.0> FHC read buffering:  OFF
+2019-04-01 18:50:48.257 [info] <0.309.0> FHC write buffering: ON
+2019-04-01 18:50:48.259 [info] <0.297.0> Running boot step worker_pool defined by app rabbit
+2019-04-01 18:50:48.259 [info] <0.297.0> Running boot step database defined by app rabbit
+2019-04-01 18:51:02.279 [info] <0.297.0> Waiting for Mnesia tables for 30000 ms, 0 retries left
+2019-04-01 18:51:32.280 [error] <0.297.0> Feature flag `quorum_queue`: migration function crashed: {error,{timeout_waiting_for_tables,[rabbit_durable_queue]}}
+[{rabbit_table,wait,3,[{file,"src/rabbit_table.erl"},{line,117}]},{rabbit_core_ff,quorum_queue_migration,3,[{file,"src/rabbit_core_ff.erl"},{line,52}]},{rabbit_feature_flags,run_migration_fun,3,[{file,"src/rabbit_feature_flags.erl"},{line,1484}]},{rabbit_feature_flags,'-verify_which_feature_flags_are_actually_enabled/0-fun-2-',3,[{file,"src/rabbit_feature_flags.erl"},{line,2123}]},{maps,fold_1,3,[{file,"maps.erl"},{line,257}]},{rabbit_feature_flags,verify_which_feature_flags_are_actually_enabled,0,[{file,"src/rabbit_feature_flags.erl"},{line,2121}]},{rabbit_feature_flags,sync_feature_flags_with_cluster,3,[{file,"src/rabbit_feature_flags.erl"},{line,1942}]},{rabbit_mnesia,ensure_feature_flags_are_in_sync,2,[{file,"src/rabbit_mnesia.erl"},{line,626}]}]
+2019-04-01 18:51:32.280 [info] <0.297.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-01 18:52:02.324 [warning] <0.297.0> Error while waiting for Mnesia tables: {timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]}
+2019-04-01 18:52:02.324 [info] <0.297.0> Waiting for Mnesia tables for 30000 ms, 8 retries left
+2019-04-01 18:52:32.325 [warning] <0.297.0> Error while waiting for Mnesia tables: {timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]}
+2019-04-01 18:52:32.326 [info] <0.297.0> Waiting for Mnesia tables for 30000 ms, 7 retries left
+2019-04-01 18:53:02.327 [warning] <0.297.0> Error while waiting for Mnesia tables: {timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]}
+2019-04-01 18:53:02.328 [info] <0.297.0> Waiting for Mnesia tables for 30000 ms, 6 retries left
+2019-04-01 18:53:32.329 [warning] <0.297.0> Error while waiting for Mnesia tables: {timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]}
+2019-04-01 18:53:32.329 [info] <0.297.0> Waiting for Mnesia tables for 30000 ms, 5 retries left
+2019-04-01 18:54:02.330 [warning] <0.297.0> Error while waiting for Mnesia tables: {timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]}
+2019-04-01 18:54:02.330 [info] <0.297.0> Waiting for Mnesia tables for 30000 ms, 4 retries left
+2019-04-01 18:54:32.331 [warning] <0.297.0> Error while waiting for Mnesia tables: {timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]}
+2019-04-01 18:54:32.331 [info] <0.297.0> Waiting for Mnesia tables for 30000 ms, 3 retries left
+2019-04-01 18:55:02.332 [warning] <0.297.0> Error while waiting for Mnesia tables: {timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]}
+2019-04-01 18:55:02.332 [info] <0.297.0> Waiting for Mnesia tables for 30000 ms, 2 retries left
+2019-04-01 18:55:32.333 [warning] <0.297.0> Error while waiting for Mnesia tables: {timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]}
+2019-04-01 18:55:32.333 [info] <0.297.0> Waiting for Mnesia tables for 30000 ms, 1 retries left
+2019-04-01 18:56:02.335 [warning] <0.297.0> Error while waiting for Mnesia tables: {timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]}
+2019-04-01 18:56:02.335 [info] <0.297.0> Waiting for Mnesia tables for 30000 ms, 0 retries left
+2019-04-01 18:56:32.336 [error] <0.296.0> CRASH REPORT Process <0.296.0> with 0 neighbours exited with reason: {{timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]},{rabbit,start,[normal,[]]}} in application_master:init/4 line 138
+2019-04-01 18:56:32.337 [info] <0.43.0> Application rabbit exited with reason: {{timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]},{rabbit,start,[normal,[]]}}
+{"Kernel pid terminated",application_controller,"{application_start_failure,rabbit,{{timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]},{rabbit,start,[normal,[]]}}}"}
+Kernel pid terminated (application_controller) ({application_start_failure,rabbit,{{timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_r
+
+Crash dump is being written to: /var/log/rabbitmq/erl_crash.dump...done
