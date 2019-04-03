@@ -1,0 +1,1710 @@
+2019-04-03 18:49:49.944 [debug] <0.128.0> Lager installed handler lager_forwarder_backend into rabbit_log_connection_lager_event
+2019-04-03 18:49:49.944 [debug] <0.119.0> Lager installed handler lager_forwarder_backend into error_logger_lager_event
+2019-04-03 18:49:49.944 [debug] <0.122.0> Lager installed handler lager_forwarder_backend into rabbit_log_lager_event
+2019-04-03 18:49:49.944 [debug] <0.125.0> Lager installed handler lager_forwarder_backend into rabbit_log_channel_lager_event
+2019-04-03 18:49:49.944 [debug] <0.131.0> Lager installed handler lager_forwarder_backend into rabbit_log_ldap_lager_event
+2019-04-03 18:49:49.944 [debug] <0.116.0> Lager installed handler error_logger_lager_h into error_logger
+2019-04-03 18:49:49.944 [debug] <0.137.0> Lager installed handler lager_forwarder_backend into rabbit_log_queue_lager_event
+2019-04-03 18:49:49.944 [debug] <0.140.0> Lager installed handler lager_forwarder_backend into rabbit_log_ra_lager_event
+2019-04-03 18:49:49.944 [debug] <0.143.0> Lager installed handler lager_forwarder_backend into rabbit_log_federation_lager_event
+2019-04-03 18:49:49.944 [debug] <0.146.0> Lager installed handler {lager_file_backend,
+                            "/var/log/rabbitmq/rabbit@rabbitmq3_upgrade.log"} into rabbit_log_upgrade_lager_event
+2019-04-03 18:49:49.944 [debug] <0.134.0> Lager installed handler lager_forwarder_backend into rabbit_log_mirroring_lager_event
+2019-04-03 18:49:50.322 [debug] <0.109.0> Lager installed handler lager_backend_throttle into lager_event
+2019-04-03 18:49:50.358 [info] <0.157.0> RabbitMQ hasn't finished starting yet. Waiting for startup to finish before stopping...
+2019-04-03 18:49:50.772 [info] <0.8.0> Log file opened with Lager
+2019-04-03 18:49:51.526 [debug] <0.8.0> Feature flags: query feature flags in loaded applications
+2019-04-03 18:49:55.280 [debug] <0.8.0> Feature flags: application `rabbitmq_management_agent` has 1 feature flags
+2019-04-03 18:49:55.280 [debug] <0.8.0> Feature flags: application `rabbit` has 2 feature flags
+2019-04-03 18:49:55.280 [debug] <0.8.0> Feature flags: (re)initialize registry
+2019-04-03 18:49:55.280 [info] <0.8.0> Feature flags: list of feature flags found:
+2019-04-03 18:49:55.280 [info] <0.8.0> Feature flags:   [ ] empty_basic_get_metric
+2019-04-03 18:49:55.280 [info] <0.8.0> Feature flags:   [ ] implicit_default_bindings
+2019-04-03 18:49:55.280 [info] <0.8.0> Feature flags:   [ ] quorum_queue
+2019-04-03 18:49:55.280 [info] <0.8.0> Feature flags: feature flag states written to disk: yes
+2019-04-03 18:49:55.283 [debug] <0.8.0> Feature flags: registry module ready, loading it...
+2019-04-03 18:49:55.286 [debug] <0.8.0> Feature flags: registry module loaded
+2019-04-03 18:49:55.310 [info] <0.255.0> ra: meta data store initialised. 0 record(s) recovered
+2019-04-03 18:49:55.311 [info] <0.260.0> WAL: recovering []
+2019-04-03 18:49:55.311 [debug] <0.260.0> wal: opening new file "00000001.wal"
+2019-04-03 18:49:55.312 [info] <0.264.0> 
+ Starting RabbitMQ 3.8.0-alpha.572 on Erlang 21.3
+ Copyright (C) 2007-2019 Pivotal Software, Inc.
+ Licensed under the MPL.  See https://www.rabbitmq.com/
+2019-04-03 18:49:55.312 [info] <0.264.0> 
+ node           : rabbit@rabbitmq3
+ home dir       : /var/lib/rabbitmq
+ config file(s) : /etc/rabbitmq/rabbitmq.config
+ cookie hash    : gnzLDuqKcGxMNKFokfhOew==
+ log(s)         : /var/log/rabbitmq/rabbit.log
+                : /var/log/rabbitmq/rabbit@rabbitmq3_upgrade.log
+ database dir   : /var/lib/rabbitmq/mnesia/rabbit@rabbitmq3
+2019-04-03 18:49:55.327 [info] <0.264.0> Running boot step pre_boot defined by app rabbit
+2019-04-03 18:49:55.327 [info] <0.264.0> Running boot step rabbit_core_metrics defined by app rabbit
+2019-04-03 18:49:55.327 [debug] <0.264.0> Applying MFA: M = rabbit_sup, F = start_child, A = [rabbit_metrics]
+2019-04-03 18:49:55.327 [info] <0.264.0> Running boot step rabbit_alarm defined by app rabbit
+2019-04-03 18:49:55.327 [debug] <0.264.0> Applying MFA: M = rabbit_alarm, F = start, A = []
+2019-04-03 18:49:55.327 [debug] <0.267.0> Supervisor rabbit_alarm_sup started rabbit_alarm:start_link() at pid <0.268.0>
+2019-04-03 18:49:55.331 [info] <0.270.0> Memory high watermark set to 3180 MiB (3334930432 bytes) of 7951 MiB (8337326080 bytes) total
+2019-04-03 18:49:55.331 [debug] <0.269.0> Supervisor vm_memory_monitor_sup started vm_memory_monitor:start_link(0.4, #Fun<rabbit_alarm.0.52593784>, #Fun<rabbit_alarm.1.52593784>) at pid <0.270.0>
+2019-04-03 18:49:55.334 [info] <0.272.0> Enabling free disk space monitoring
+2019-04-03 18:49:55.335 [info] <0.272.0> Disk free limit set to 50MB
+2019-04-03 18:49:55.337 [debug] <0.271.0> Supervisor rabbit_disk_monitor_sup started rabbit_disk_monitor:start_link(50000000) at pid <0.272.0>
+2019-04-03 18:49:55.337 [info] <0.264.0> Running boot step code_server_cache defined by app rabbit
+2019-04-03 18:49:55.337 [debug] <0.264.0> Applying MFA: M = rabbit_sup, F = start_child, A = [code_server_cache]
+2019-04-03 18:49:55.337 [info] <0.264.0> Running boot step file_handle_cache defined by app rabbit
+2019-04-03 18:49:55.337 [debug] <0.264.0> Applying MFA: M = rabbit, F = start_fhc, A = []
+2019-04-03 18:49:55.338 [info] <0.275.0> Limiting to approx 1048476 file handles (943626 sockets)
+2019-04-03 18:49:55.338 [info] <0.276.0> FHC read buffering:  OFF
+2019-04-03 18:49:55.338 [debug] <0.274.0> Supervisor file_handle_cache_sup started file_handle_cache:start_link(fun rabbit_alarm:set_alarm/1, fun rabbit_alarm:clear_alarm/1) at pid <0.275.0>
+2019-04-03 18:49:55.338 [info] <0.276.0> FHC write buffering: ON
+2019-04-03 18:49:55.338 [info] <0.264.0> Running boot step worker_pool defined by app rabbit
+2019-04-03 18:49:55.338 [debug] <0.264.0> Applying MFA: M = rabbit_sup, F = start_supervisor_child, A = [worker_pool_sup]
+2019-04-03 18:49:55.339 [info] <0.264.0> Running boot step database defined by app rabbit
+2019-04-03 18:49:55.339 [debug] <0.264.0> Applying MFA: M = rabbit_mnesia, F = init, A = []
+2019-04-03 18:49:55.339 [info] <0.264.0> Node database directory at /var/lib/rabbitmq/mnesia/rabbit@rabbitmq3 is empty. Assuming we need to join an existing cluster or initialise from scratch...
+2019-04-03 18:49:55.339 [info] <0.264.0> Configured peer discovery backend: rabbit_peer_discovery_classic_config
+2019-04-03 18:49:55.339 [info] <0.264.0> Will try to lock with peer discovery backend rabbit_peer_discovery_classic_config
+2019-04-03 18:49:55.339 [info] <0.264.0> Peer discovery backend does not support locking, falling back to randomized delay
+2019-04-03 18:49:55.339 [info] <0.264.0> Peer discovery backend rabbit_peer_discovery_classic_config does not support registration, skipping randomized startup delay.
+2019-04-03 18:49:55.339 [info] <0.264.0> All discovered existing cluster peers: 
+2019-04-03 18:49:55.339 [info] <0.264.0> Discovered no peer nodes to cluster with
+2019-04-03 18:49:55.341 [info] <0.43.0> Application mnesia exited with reason: stopped
+2019-04-03 18:49:55.553 [info] <0.264.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-03 18:49:55.580 [debug] <0.264.0> Feature flags: double-checking feature flag states...
+2019-04-03 18:49:55.580 [debug] <0.264.0> Feature flag `implicit_default_bindings`: run migration function implicit_default_bindings_migration with arg: is_enabled
+2019-04-03 18:49:55.580 [debug] <0.264.0> Feature flag `quorum_queue`: run migration function quorum_queue_migration with arg: is_enabled
+2019-04-03 18:49:55.580 [info] <0.264.0> Waiting for Mnesia tables for 30000 ms, 0 retries left
+2019-04-03 18:49:55.580 [debug] <0.264.0> Feature flags: starting an unclustered node for the first time: all feature flags will be enabled by default
+2019-04-03 18:49:55.580 [debug] <0.264.0> Feature flag `empty_basic_get_metric`: REQUEST TO ENABLE
+2019-04-03 18:49:55.580 [debug] <0.264.0> Feature flag `empty_basic_get_metric`: not enabled, check if supported by cluster
+2019-04-03 18:49:55.580 [debug] <0.264.0> Feature flags: isolated node; skipping remote node query => consider `[empty_basic_get_metric]` supported
+2019-04-03 18:49:55.580 [info] <0.264.0> Feature flag `empty_basic_get_metric`: supported, attempt to enable...
+2019-04-03 18:49:55.580 [info] <0.264.0> Feature flag `empty_basic_get_metric`: mark as enabled=state_changing
+2019-04-03 18:49:55.580 [debug] <0.264.0> Feature flags: query feature flags in loaded applications
+2019-04-03 18:49:55.593 [debug] <0.264.0> Feature flags: application `rabbitmq_management_agent` has 1 feature flags
+2019-04-03 18:49:55.593 [debug] <0.264.0> Feature flags: application `rabbit` has 2 feature flags
+2019-04-03 18:49:55.593 [debug] <0.264.0> Feature flags: (re)initialize registry
+2019-04-03 18:49:55.593 [info] <0.264.0> Feature flags: list of feature flags found:
+2019-04-03 18:49:55.593 [info] <0.264.0> Feature flags:   [~] empty_basic_get_metric
+2019-04-03 18:49:55.593 [info] <0.264.0> Feature flags:   [ ] implicit_default_bindings
+2019-04-03 18:49:55.593 [info] <0.264.0> Feature flags:   [ ] quorum_queue
+2019-04-03 18:49:55.593 [info] <0.264.0> Feature flags: feature flag states written to disk: yes
+2019-04-03 18:49:55.595 [debug] <0.264.0> Feature flags: registry module ready, loading it...
+2019-04-03 18:49:55.603 [debug] <0.264.0> Feature flags: registry module loaded
+2019-04-03 18:49:55.603 [debug] <0.264.0> Feature flag `empty_basic_get_metric`: enable dependencies: []
+2019-04-03 18:49:55.603 [info] <0.264.0> Feature flag `empty_basic_get_metric`: mark as enabled=true
+2019-04-03 18:49:55.604 [debug] <0.264.0> Feature flags: query feature flags in loaded applications
+2019-04-03 18:49:55.617 [debug] <0.264.0> Feature flags: application `rabbitmq_management_agent` has 1 feature flags
+2019-04-03 18:49:55.617 [debug] <0.264.0> Feature flags: application `rabbit` has 2 feature flags
+2019-04-03 18:49:55.617 [debug] <0.264.0> Feature flags: (re)initialize registry
+2019-04-03 18:49:55.617 [info] <0.264.0> Feature flags: list of feature flags found:
+2019-04-03 18:49:55.617 [info] <0.264.0> Feature flags:   [x] empty_basic_get_metric
+2019-04-03 18:49:55.617 [info] <0.264.0> Feature flags:   [ ] implicit_default_bindings
+2019-04-03 18:49:55.617 [info] <0.264.0> Feature flags:   [ ] quorum_queue
+2019-04-03 18:49:55.617 [info] <0.264.0> Feature flags: feature flag states written to disk: yes
+2019-04-03 18:49:55.620 [debug] <0.264.0> Feature flags: registry module ready, loading it...
+2019-04-03 18:49:55.628 [debug] <0.264.0> Feature flags: registry module loaded
+2019-04-03 18:49:55.629 [debug] <0.264.0> Feature flag `implicit_default_bindings`: REQUEST TO ENABLE
+2019-04-03 18:49:55.629 [debug] <0.264.0> Feature flag `implicit_default_bindings`: not enabled, check if supported by cluster
+2019-04-03 18:49:55.629 [debug] <0.264.0> Feature flags: isolated node; skipping remote node query => consider `[implicit_default_bindings]` supported
+2019-04-03 18:49:55.629 [info] <0.264.0> Feature flag `implicit_default_bindings`: supported, attempt to enable...
+2019-04-03 18:49:55.629 [info] <0.264.0> Feature flag `implicit_default_bindings`: mark as enabled=state_changing
+2019-04-03 18:49:55.629 [debug] <0.264.0> Feature flags: query feature flags in loaded applications
+2019-04-03 18:49:55.642 [debug] <0.264.0> Feature flags: application `rabbitmq_management_agent` has 1 feature flags
+2019-04-03 18:49:55.642 [debug] <0.264.0> Feature flags: application `rabbit` has 2 feature flags
+2019-04-03 18:49:55.642 [debug] <0.264.0> Feature flags: (re)initialize registry
+2019-04-03 18:49:55.642 [info] <0.264.0> Feature flags: list of feature flags found:
+2019-04-03 18:49:55.642 [info] <0.264.0> Feature flags:   [x] empty_basic_get_metric
+2019-04-03 18:49:55.642 [info] <0.264.0> Feature flags:   [~] implicit_default_bindings
+2019-04-03 18:49:55.642 [info] <0.264.0> Feature flags:   [ ] quorum_queue
+2019-04-03 18:49:55.642 [info] <0.264.0> Feature flags: feature flag states written to disk: yes
+2019-04-03 18:49:55.645 [debug] <0.264.0> Feature flags: registry module ready, loading it...
+2019-04-03 18:49:55.652 [debug] <0.264.0> Feature flags: registry module loaded
+2019-04-03 18:49:55.652 [debug] <0.264.0> Feature flag `implicit_default_bindings`: enable dependencies: []
+2019-04-03 18:49:55.652 [debug] <0.264.0> Feature flag `implicit_default_bindings`: run migration function implicit_default_bindings_migration with arg: enable
+2019-04-03 18:49:55.652 [info] <0.264.0> Waiting for Mnesia tables for 30000 ms, 0 retries left
+2019-04-03 18:49:55.653 [info] <0.264.0> Feature flag `implicit_default_bindings`: mark as enabled=true
+2019-04-03 18:49:55.654 [debug] <0.264.0> Feature flags: query feature flags in loaded applications
+2019-04-03 18:49:55.668 [debug] <0.264.0> Feature flags: application `rabbitmq_management_agent` has 1 feature flags
+2019-04-03 18:49:55.668 [debug] <0.264.0> Feature flags: application `rabbit` has 2 feature flags
+2019-04-03 18:49:55.668 [debug] <0.264.0> Feature flags: (re)initialize registry
+2019-04-03 18:49:55.668 [info] <0.264.0> Feature flags: list of feature flags found:
+2019-04-03 18:49:55.668 [info] <0.264.0> Feature flags:   [x] empty_basic_get_metric
+2019-04-03 18:49:55.668 [info] <0.264.0> Feature flags:   [x] implicit_default_bindings
+2019-04-03 18:49:55.668 [info] <0.264.0> Feature flags:   [ ] quorum_queue
+2019-04-03 18:49:55.668 [info] <0.264.0> Feature flags: feature flag states written to disk: yes
+2019-04-03 18:49:55.671 [debug] <0.264.0> Feature flags: registry module ready, loading it...
+2019-04-03 18:49:55.679 [debug] <0.264.0> Feature flags: registry module loaded
+2019-04-03 18:49:55.679 [debug] <0.264.0> Feature flag `quorum_queue`: REQUEST TO ENABLE
+2019-04-03 18:49:55.679 [debug] <0.264.0> Feature flag `quorum_queue`: not enabled, check if supported by cluster
+2019-04-03 18:49:55.679 [debug] <0.264.0> Feature flags: isolated node; skipping remote node query => consider `[quorum_queue]` supported
+2019-04-03 18:49:55.679 [info] <0.264.0> Feature flag `quorum_queue`: supported, attempt to enable...
+2019-04-03 18:49:55.679 [info] <0.264.0> Feature flag `quorum_queue`: mark as enabled=state_changing
+2019-04-03 18:49:55.679 [debug] <0.264.0> Feature flags: query feature flags in loaded applications
+2019-04-03 18:49:55.692 [debug] <0.264.0> Feature flags: application `rabbitmq_management_agent` has 1 feature flags
+2019-04-03 18:49:55.693 [debug] <0.264.0> Feature flags: application `rabbit` has 2 feature flags
+2019-04-03 18:49:55.693 [debug] <0.264.0> Feature flags: (re)initialize registry
+2019-04-03 18:49:55.693 [info] <0.264.0> Feature flags: list of feature flags found:
+2019-04-03 18:49:55.693 [info] <0.264.0> Feature flags:   [x] empty_basic_get_metric
+2019-04-03 18:49:55.693 [info] <0.264.0> Feature flags:   [x] implicit_default_bindings
+2019-04-03 18:49:55.693 [info] <0.264.0> Feature flags:   [~] quorum_queue
+2019-04-03 18:49:55.693 [info] <0.264.0> Feature flags: feature flag states written to disk: yes
+2019-04-03 18:49:55.695 [debug] <0.264.0> Feature flags: registry module ready, loading it...
+2019-04-03 18:49:55.703 [debug] <0.264.0> Feature flags: registry module loaded
+2019-04-03 18:49:55.703 [debug] <0.264.0> Feature flag `quorum_queue`: enable dependencies: []
+2019-04-03 18:49:55.703 [debug] <0.264.0> Feature flag `quorum_queue`: run migration function quorum_queue_migration with arg: enable
+2019-04-03 18:49:55.703 [info] <0.264.0> Waiting for Mnesia tables for 30000 ms, 0 retries left
+2019-04-03 18:49:55.704 [info] <0.264.0> Feature flag `quorum_queue`:   migrating Mnesia table rabbit_queue...
+2019-04-03 18:49:55.728 [info] <0.264.0> Feature flag `quorum_queue`:   migrating Mnesia table rabbit_durable_queue...
+2019-04-03 18:49:55.765 [info] <0.264.0> Feature flag `quorum_queue`:   Mnesia tables migration done
+2019-04-03 18:49:55.765 [info] <0.264.0> Feature flag `quorum_queue`: mark as enabled=true
+2019-04-03 18:49:55.766 [debug] <0.264.0> Feature flags: query feature flags in loaded applications
+2019-04-03 18:49:55.779 [debug] <0.264.0> Feature flags: application `rabbitmq_management_agent` has 1 feature flags
+2019-04-03 18:49:55.779 [debug] <0.264.0> Feature flags: application `rabbit` has 2 feature flags
+2019-04-03 18:49:55.779 [debug] <0.264.0> Feature flags: (re)initialize registry
+2019-04-03 18:49:55.779 [info] <0.264.0> Feature flags: list of feature flags found:
+2019-04-03 18:49:55.779 [info] <0.264.0> Feature flags:   [x] empty_basic_get_metric
+2019-04-03 18:49:55.779 [info] <0.264.0> Feature flags:   [x] implicit_default_bindings
+2019-04-03 18:49:55.779 [info] <0.264.0> Feature flags:   [x] quorum_queue
+2019-04-03 18:49:55.779 [info] <0.264.0> Feature flags: feature flag states written to disk: yes
+2019-04-03 18:49:55.781 [debug] <0.264.0> Feature flags: registry module ready, loading it...
+2019-04-03 18:49:55.788 [debug] <0.264.0> Feature flags: registry module loaded
+2019-04-03 18:49:55.788 [info] <0.264.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-03 18:49:55.825 [info] <0.264.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-03 18:49:55.826 [info] <0.264.0> Peer discovery backend rabbit_peer_discovery_classic_config does not support registration, skipping registration.
+2019-04-03 18:49:55.826 [info] <0.264.0> Running boot step database_sync defined by app rabbit
+2019-04-03 18:49:55.826 [debug] <0.264.0> Applying MFA: M = rabbit_sup, F = start_child, A = [mnesia_sync]
+2019-04-03 18:49:55.826 [info] <0.264.0> Running boot step feature_flags defined by app rabbit
+2019-04-03 18:49:55.826 [debug] <0.264.0> Applying MFA: M = rabbit_feature_flags, F = init, A = []
+2019-04-03 18:49:55.826 [info] <0.264.0> Running boot step codec_correctness_check defined by app rabbit
+2019-04-03 18:49:55.826 [debug] <0.264.0> Applying MFA: M = rabbit_binary_generator, F = check_empty_frame_size, A = []
+2019-04-03 18:49:55.826 [info] <0.264.0> Running boot step external_infrastructure defined by app rabbit
+2019-04-03 18:49:55.826 [info] <0.264.0> Running boot step rabbit_registry defined by app rabbit
+2019-04-03 18:49:55.826 [debug] <0.264.0> Applying MFA: M = rabbit_sup, F = start_child, A = [rabbit_registry]
+2019-04-03 18:49:55.827 [info] <0.264.0> Running boot step rabbit_auth_mechanism_cr_demo defined by app rabbit
+2019-04-03 18:49:55.827 [debug] <0.264.0> Applying MFA: M = rabbit_registry, F = register, A = [auth_mechanism,<<"RABBIT-CR-DEMO">>,rabbit_auth_mechanism_cr_demo]
+2019-04-03 18:49:55.827 [info] <0.264.0> Running boot step rabbit_queue_location_random defined by app rabbit
+2019-04-03 18:49:55.827 [debug] <0.264.0> Applying MFA: M = rabbit_registry, F = register, A = [queue_master_locator,<<"random">>,rabbit_queue_location_random]
+2019-04-03 18:49:55.827 [info] <0.264.0> Running boot step rabbit_event defined by app rabbit
+2019-04-03 18:49:55.827 [debug] <0.264.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_event]
+2019-04-03 18:49:55.827 [info] <0.264.0> Running boot step rabbit_auth_mechanism_amqplain defined by app rabbit
+2019-04-03 18:49:55.827 [debug] <0.477.0> Supervisor rabbit_event_sup started rabbit_event:start_link() at pid <0.478.0>
+2019-04-03 18:49:55.827 [debug] <0.264.0> Applying MFA: M = rabbit_registry, F = register, A = [auth_mechanism,<<"AMQPLAIN">>,rabbit_auth_mechanism_amqplain]
+2019-04-03 18:49:55.827 [info] <0.264.0> Running boot step rabbit_auth_mechanism_plain defined by app rabbit
+2019-04-03 18:49:55.827 [debug] <0.264.0> Applying MFA: M = rabbit_registry, F = register, A = [auth_mechanism,<<"PLAIN">>,rabbit_auth_mechanism_plain]
+2019-04-03 18:49:55.827 [info] <0.264.0> Running boot step rabbit_exchange_type_direct defined by app rabbit
+2019-04-03 18:49:55.827 [debug] <0.264.0> Applying MFA: M = rabbit_registry, F = register, A = [exchange,<<"direct">>,rabbit_exchange_type_direct]
+2019-04-03 18:49:55.827 [info] <0.264.0> Running boot step rabbit_exchange_type_fanout defined by app rabbit
+2019-04-03 18:49:55.828 [debug] <0.264.0> Applying MFA: M = rabbit_registry, F = register, A = [exchange,<<"fanout">>,rabbit_exchange_type_fanout]
+2019-04-03 18:49:55.828 [info] <0.264.0> Running boot step rabbit_exchange_type_headers defined by app rabbit
+2019-04-03 18:49:55.828 [debug] <0.264.0> Applying MFA: M = rabbit_registry, F = register, A = [exchange,<<"headers">>,rabbit_exchange_type_headers]
+2019-04-03 18:49:55.828 [info] <0.264.0> Running boot step rabbit_exchange_type_topic defined by app rabbit
+2019-04-03 18:49:55.828 [debug] <0.264.0> Applying MFA: M = rabbit_registry, F = register, A = [exchange,<<"topic">>,rabbit_exchange_type_topic]
+2019-04-03 18:49:55.828 [info] <0.264.0> Running boot step rabbit_mirror_queue_mode_all defined by app rabbit
+2019-04-03 18:49:55.828 [debug] <0.264.0> Applying MFA: M = rabbit_registry, F = register, A = [ha_mode,<<"all">>,rabbit_mirror_queue_mode_all]
+2019-04-03 18:49:55.828 [info] <0.264.0> Running boot step rabbit_mirror_queue_mode_exactly defined by app rabbit
+2019-04-03 18:49:55.828 [debug] <0.264.0> Applying MFA: M = rabbit_registry, F = register, A = [ha_mode,<<"exactly">>,rabbit_mirror_queue_mode_exactly]
+2019-04-03 18:49:55.829 [info] <0.264.0> Running boot step rabbit_mirror_queue_mode_nodes defined by app rabbit
+2019-04-03 18:49:55.829 [debug] <0.264.0> Applying MFA: M = rabbit_registry, F = register, A = [ha_mode,<<"nodes">>,rabbit_mirror_queue_mode_nodes]
+2019-04-03 18:49:55.829 [info] <0.264.0> Running boot step rabbit_priority_queue defined by app rabbit
+2019-04-03 18:49:55.829 [debug] <0.264.0> Applying MFA: M = rabbit_priority_queue, F = enable, A = []
+2019-04-03 18:49:55.829 [info] <0.264.0> Priority queues enabled, real BQ is rabbit_variable_queue
+2019-04-03 18:49:55.829 [info] <0.264.0> Running boot step rabbit_queue_location_client_local defined by app rabbit
+2019-04-03 18:49:55.829 [debug] <0.264.0> Applying MFA: M = rabbit_registry, F = register, A = [queue_master_locator,<<"client-local">>,rabbit_queue_location_client_local]
+2019-04-03 18:49:55.829 [info] <0.264.0> Running boot step rabbit_queue_location_min_masters defined by app rabbit
+2019-04-03 18:49:55.829 [debug] <0.264.0> Applying MFA: M = rabbit_registry, F = register, A = [queue_master_locator,<<"min-masters">>,rabbit_queue_location_min_masters]
+2019-04-03 18:49:55.829 [info] <0.264.0> Running boot step kernel_ready defined by app rabbit
+2019-04-03 18:49:55.829 [info] <0.264.0> Running boot step rabbit_sysmon_minder defined by app rabbit
+2019-04-03 18:49:55.829 [debug] <0.264.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_sysmon_minder]
+2019-04-03 18:49:55.829 [debug] <0.479.0> Supervisor rabbit_sysmon_minder_sup started rabbit_sysmon_minder:start_link() at pid <0.480.0>
+2019-04-03 18:49:55.830 [info] <0.264.0> Running boot step rabbit_epmd_monitor defined by app rabbit
+2019-04-03 18:49:55.830 [debug] <0.264.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_epmd_monitor]
+2019-04-03 18:49:55.832 [debug] <0.481.0> Supervisor rabbit_epmd_monitor_sup started rabbit_epmd_monitor:start_link() at pid <0.482.0>
+2019-04-03 18:49:55.832 [info] <0.264.0> Running boot step guid_generator defined by app rabbit
+2019-04-03 18:49:55.832 [debug] <0.264.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_guid]
+2019-04-03 18:49:55.834 [info] <0.264.0> Running boot step rabbit_node_monitor defined by app rabbit
+2019-04-03 18:49:55.834 [debug] <0.264.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_node_monitor]
+2019-04-03 18:49:55.834 [debug] <0.485.0> Supervisor rabbit_guid_sup started rabbit_guid:start_link() at pid <0.486.0>
+2019-04-03 18:49:55.834 [info] <0.488.0> Starting rabbit_node_monitor
+2019-04-03 18:49:55.834 [info] <0.264.0> Running boot step delegate_sup defined by app rabbit
+2019-04-03 18:49:55.834 [debug] <0.264.0> Applying MFA: M = rabbit, F = boot_delegate, A = []
+2019-04-03 18:49:55.834 [debug] <0.487.0> Supervisor rabbit_node_monitor_sup started rabbit_node_monitor:start_link() at pid <0.488.0>
+2019-04-03 18:49:55.835 [info] <0.264.0> Running boot step rabbit_memory_monitor defined by app rabbit
+2019-04-03 18:49:55.835 [debug] <0.264.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_memory_monitor]
+2019-04-03 18:49:55.835 [debug] <0.506.0> Supervisor rabbit_memory_monitor_sup started rabbit_memory_monitor:start_link() at pid <0.507.0>
+2019-04-03 18:49:55.835 [info] <0.264.0> Running boot step core_initialized defined by app rabbit
+2019-04-03 18:49:55.835 [info] <0.264.0> Running boot step upgrade_queues defined by app rabbit
+2019-04-03 18:49:55.836 [debug] <0.264.0> Applying MFA: M = rabbit_upgrade, F = maybe_migrate_queues_to_per_vhost_storage, A = []
+2019-04-03 18:49:55.861 [info] <0.264.0> message_store upgrades: 1 to apply
+2019-04-03 18:49:55.861 [info] <0.264.0> message_store upgrades: Applying rabbit_variable_queue:move_messages_to_vhost_store
+2019-04-03 18:49:55.861 [info] <0.264.0> message_store upgrades: No durable queues found. Skipping message store migration
+2019-04-03 18:49:55.861 [info] <0.264.0> message_store upgrades: Removing the old message store data
+2019-04-03 18:49:55.862 [info] <0.264.0> message_store upgrades: All upgrades applied successfully
+2019-04-03 18:49:55.890 [info] <0.264.0> Running boot step rabbit_connection_tracking_handler defined by app rabbit
+2019-04-03 18:49:55.891 [debug] <0.264.0> Applying MFA: M = gen_event, F = add_handler, A = [rabbit_event,rabbit_connection_tracking_handler,[]]
+2019-04-03 18:49:55.891 [info] <0.264.0> Running boot step rabbit_exchange_parameters defined by app rabbit
+2019-04-03 18:49:55.891 [debug] <0.264.0> Applying MFA: M = rabbit_exchange_parameters, F = register, A = []
+2019-04-03 18:49:55.891 [info] <0.264.0> Running boot step rabbit_mirror_queue_misc defined by app rabbit
+2019-04-03 18:49:55.891 [debug] <0.264.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-mode">>,rabbit_mirror_queue_misc]
+2019-04-03 18:49:55.891 [debug] <0.264.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-params">>,rabbit_mirror_queue_misc]
+2019-04-03 18:49:55.891 [debug] <0.264.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-sync-mode">>,rabbit_mirror_queue_misc]
+2019-04-03 18:49:55.892 [debug] <0.264.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-sync-batch-size">>,rabbit_mirror_queue_misc]
+2019-04-03 18:49:55.892 [debug] <0.264.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-promote-on-shutdown">>,rabbit_mirror_queue_misc]
+2019-04-03 18:49:55.892 [debug] <0.264.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-promote-on-failure">>,rabbit_mirror_queue_misc]
+2019-04-03 18:49:55.892 [info] <0.264.0> Running boot step rabbit_policies defined by app rabbit
+2019-04-03 18:49:55.892 [debug] <0.264.0> Applying MFA: M = rabbit_policies, F = register, A = []
+2019-04-03 18:49:55.893 [info] <0.264.0> Running boot step rabbit_policy defined by app rabbit
+2019-04-03 18:49:55.893 [debug] <0.264.0> Applying MFA: M = rabbit_policy, F = register, A = []
+2019-04-03 18:49:55.893 [info] <0.264.0> Running boot step rabbit_queue_location_validator defined by app rabbit
+2019-04-03 18:49:55.893 [debug] <0.264.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"queue-master-locator">>,rabbit_queue_location_validator]
+2019-04-03 18:49:55.893 [info] <0.264.0> Running boot step rabbit_quorum_memory_manager defined by app rabbit
+2019-04-03 18:49:55.893 [debug] <0.264.0> Applying MFA: M = rabbit_quorum_memory_manager, F = register, A = []
+2019-04-03 18:49:55.893 [info] <0.264.0> Running boot step rabbit_vhost_limit defined by app rabbit
+2019-04-03 18:49:55.893 [debug] <0.264.0> Applying MFA: M = rabbit_vhost_limit, F = register, A = []
+2019-04-03 18:49:55.893 [info] <0.264.0> Running boot step rabbit_mgmt_reset_handler defined by app rabbitmq_management
+2019-04-03 18:49:55.893 [debug] <0.264.0> Applying MFA: M = gen_event, F = add_handler, A = [rabbit_event,rabbit_mgmt_reset_handler,[]]
+2019-04-03 18:49:55.893 [info] <0.264.0> Running boot step rabbit_mgmt_db_handler defined by app rabbitmq_management_agent
+2019-04-03 18:49:55.893 [debug] <0.264.0> Applying MFA: M = rabbit_mgmt_db_handler, F = add_handler, A = []
+2019-04-03 18:49:55.893 [info] <0.264.0> Management plugin: using rates mode 'basic'
+2019-04-03 18:49:55.894 [info] <0.264.0> Running boot step recovery defined by app rabbit
+2019-04-03 18:49:55.894 [debug] <0.264.0> Applying MFA: M = rabbit, F = recover, A = []
+2019-04-03 18:49:55.895 [info] <0.264.0> Running boot step load_definitions defined by app rabbitmq_management
+2019-04-03 18:49:55.895 [debug] <0.264.0> Applying MFA: M = rabbit_mgmt_load_definitions, F = maybe_load_definitions, A = []
+2019-04-03 18:49:55.895 [info] <0.264.0> Running boot step empty_db_check defined by app rabbit
+2019-04-03 18:49:55.895 [debug] <0.264.0> Applying MFA: M = rabbit, F = maybe_insert_default_data, A = []
+2019-04-03 18:49:55.895 [info] <0.264.0> Adding vhost '/'
+2019-04-03 18:49:55.966 [debug] <0.523.0> Recovering data for VHost <<"/">>
+2019-04-03 18:49:55.966 [info] <0.523.0> Making sure data directory '/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L' for vhost '/' exists
+2019-04-03 18:49:55.969 [debug] <0.522.0> Supervisor {<0.522.0>,rabbit_vhost_sup} started rabbit_recovery_terms:start_link(<<"/">>) at pid <0.524.0>
+2019-04-03 18:49:55.975 [info] <0.523.0> Starting message stores for vhost '/'
+2019-04-03 18:49:55.975 [info] <0.527.0> Message store "628WB79CIFDYO9LJI6DKMI09L/msg_store_transient": using rabbit_msg_store_ets_index to provide index
+2019-04-03 18:49:55.977 [info] <0.523.0> Started message store of type transient for vhost '/'
+2019-04-03 18:49:55.977 [info] <0.530.0> Message store "628WB79CIFDYO9LJI6DKMI09L/msg_store_persistent": using rabbit_msg_store_ets_index to provide index
+2019-04-03 18:49:55.977 [debug] <0.522.0> Supervisor {<0.522.0>,rabbit_vhost_sup} started rabbit_msg_store:start_link(msg_store_transient, "/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L", undefined, {#Fun<rabbit_variable_queue.2.24443698>,ok}) at pid <0.527.0>
+2019-04-03 18:49:55.978 [warning] <0.530.0> Message store "628WB79CIFDYO9LJI6DKMI09L/msg_store_persistent": rebuilding indices from scratch
+2019-04-03 18:49:55.979 [debug] <0.522.0> Supervisor {<0.522.0>,rabbit_vhost_sup} started rabbit_msg_store:start_link(msg_store_persistent, "/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L", [], {#Fun<rabbit_queue_index.2.39046318>,{start,[]}}) at pid <0.530.0>
+2019-04-03 18:49:55.979 [info] <0.523.0> Started message store of type persistent for vhost '/'
+2019-04-03 18:49:55.979 [debug] <0.522.0> Supervisor {<0.522.0>,rabbit_vhost_sup} started rabbit_amqqueue_sup_sup:start_link() at pid <0.536.0>
+2019-04-03 18:49:55.980 [info] <0.264.0> Creating user 'jack'
+2019-04-03 18:49:55.985 [info] <0.264.0> Setting user tags for user 'jack' to [administrator]
+2019-04-03 18:49:55.994 [info] <0.264.0> Setting permissions for 'jack' in '/' to '.*', '.*', '.*'
+2019-04-03 18:49:56.006 [info] <0.264.0> Running boot step rabbit_looking_glass defined by app rabbit
+2019-04-03 18:49:56.006 [debug] <0.264.0> Applying MFA: M = rabbit_looking_glass, F = boot, A = []
+2019-04-03 18:49:56.006 [info] <0.264.0> Running boot step rabbit_core_metrics_gc defined by app rabbit
+2019-04-03 18:49:56.007 [debug] <0.264.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_core_metrics_gc]
+2019-04-03 18:49:56.007 [info] <0.264.0> Running boot step background_gc defined by app rabbit
+2019-04-03 18:49:56.007 [debug] <0.264.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [background_gc]
+2019-04-03 18:49:56.007 [info] <0.264.0> Running boot step connection_tracking defined by app rabbit
+2019-04-03 18:49:56.007 [debug] <0.264.0> Applying MFA: M = rabbit_connection_tracking, F = boot, A = []
+2019-04-03 18:49:56.007 [debug] <0.550.0> Supervisor rabbit_core_metrics_gc_sup started rabbit_core_metrics_gc:start_link() at pid <0.551.0>
+2019-04-03 18:49:56.007 [debug] <0.552.0> Supervisor background_gc_sup started background_gc:start_link() at pid <0.553.0>
+2019-04-03 18:49:56.016 [info] <0.264.0> Setting up a table for connection tracking on this node: tracked_connection_on_node_rabbit@rabbitmq3
+2019-04-03 18:49:56.025 [info] <0.264.0> Setting up a table for per-vhost connection counting on this node: tracked_connection_per_vhost_on_node_rabbit@rabbitmq3
+2019-04-03 18:49:56.026 [info] <0.264.0> Running boot step routing_ready defined by app rabbit
+2019-04-03 18:49:56.026 [info] <0.264.0> Running boot step pre_flight defined by app rabbit
+2019-04-03 18:49:56.026 [info] <0.264.0> Running boot step notify_cluster defined by app rabbit
+2019-04-03 18:49:56.026 [debug] <0.264.0> Applying MFA: M = rabbit_node_monitor, F = notify_node_up, A = []
+2019-04-03 18:49:56.026 [info] <0.264.0> Running boot step networking defined by app rabbit
+2019-04-03 18:49:56.026 [debug] <0.264.0> Applying MFA: M = rabbit_networking, F = boot, A = []
+2019-04-03 18:49:56.029 [info] <0.576.0> started TCP listener on [::]:5672
+2019-04-03 18:49:56.029 [info] <0.264.0> Running boot step direct_client defined by app rabbit
+2019-04-03 18:49:56.029 [debug] <0.264.0> Applying MFA: M = rabbit_direct, F = boot, A = []
+2019-04-03 18:49:56.032 [debug] <0.581.0> Supervisor rabbit_mgmt_agent_sup_sup started rabbit_mgmt_agent_sup:start_link() at pid <0.582.0>
+2019-04-03 18:49:56.058 [debug] <0.622.0> Starting HTTP[S] listener with transport ranch_tcp, options [{port,15672}] and protocol options #{}, stream handlers [rabbit_cowboy_stream_h,cowboy_compress_h,cowboy_stream_h]
+2019-04-03 18:49:56.059 [info] <0.626.0> Management plugin: HTTP (non-TLS) listener started on port 15672
+2019-04-03 18:49:56.060 [info] <0.732.0> Statistics database started.
+2019-04-03 18:49:56.060 [debug] <0.730.0> Supervisor rabbit_mgmt_sup_sup started rabbit_mgmt_sup:start_link() at pid <0.731.0>
+2019-04-03 18:49:56.060 [notice] <0.106.0> Changed loghwm of /var/log/rabbitmq/rabbit.log to 5000
+2019-04-03 18:49:56.188 [info] <0.8.0> Server startup complete; 3 plugins started.
+ * rabbitmq_management
+ * rabbitmq_web_dispatch
+ * rabbitmq_management_agent
+2019-04-03 18:49:56.239 [info] <0.157.0> RabbitMQ is asked to stop...
+2019-04-03 18:49:56.287 [info] <0.157.0> Stopping RabbitMQ applications and their dependencies in the following order:
+    rabbitmq_management
+    amqp_client
+    rabbitmq_web_dispatch
+    cowboy
+    cowlib
+    rabbitmq_management_agent
+    rabbit
+    mnesia
+    rabbit_common
+    sysmon_handler
+    os_mon
+    ra
+2019-04-03 18:49:56.287 [info] <0.157.0> Stopping application 'rabbitmq_management'
+2019-04-03 18:49:56.289 [warning] <0.622.0> RabbitMQ HTTP listener registry could not find context rabbitmq_management_tls
+2019-04-03 18:49:56.291 [info] <0.43.0> Application rabbitmq_management exited with reason: stopped
+2019-04-03 18:49:56.291 [info] <0.157.0> Stopping application 'amqp_client'
+2019-04-03 18:49:56.293 [info] <0.43.0> Application amqp_client exited with reason: stopped
+2019-04-03 18:49:56.293 [info] <0.157.0> Stopping application 'rabbitmq_web_dispatch'
+2019-04-03 18:49:56.295 [info] <0.43.0> Application rabbitmq_web_dispatch exited with reason: stopped
+2019-04-03 18:49:56.295 [info] <0.157.0> Stopping application 'cowboy'
+2019-04-03 18:49:56.296 [info] <0.43.0> Application cowboy exited with reason: stopped
+2019-04-03 18:49:56.296 [info] <0.157.0> Stopping application 'cowlib'
+2019-04-03 18:49:56.297 [info] <0.43.0> Application cowlib exited with reason: stopped
+2019-04-03 18:49:56.297 [info] <0.157.0> Stopping application 'rabbitmq_management_agent'
+2019-04-03 18:49:56.299 [info] <0.43.0> Application rabbitmq_management_agent exited with reason: stopped
+2019-04-03 18:49:56.299 [info] <0.157.0> Stopping application 'rabbit'
+2019-04-03 18:49:56.299 [info] <0.264.0> Peer discovery backend rabbit_peer_discovery_classic_config does not support registration, skipping unregistration.
+2019-04-03 18:49:56.299 [info] <0.576.0> stopped TCP listener on [::]:5672
+2019-04-03 18:49:56.300 [info] <0.478.0> Closing all connections in vhost '/' on node 'rabbit@rabbitmq3' because the vhost is stopping
+2019-04-03 18:49:56.300 [info] <0.530.0> Stopping message store for directory '/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L/msg_store_persistent'
+2019-04-03 18:49:56.305 [info] <0.530.0> Message store for directory '/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L/msg_store_persistent' is stopped
+2019-04-03 18:49:56.305 [info] <0.527.0> Stopping message store for directory '/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L/msg_store_transient'
+2019-04-03 18:49:56.315 [info] <0.527.0> Message store for directory '/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L/msg_store_transient' is stopped
+2019-04-03 18:49:56.319 [info] <0.157.0> Stopping application 'mnesia'
+2019-04-03 18:49:56.319 [info] <0.43.0> Application rabbit exited with reason: stopped
+2019-04-03 18:49:56.326 [info] <0.43.0> Application mnesia exited with reason: stopped
+2019-04-03 18:49:56.326 [info] <0.157.0> Stopping application 'rabbit_common'
+2019-04-03 18:49:56.326 [info] <0.157.0> Stopping application 'sysmon_handler'
+2019-04-03 18:49:56.326 [info] <0.43.0> Application rabbit_common exited with reason: stopped
+2019-04-03 18:49:56.328 [info] <0.157.0> Stopping application 'os_mon'
+2019-04-03 18:49:56.328 [info] <0.43.0> Application sysmon_handler exited with reason: stopped
+2019-04-03 18:49:56.330 [info] <0.157.0> Stopping application 'ra'
+2019-04-03 18:49:56.330 [info] <0.43.0> Application os_mon exited with reason: stopped
+2019-04-03 18:49:56.336 [info] <0.157.0> Successfully stopped RabbitMQ and its dependencies
+2019-04-03 18:49:56.336 [info] <0.43.0> Application ra exited with reason: stopped
+2019-04-03 18:49:59.240 [info] <0.43.0> Application mnesia exited with reason: stopped
+2019-04-03 18:49:59.241 [debug] <0.759.0> Feature flags: querying all feature flags on node `rabbit@rabbitmq1`...
+2019-04-03 18:49:59.242 [debug] <0.759.0> Feature flags: querying all feature flags on node `rabbit@rabbitmq1` done; all features: [empty_basic_get_metric,implicit_default_bindings,quorum_queue]
+2019-04-03 18:49:59.243 [debug] <0.759.0> Feature flags: register feature flags provided by applications unknown locally: []
+2019-04-03 18:49:59.243 [debug] <0.759.0> Feature flags: query feature flags in loaded applications
+2019-04-03 18:49:59.255 [debug] <0.759.0> Feature flags: application `rabbitmq_management_agent` has 1 feature flags
+2019-04-03 18:49:59.255 [debug] <0.759.0> Feature flags: application `rabbit` has 2 feature flags
+2019-04-03 18:49:59.255 [debug] <0.759.0> Feature flags: registry already up-to-date, skipping init
+2019-04-03 18:49:59.268 [debug] <0.759.0> Feature flags: node `rabbit@rabbitmq1` compatibility check, part 1/2
+2019-04-03 18:49:59.268 [debug] <0.759.0> Feature flags: querying `[empty_basic_get_metric,implicit_default_bindings,quorum_queue]` support on node rabbit@rabbitmq1...
+2019-04-03 18:49:59.269 [debug] <0.759.0> Feature flags: node `rabbit@rabbitmq1` supports `[empty_basic_get_metric,implicit_default_bindings,quorum_queue]`
+2019-04-03 18:49:59.269 [info] <0.759.0> Feature flags: all running remote nodes support `[empty_basic_get_metric,implicit_default_bindings,quorum_queue]`
+2019-04-03 18:49:59.269 [debug] <0.759.0> Feature flags: node `rabbit@rabbitmq1` compatibility check, part 2/2
+2019-04-03 18:49:59.269 [debug] <0.759.0> Feature flags: querying enabled feature flags on node `rabbit@rabbitmq1`...
+2019-04-03 18:49:59.269 [debug] <0.759.0> Feature flags: querying enabled feature flags on node `rabbit@rabbitmq1` done; enabled features: [empty_basic_get_metric,implicit_default_bindings,quorum_queue]
+2019-04-03 18:49:59.270 [debug] <0.759.0> Feature flags: node `rabbit@rabbitmq1` is compatible
+2019-04-03 18:49:59.343 [debug] <0.759.0> Feature flags: double-checking feature flag states...
+2019-04-03 18:49:59.343 [debug] <0.759.0> Feature flag `implicit_default_bindings`: run migration function implicit_default_bindings_migration with arg: is_enabled
+2019-04-03 18:49:59.343 [debug] <0.759.0> Feature flag `quorum_queue`: run migration function quorum_queue_migration with arg: is_enabled
+2019-04-03 18:49:59.343 [info] <0.759.0> Waiting for Mnesia tables for 30000 ms, 0 retries left
+2019-04-03 18:49:59.356 [debug] <0.759.0> Feature flags: starting an unclustered node which is already initialized: all feature flags left in their current state
+2019-04-03 18:49:59.356 [info] <0.759.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-03 18:49:59.408 [info] <0.759.0> Waiting for Mnesia tables for 30000 ms, 0 retries left
+2019-04-03 18:49:59.411 [info] <0.43.0> Application mnesia exited with reason: stopped
+2019-04-03 18:49:59.426 [info] <0.759.0> Clustering with [rabbit@rabbitmq2,rabbit@rabbitmq1] as disc node
+2019-04-03 18:49:59.448 [info] <0.759.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-03 18:49:59.794 [debug] <0.759.0> Feature flags: double-checking feature flag states...
+2019-04-03 18:49:59.795 [debug] <0.759.0> Feature flag `implicit_default_bindings`: run migration function implicit_default_bindings_migration with arg: is_enabled
+2019-04-03 18:49:59.795 [debug] <0.759.0> Feature flag `quorum_queue`: run migration function quorum_queue_migration with arg: is_enabled
+2019-04-03 18:49:59.795 [info] <0.759.0> Waiting for Mnesia tables for 30000 ms, 0 retries left
+2019-04-03 18:49:59.795 [debug] <0.759.0> Feature flags: SYNCING FEATURE FLAGS with node `rabbit@rabbitmq1`...
+2019-04-03 18:49:59.795 [debug] <0.759.0> Feature flags: querying enabled feature flags on node `rabbit@rabbitmq1`...
+2019-04-03 18:49:59.796 [debug] <0.759.0> Feature flags: querying enabled feature flags on node `rabbit@rabbitmq1` done; enabled features: [empty_basic_get_metric,implicit_default_bindings,quorum_queue]
+2019-04-03 18:49:59.796 [debug] <0.759.0> Feature flags: enabling locally feature flags already enabled on node `rabbit@rabbitmq1`...
+2019-04-03 18:49:59.796 [debug] <0.759.0> Feature flags: enabling on node `rabbit@rabbitmq1` feature flags already enabled locally...
+2019-04-03 18:49:59.796 [info] <0.759.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-03 18:49:59.838 [info] <0.759.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-03 18:49:59.850 [info] <0.43.0> Application mnesia exited with reason: stopped
+2019-04-03 18:49:59.850 [error] <0.759.0> Failed to create a tracked connection table for node rabbit@rabbitmq3: {node_not_running,rabbit@rabbitmq3}
+2019-04-03 18:49:59.850 [info] <0.759.0> Setting up a table for connection tracking on this node: tracked_connection_on_node_rabbit@rabbitmq3
+2019-04-03 18:49:59.850 [error] <0.759.0> Failed to create a per-vhost tracked connection table for node rabbit@rabbitmq3: {node_not_running,rabbit@rabbitmq3}
+2019-04-03 18:49:59.850 [info] <0.759.0> Setting up a table for per-vhost connection counting on this node: tracked_connection_per_vhost_on_node_rabbit@rabbitmq3
+2019-04-03 18:50:01.133 [info] <0.1065.0> RabbitMQ is asked to stop...
+2019-04-03 18:50:01.315 [info] <0.1065.0> Stopping RabbitMQ applications and their dependencies in the following order:
+    rabbitmq_management
+    amqp_client
+    rabbitmq_web_dispatch
+    rabbitmq_management_agent
+    rabbit
+    mnesia
+    rabbit_common
+    sysmon_handler
+    os_mon
+    ra
+2019-04-03 18:50:01.315 [info] <0.1065.0> Stopping application 'rabbitmq_management'
+2019-04-03 18:50:01.315 [info] <0.1065.0> Stopping application 'amqp_client'
+2019-04-03 18:50:01.315 [info] <0.1065.0> Stopping application 'rabbitmq_web_dispatch'
+2019-04-03 18:50:01.315 [info] <0.1065.0> Stopping application 'rabbitmq_management_agent'
+2019-04-03 18:50:01.315 [info] <0.1065.0> Stopping application 'rabbit'
+2019-04-03 18:50:01.315 [info] <0.1065.0> Stopping application 'mnesia'
+2019-04-03 18:50:01.315 [info] <0.1065.0> Stopping application 'rabbit_common'
+2019-04-03 18:50:01.315 [info] <0.1065.0> Stopping application 'sysmon_handler'
+2019-04-03 18:50:01.315 [info] <0.1065.0> Stopping application 'os_mon'
+2019-04-03 18:50:01.315 [info] <0.1065.0> Stopping application 'ra'
+2019-04-03 18:50:01.315 [info] <0.1065.0> Successfully stopped RabbitMQ and its dependencies
+2019-04-03 18:50:01.315 [info] <0.1065.0> Halting Erlang VM with the following applications:
+    aten
+    tools
+    ranch
+    ssl
+    public_key
+    asn1
+    jsx
+    xmerl
+    gen_batch_server
+    crypto
+    recon
+    inets
+    lager
+    goldrush
+    compiler
+    syntax_tools
+    sasl
+    stdlib
+    kernel
+2019-04-03 18:50:09.159 [debug] <0.119.0> Lager installed handler lager_forwarder_backend into error_logger_lager_event
+2019-04-03 18:50:09.159 [debug] <0.122.0> Lager installed handler lager_forwarder_backend into rabbit_log_lager_event
+2019-04-03 18:50:09.159 [debug] <0.125.0> Lager installed handler lager_forwarder_backend into rabbit_log_channel_lager_event
+2019-04-03 18:50:09.181 [debug] <0.146.0> Lager installed handler {lager_file_backend,
+                            "/var/log/rabbitmq/rabbit@rabbitmq3_upgrade.log"} into rabbit_log_upgrade_lager_event
+2019-04-03 18:50:09.159 [debug] <0.128.0> Lager installed handler lager_forwarder_backend into rabbit_log_connection_lager_event
+2019-04-03 18:50:09.159 [debug] <0.131.0> Lager installed handler lager_forwarder_backend into rabbit_log_ldap_lager_event
+2019-04-03 18:50:09.159 [debug] <0.134.0> Lager installed handler lager_forwarder_backend into rabbit_log_mirroring_lager_event
+2019-04-03 18:50:09.159 [debug] <0.137.0> Lager installed handler lager_forwarder_backend into rabbit_log_queue_lager_event
+2019-04-03 18:50:09.159 [debug] <0.140.0> Lager installed handler lager_forwarder_backend into rabbit_log_ra_lager_event
+2019-04-03 18:50:09.159 [debug] <0.143.0> Lager installed handler lager_forwarder_backend into rabbit_log_federation_lager_event
+2019-04-03 18:50:09.159 [debug] <0.116.0> Lager installed handler error_logger_lager_h into error_logger
+2019-04-03 18:50:09.581 [debug] <0.109.0> Lager installed handler lager_backend_throttle into lager_event
+2019-04-03 18:50:10.309 [info] <0.8.0> Log file opened with Lager
+2019-04-03 18:50:11.815 [debug] <0.8.0> Feature flags: query feature flags in loaded applications
+2019-04-03 18:50:19.997 [debug] <0.8.0> Feature flags: application `rabbitmq_management_agent` has 1 feature flags
+2019-04-03 18:50:19.997 [debug] <0.8.0> Feature flags: application `rabbit` has 2 feature flags
+2019-04-03 18:50:19.998 [debug] <0.8.0> Feature flags: (re)initialize registry
+2019-04-03 18:50:19.998 [info] <0.8.0> Feature flags: list of feature flags found:
+2019-04-03 18:50:19.998 [info] <0.8.0> Feature flags:   [x] empty_basic_get_metric
+2019-04-03 18:50:19.998 [info] <0.8.0> Feature flags:   [x] implicit_default_bindings
+2019-04-03 18:50:19.998 [info] <0.8.0> Feature flags:   [x] quorum_queue
+2019-04-03 18:50:19.998 [info] <0.8.0> Feature flags: feature flag states written to disk: yes
+2019-04-03 18:50:20.001 [debug] <0.8.0> Feature flags: registry module ready, loading it...
+2019-04-03 18:50:20.005 [debug] <0.8.0> Feature flags: registry module loaded
+2019-04-03 18:50:20.124 [info] <0.8.0> upgrades: Backing up mnesia dir to "/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3-upgrade-backup"
+2019-04-03 18:50:20.140 [info] <0.8.0> upgrades: Mnesia dir backed up to "/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3-upgrade-backup"
+2019-04-03 18:50:20.147 [info] <0.43.0> Application mnesia exited with reason: stopped
+2019-04-03 18:50:20.148 [debug] <0.8.0> Feature flags: querying all feature flags on node `rabbit@rabbitmq1`...
+2019-04-03 18:50:20.148 [debug] <0.8.0> Feature flags: querying all feature flags on node `rabbit@rabbitmq1` done; all features: [empty_basic_get_metric,implicit_default_bindings,quorum_queue]
+2019-04-03 18:50:20.149 [debug] <0.8.0> Feature flags: register feature flags provided by applications unknown locally: []
+2019-04-03 18:50:20.149 [debug] <0.8.0> Feature flags: query feature flags in loaded applications
+2019-04-03 18:50:20.162 [debug] <0.8.0> Feature flags: application `rabbitmq_management_agent` has 1 feature flags
+2019-04-03 18:50:20.162 [debug] <0.8.0> Feature flags: application `rabbit` has 2 feature flags
+2019-04-03 18:50:20.162 [debug] <0.8.0> Feature flags: registry already up-to-date, skipping init
+2019-04-03 18:50:20.214 [debug] <0.8.0> Feature flags: node `rabbit@rabbitmq1` compatibility check, part 1/2
+2019-04-03 18:50:20.214 [debug] <0.8.0> Feature flags: querying `[empty_basic_get_metric,implicit_default_bindings,quorum_queue]` support on node rabbit@rabbitmq1...
+2019-04-03 18:50:20.214 [debug] <0.8.0> Feature flags: node `rabbit@rabbitmq1` supports `[empty_basic_get_metric,implicit_default_bindings,quorum_queue]`
+2019-04-03 18:50:20.214 [info] <0.8.0> Feature flags: all running remote nodes support `[empty_basic_get_metric,implicit_default_bindings,quorum_queue]`
+2019-04-03 18:50:20.215 [debug] <0.8.0> Feature flags: node `rabbit@rabbitmq1` compatibility check, part 2/2
+2019-04-03 18:50:20.215 [debug] <0.8.0> Feature flags: querying enabled feature flags on node `rabbit@rabbitmq1`...
+2019-04-03 18:50:20.215 [debug] <0.8.0> Feature flags: querying enabled feature flags on node `rabbit@rabbitmq1` done; enabled features: [empty_basic_get_metric,implicit_default_bindings,quorum_queue]
+2019-04-03 18:50:20.215 [debug] <0.8.0> Feature flags: node `rabbit@rabbitmq1` is compatible
+2019-04-03 18:50:20.346 [info] <0.314.0> ra: meta data store initialised. 0 record(s) recovered
+2019-04-03 18:50:20.348 [info] <0.321.0> WAL: recovering []
+2019-04-03 18:50:20.348 [debug] <0.321.0> wal: opening new file "00000001.wal"
+2019-04-03 18:50:20.353 [info] <0.325.0> 
+ Starting RabbitMQ 3.8.0-alpha.572 on Erlang 21.3
+ Copyright (C) 2007-2019 Pivotal Software, Inc.
+ Licensed under the MPL.  See https://www.rabbitmq.com/
+2019-04-03 18:50:20.355 [info] <0.325.0> 
+ node           : rabbit@rabbitmq3
+ home dir       : /var/lib/rabbitmq
+ config file(s) : /etc/rabbitmq/rabbitmq.config
+ cookie hash    : gnzLDuqKcGxMNKFokfhOew==
+ log(s)         : /var/log/rabbitmq/rabbit.log
+                : /var/log/rabbitmq/rabbit@rabbitmq3_upgrade.log
+ database dir   : /var/lib/rabbitmq/mnesia/rabbit@rabbitmq3
+2019-04-03 18:50:20.377 [info] <0.325.0> Running boot step pre_boot defined by app rabbit
+2019-04-03 18:50:20.377 [info] <0.325.0> Running boot step rabbit_core_metrics defined by app rabbit
+2019-04-03 18:50:20.377 [debug] <0.325.0> Applying MFA: M = rabbit_sup, F = start_child, A = [rabbit_metrics]
+2019-04-03 18:50:20.378 [info] <0.325.0> Running boot step rabbit_alarm defined by app rabbit
+2019-04-03 18:50:20.378 [debug] <0.325.0> Applying MFA: M = rabbit_alarm, F = start, A = []
+2019-04-03 18:50:20.378 [debug] <0.331.0> Supervisor rabbit_alarm_sup started rabbit_alarm:start_link() at pid <0.332.0>
+2019-04-03 18:50:20.395 [info] <0.334.0> Memory high watermark set to 3180 MiB (3334930432 bytes) of 7951 MiB (8337326080 bytes) total
+2019-04-03 18:50:20.395 [debug] <0.333.0> Supervisor vm_memory_monitor_sup started vm_memory_monitor:start_link(0.4, #Fun<rabbit_alarm.0.52593784>, #Fun<rabbit_alarm.1.52593784>) at pid <0.334.0>
+2019-04-03 18:50:20.403 [info] <0.344.0> Enabling free disk space monitoring
+2019-04-03 18:50:20.403 [info] <0.344.0> Disk free limit set to 50MB
+2019-04-03 18:50:20.416 [debug] <0.343.0> Supervisor rabbit_disk_monitor_sup started rabbit_disk_monitor:start_link(50000000) at pid <0.344.0>
+2019-04-03 18:50:20.416 [info] <0.325.0> Running boot step code_server_cache defined by app rabbit
+2019-04-03 18:50:20.416 [debug] <0.325.0> Applying MFA: M = rabbit_sup, F = start_child, A = [code_server_cache]
+2019-04-03 18:50:20.417 [info] <0.325.0> Running boot step file_handle_cache defined by app rabbit
+2019-04-03 18:50:20.417 [debug] <0.325.0> Applying MFA: M = rabbit, F = start_fhc, A = []
+2019-04-03 18:50:20.417 [info] <0.359.0> FHC read buffering:  OFF
+2019-04-03 18:50:20.417 [info] <0.359.0> FHC write buffering: ON
+2019-04-03 18:50:20.417 [info] <0.358.0> Limiting to approx 1048476 file handles (943626 sockets)
+2019-04-03 18:50:20.418 [debug] <0.357.0> Supervisor file_handle_cache_sup started file_handle_cache:start_link(fun rabbit_alarm:set_alarm/1, fun rabbit_alarm:clear_alarm/1) at pid <0.358.0>
+2019-04-03 18:50:20.419 [info] <0.325.0> Running boot step worker_pool defined by app rabbit
+2019-04-03 18:50:20.420 [debug] <0.325.0> Applying MFA: M = rabbit_sup, F = start_supervisor_child, A = [worker_pool_sup]
+2019-04-03 18:50:20.420 [info] <0.325.0> Running boot step database defined by app rabbit
+2019-04-03 18:50:20.421 [debug] <0.325.0> Applying MFA: M = rabbit_mnesia, F = init, A = []
+2019-04-03 18:50:20.449 [info] <0.325.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-03 18:50:20.514 [debug] <0.325.0> Feature flags: double-checking feature flag states...
+2019-04-03 18:50:20.514 [debug] <0.325.0> Feature flag `implicit_default_bindings`: run migration function implicit_default_bindings_migration with arg: is_enabled
+2019-04-03 18:50:20.514 [debug] <0.325.0> Feature flag `quorum_queue`: run migration function quorum_queue_migration with arg: is_enabled
+2019-04-03 18:50:20.515 [info] <0.325.0> Waiting for Mnesia tables for 30000 ms, 0 retries left
+2019-04-03 18:50:20.515 [debug] <0.325.0> Feature flags: SYNCING FEATURE FLAGS with node `rabbit@rabbitmq1`...
+2019-04-03 18:50:20.515 [debug] <0.325.0> Feature flags: querying enabled feature flags on node `rabbit@rabbitmq1`...
+2019-04-03 18:50:20.515 [debug] <0.325.0> Feature flags: querying enabled feature flags on node `rabbit@rabbitmq1` done; enabled features: [empty_basic_get_metric,implicit_default_bindings,quorum_queue]
+2019-04-03 18:50:20.515 [debug] <0.325.0> Feature flags: enabling locally feature flags already enabled on node `rabbit@rabbitmq1`...
+2019-04-03 18:50:20.515 [debug] <0.325.0> Feature flags: enabling on node `rabbit@rabbitmq1` feature flags already enabled locally...
+2019-04-03 18:50:20.516 [info] <0.325.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-03 18:50:20.567 [info] <0.325.0> upgrades: Mnesia backup removed
+2019-04-03 18:50:20.567 [info] <0.325.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-03 18:50:20.567 [info] <0.325.0> Peer discovery backend rabbit_peer_discovery_classic_config does not support registration, skipping registration.
+2019-04-03 18:50:20.567 [info] <0.325.0> Running boot step database_sync defined by app rabbit
+2019-04-03 18:50:20.567 [debug] <0.325.0> Applying MFA: M = rabbit_sup, F = start_child, A = [mnesia_sync]
+2019-04-03 18:50:20.568 [info] <0.325.0> Running boot step feature_flags defined by app rabbit
+2019-04-03 18:50:20.568 [debug] <0.325.0> Applying MFA: M = rabbit_feature_flags, F = init, A = []
+2019-04-03 18:50:20.568 [info] <0.325.0> Running boot step codec_correctness_check defined by app rabbit
+2019-04-03 18:50:20.568 [debug] <0.325.0> Applying MFA: M = rabbit_binary_generator, F = check_empty_frame_size, A = []
+2019-04-03 18:50:20.568 [info] <0.325.0> Running boot step external_infrastructure defined by app rabbit
+2019-04-03 18:50:20.568 [info] <0.325.0> Running boot step rabbit_registry defined by app rabbit
+2019-04-03 18:50:20.568 [debug] <0.325.0> Applying MFA: M = rabbit_sup, F = start_child, A = [rabbit_registry]
+2019-04-03 18:50:20.568 [info] <0.325.0> Running boot step rabbit_auth_mechanism_cr_demo defined by app rabbit
+2019-04-03 18:50:20.569 [debug] <0.325.0> Applying MFA: M = rabbit_registry, F = register, A = [auth_mechanism,<<"RABBIT-CR-DEMO">>,rabbit_auth_mechanism_cr_demo]
+2019-04-03 18:50:20.569 [info] <0.325.0> Running boot step rabbit_queue_location_random defined by app rabbit
+2019-04-03 18:50:20.569 [debug] <0.325.0> Applying MFA: M = rabbit_registry, F = register, A = [queue_master_locator,<<"random">>,rabbit_queue_location_random]
+2019-04-03 18:50:20.569 [info] <0.325.0> Running boot step rabbit_event defined by app rabbit
+2019-04-03 18:50:20.569 [debug] <0.325.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_event]
+2019-04-03 18:50:20.570 [debug] <0.427.0> Supervisor rabbit_event_sup started rabbit_event:start_link() at pid <0.428.0>
+2019-04-03 18:50:20.570 [info] <0.325.0> Running boot step rabbit_auth_mechanism_amqplain defined by app rabbit
+2019-04-03 18:50:20.570 [debug] <0.325.0> Applying MFA: M = rabbit_registry, F = register, A = [auth_mechanism,<<"AMQPLAIN">>,rabbit_auth_mechanism_amqplain]
+2019-04-03 18:50:20.570 [info] <0.325.0> Running boot step rabbit_auth_mechanism_plain defined by app rabbit
+2019-04-03 18:50:20.570 [debug] <0.325.0> Applying MFA: M = rabbit_registry, F = register, A = [auth_mechanism,<<"PLAIN">>,rabbit_auth_mechanism_plain]
+2019-04-03 18:50:20.571 [info] <0.325.0> Running boot step rabbit_exchange_type_direct defined by app rabbit
+2019-04-03 18:50:20.571 [debug] <0.325.0> Applying MFA: M = rabbit_registry, F = register, A = [exchange,<<"direct">>,rabbit_exchange_type_direct]
+2019-04-03 18:50:20.571 [info] <0.325.0> Running boot step rabbit_exchange_type_fanout defined by app rabbit
+2019-04-03 18:50:20.571 [debug] <0.325.0> Applying MFA: M = rabbit_registry, F = register, A = [exchange,<<"fanout">>,rabbit_exchange_type_fanout]
+2019-04-03 18:50:20.571 [info] <0.325.0> Running boot step rabbit_exchange_type_headers defined by app rabbit
+2019-04-03 18:50:20.571 [debug] <0.325.0> Applying MFA: M = rabbit_registry, F = register, A = [exchange,<<"headers">>,rabbit_exchange_type_headers]
+2019-04-03 18:50:20.572 [info] <0.325.0> Running boot step rabbit_exchange_type_topic defined by app rabbit
+2019-04-03 18:50:20.572 [debug] <0.325.0> Applying MFA: M = rabbit_registry, F = register, A = [exchange,<<"topic">>,rabbit_exchange_type_topic]
+2019-04-03 18:50:20.572 [info] <0.325.0> Running boot step rabbit_mirror_queue_mode_all defined by app rabbit
+2019-04-03 18:50:20.572 [debug] <0.325.0> Applying MFA: M = rabbit_registry, F = register, A = [ha_mode,<<"all">>,rabbit_mirror_queue_mode_all]
+2019-04-03 18:50:20.572 [info] <0.325.0> Running boot step rabbit_mirror_queue_mode_exactly defined by app rabbit
+2019-04-03 18:50:20.572 [debug] <0.325.0> Applying MFA: M = rabbit_registry, F = register, A = [ha_mode,<<"exactly">>,rabbit_mirror_queue_mode_exactly]
+2019-04-03 18:50:20.572 [info] <0.325.0> Running boot step rabbit_mirror_queue_mode_nodes defined by app rabbit
+2019-04-03 18:50:20.573 [debug] <0.325.0> Applying MFA: M = rabbit_registry, F = register, A = [ha_mode,<<"nodes">>,rabbit_mirror_queue_mode_nodes]
+2019-04-03 18:50:20.573 [info] <0.325.0> Running boot step rabbit_priority_queue defined by app rabbit
+2019-04-03 18:50:20.573 [debug] <0.325.0> Applying MFA: M = rabbit_priority_queue, F = enable, A = []
+2019-04-03 18:50:20.573 [info] <0.325.0> Priority queues enabled, real BQ is rabbit_variable_queue
+2019-04-03 18:50:20.573 [info] <0.325.0> Running boot step rabbit_queue_location_client_local defined by app rabbit
+2019-04-03 18:50:20.573 [debug] <0.325.0> Applying MFA: M = rabbit_registry, F = register, A = [queue_master_locator,<<"client-local">>,rabbit_queue_location_client_local]
+2019-04-03 18:50:20.573 [info] <0.325.0> Running boot step rabbit_queue_location_min_masters defined by app rabbit
+2019-04-03 18:50:20.573 [debug] <0.325.0> Applying MFA: M = rabbit_registry, F = register, A = [queue_master_locator,<<"min-masters">>,rabbit_queue_location_min_masters]
+2019-04-03 18:50:20.573 [info] <0.325.0> Running boot step kernel_ready defined by app rabbit
+2019-04-03 18:50:20.573 [info] <0.325.0> Running boot step rabbit_sysmon_minder defined by app rabbit
+2019-04-03 18:50:20.573 [debug] <0.325.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_sysmon_minder]
+2019-04-03 18:50:20.574 [debug] <0.429.0> Supervisor rabbit_sysmon_minder_sup started rabbit_sysmon_minder:start_link() at pid <0.430.0>
+2019-04-03 18:50:20.574 [info] <0.325.0> Running boot step rabbit_epmd_monitor defined by app rabbit
+2019-04-03 18:50:20.574 [debug] <0.325.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_epmd_monitor]
+2019-04-03 18:50:20.579 [debug] <0.431.0> Supervisor rabbit_epmd_monitor_sup started rabbit_epmd_monitor:start_link() at pid <0.432.0>
+2019-04-03 18:50:20.579 [info] <0.325.0> Running boot step guid_generator defined by app rabbit
+2019-04-03 18:50:20.579 [debug] <0.325.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_guid]
+2019-04-03 18:50:20.582 [debug] <0.435.0> Supervisor rabbit_guid_sup started rabbit_guid:start_link() at pid <0.436.0>
+2019-04-03 18:50:20.582 [info] <0.325.0> Running boot step rabbit_node_monitor defined by app rabbit
+2019-04-03 18:50:20.582 [debug] <0.325.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_node_monitor]
+2019-04-03 18:50:20.591 [info] <0.438.0> Starting rabbit_node_monitor
+2019-04-03 18:50:20.591 [debug] <0.437.0> Supervisor rabbit_node_monitor_sup started rabbit_node_monitor:start_link() at pid <0.438.0>
+2019-04-03 18:50:20.591 [info] <0.325.0> Running boot step delegate_sup defined by app rabbit
+2019-04-03 18:50:20.591 [debug] <0.325.0> Applying MFA: M = rabbit, F = boot_delegate, A = []
+2019-04-03 18:50:20.592 [info] <0.325.0> Running boot step rabbit_memory_monitor defined by app rabbit
+2019-04-03 18:50:20.592 [debug] <0.325.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_memory_monitor]
+2019-04-03 18:50:20.593 [info] <0.325.0> Running boot step core_initialized defined by app rabbit
+2019-04-03 18:50:20.593 [info] <0.325.0> Running boot step upgrade_queues defined by app rabbit
+2019-04-03 18:50:20.593 [debug] <0.325.0> Applying MFA: M = rabbit_upgrade, F = maybe_migrate_queues_to_per_vhost_storage, A = []
+2019-04-03 18:50:20.593 [debug] <0.456.0> Supervisor rabbit_memory_monitor_sup started rabbit_memory_monitor:start_link() at pid <0.457.0>
+2019-04-03 18:50:20.655 [info] <0.325.0> message_store upgrades: 1 to apply
+2019-04-03 18:50:20.655 [info] <0.325.0> message_store upgrades: Applying rabbit_variable_queue:move_messages_to_vhost_store
+2019-04-03 18:50:20.655 [info] <0.325.0> message_store upgrades: No durable queues found. Skipping message store migration
+2019-04-03 18:50:20.655 [info] <0.325.0> message_store upgrades: Removing the old message store data
+2019-04-03 18:50:20.657 [info] <0.325.0> message_store upgrades: All upgrades applied successfully
+2019-04-03 18:50:20.736 [info] <0.325.0> Running boot step rabbit_connection_tracking_handler defined by app rabbit
+2019-04-03 18:50:20.736 [debug] <0.325.0> Applying MFA: M = gen_event, F = add_handler, A = [rabbit_event,rabbit_connection_tracking_handler,[]]
+2019-04-03 18:50:20.736 [info] <0.325.0> Running boot step rabbit_exchange_parameters defined by app rabbit
+2019-04-03 18:50:20.736 [debug] <0.325.0> Applying MFA: M = rabbit_exchange_parameters, F = register, A = []
+2019-04-03 18:50:20.737 [info] <0.325.0> Running boot step rabbit_mirror_queue_misc defined by app rabbit
+2019-04-03 18:50:20.737 [debug] <0.325.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-mode">>,rabbit_mirror_queue_misc]
+2019-04-03 18:50:20.737 [debug] <0.325.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-params">>,rabbit_mirror_queue_misc]
+2019-04-03 18:50:20.737 [debug] <0.325.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-sync-mode">>,rabbit_mirror_queue_misc]
+2019-04-03 18:50:20.737 [debug] <0.325.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-sync-batch-size">>,rabbit_mirror_queue_misc]
+2019-04-03 18:50:20.737 [debug] <0.325.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-promote-on-shutdown">>,rabbit_mirror_queue_misc]
+2019-04-03 18:50:20.738 [debug] <0.325.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-promote-on-failure">>,rabbit_mirror_queue_misc]
+2019-04-03 18:50:20.738 [info] <0.325.0> Running boot step rabbit_policies defined by app rabbit
+2019-04-03 18:50:20.738 [debug] <0.325.0> Applying MFA: M = rabbit_policies, F = register, A = []
+2019-04-03 18:50:20.739 [info] <0.325.0> Running boot step rabbit_policy defined by app rabbit
+2019-04-03 18:50:20.739 [debug] <0.325.0> Applying MFA: M = rabbit_policy, F = register, A = []
+2019-04-03 18:50:20.739 [info] <0.325.0> Running boot step rabbit_queue_location_validator defined by app rabbit
+2019-04-03 18:50:20.739 [debug] <0.325.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"queue-master-locator">>,rabbit_queue_location_validator]
+2019-04-03 18:50:20.739 [info] <0.325.0> Running boot step rabbit_quorum_memory_manager defined by app rabbit
+2019-04-03 18:50:20.739 [debug] <0.325.0> Applying MFA: M = rabbit_quorum_memory_manager, F = register, A = []
+2019-04-03 18:50:20.739 [info] <0.325.0> Running boot step rabbit_vhost_limit defined by app rabbit
+2019-04-03 18:50:20.739 [debug] <0.325.0> Applying MFA: M = rabbit_vhost_limit, F = register, A = []
+2019-04-03 18:50:20.739 [info] <0.325.0> Running boot step rabbit_mgmt_reset_handler defined by app rabbitmq_management
+2019-04-03 18:50:20.740 [debug] <0.325.0> Applying MFA: M = gen_event, F = add_handler, A = [rabbit_event,rabbit_mgmt_reset_handler,[]]
+2019-04-03 18:50:20.740 [info] <0.325.0> Running boot step rabbit_mgmt_db_handler defined by app rabbitmq_management_agent
+2019-04-03 18:50:20.740 [debug] <0.325.0> Applying MFA: M = rabbit_mgmt_db_handler, F = add_handler, A = []
+2019-04-03 18:50:20.740 [info] <0.325.0> Management plugin: using rates mode 'basic'
+2019-04-03 18:50:20.740 [info] <0.325.0> Running boot step recovery defined by app rabbit
+2019-04-03 18:50:20.744 [debug] <0.325.0> Applying MFA: M = rabbit, F = recover, A = []
+2019-04-03 18:50:20.747 [debug] <0.465.0> Recovering data for VHost <<"/">>
+2019-04-03 18:50:20.747 [info] <0.465.0> Making sure data directory '/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L' for vhost '/' exists
+2019-04-03 18:50:20.752 [debug] <0.464.0> Supervisor {<0.464.0>,rabbit_vhost_sup} started rabbit_recovery_terms:start_link(<<"/">>) at pid <0.466.0>
+2019-04-03 18:50:20.758 [info] <0.465.0> Starting message stores for vhost '/'
+2019-04-03 18:50:20.759 [info] <0.469.0> Message store "628WB79CIFDYO9LJI6DKMI09L/msg_store_transient": using rabbit_msg_store_ets_index to provide index
+2019-04-03 18:50:20.760 [debug] <0.464.0> Supervisor {<0.464.0>,rabbit_vhost_sup} started rabbit_msg_store:start_link(msg_store_transient, "/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L", undefined, {#Fun<rabbit_variable_queue.2.24443698>,ok}) at pid <0.469.0>
+2019-04-03 18:50:20.760 [info] <0.465.0> Started message store of type transient for vhost '/'
+2019-04-03 18:50:20.761 [info] <0.472.0> Message store "628WB79CIFDYO9LJI6DKMI09L/msg_store_persistent": using rabbit_msg_store_ets_index to provide index
+2019-04-03 18:50:20.762 [warning] <0.472.0> Message store "628WB79CIFDYO9LJI6DKMI09L/msg_store_persistent": rebuilding indices from scratch
+2019-04-03 18:50:20.767 [debug] <0.464.0> Supervisor {<0.464.0>,rabbit_vhost_sup} started rabbit_msg_store:start_link(msg_store_persistent, "/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L", [], {#Fun<rabbit_queue_index.2.39046318>,{start,[]}}) at pid <0.472.0>
+2019-04-03 18:50:20.767 [info] <0.465.0> Started message store of type persistent for vhost '/'
+2019-04-03 18:50:20.768 [debug] <0.464.0> Supervisor {<0.464.0>,rabbit_vhost_sup} started rabbit_amqqueue_sup_sup:start_link() at pid <0.478.0>
+2019-04-03 18:50:20.770 [info] <0.325.0> Running boot step load_definitions defined by app rabbitmq_management
+2019-04-03 18:50:20.770 [debug] <0.325.0> Applying MFA: M = rabbit_mgmt_load_definitions, F = maybe_load_definitions, A = []
+2019-04-03 18:50:20.770 [info] <0.325.0> Running boot step empty_db_check defined by app rabbit
+2019-04-03 18:50:20.770 [debug] <0.325.0> Applying MFA: M = rabbit, F = maybe_insert_default_data, A = []
+2019-04-03 18:50:20.770 [info] <0.325.0> Running boot step rabbit_looking_glass defined by app rabbit
+2019-04-03 18:50:20.770 [debug] <0.325.0> Applying MFA: M = rabbit_looking_glass, F = boot, A = []
+2019-04-03 18:50:20.770 [info] <0.325.0> Running boot step rabbit_core_metrics_gc defined by app rabbit
+2019-04-03 18:50:20.770 [debug] <0.325.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_core_metrics_gc]
+2019-04-03 18:50:20.770 [info] <0.325.0> Running boot step background_gc defined by app rabbit
+2019-04-03 18:50:20.771 [debug] <0.325.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [background_gc]
+2019-04-03 18:50:20.771 [debug] <0.489.0> Supervisor rabbit_core_metrics_gc_sup started rabbit_core_metrics_gc:start_link() at pid <0.490.0>
+2019-04-03 18:50:20.771 [debug] <0.491.0> Supervisor background_gc_sup started background_gc:start_link() at pid <0.492.0>
+2019-04-03 18:50:20.771 [info] <0.325.0> Running boot step connection_tracking defined by app rabbit
+2019-04-03 18:50:20.771 [debug] <0.325.0> Applying MFA: M = rabbit_connection_tracking, F = boot, A = []
+2019-04-03 18:50:20.799 [info] <0.325.0> Setting up a table for connection tracking on this node: tracked_connection_on_node_rabbit@rabbitmq3
+2019-04-03 18:50:20.820 [info] <0.325.0> Setting up a table for per-vhost connection counting on this node: tracked_connection_per_vhost_on_node_rabbit@rabbitmq3
+2019-04-03 18:50:20.820 [info] <0.325.0> Running boot step routing_ready defined by app rabbit
+2019-04-03 18:50:20.820 [info] <0.325.0> Running boot step pre_flight defined by app rabbit
+2019-04-03 18:50:20.820 [info] <0.325.0> Running boot step notify_cluster defined by app rabbit
+2019-04-03 18:50:20.820 [debug] <0.325.0> Applying MFA: M = rabbit_node_monitor, F = notify_node_up, A = []
+2019-04-03 18:50:20.820 [info] <0.325.0> Running boot step networking defined by app rabbit
+2019-04-03 18:50:20.820 [debug] <0.325.0> Applying MFA: M = rabbit_networking, F = boot, A = []
+2019-04-03 18:50:20.821 [info] <0.438.0> rabbit on node rabbit@rabbitmq1 up
+2019-04-03 18:50:20.833 [info] <0.515.0> started TCP listener on [::]:5672
+2019-04-03 18:50:20.834 [info] <0.325.0> Running boot step direct_client defined by app rabbit
+2019-04-03 18:50:20.834 [debug] <0.325.0> Applying MFA: M = rabbit_direct, F = boot, A = []
+2019-04-03 18:50:20.851 [info] <0.438.0> rabbit on node rabbit@rabbitmq2 up
+2019-04-03 18:50:20.874 [debug] <0.526.0> Supervisor rabbit_mgmt_agent_sup_sup started rabbit_mgmt_agent_sup:start_link() at pid <0.527.0>
+2019-04-03 18:50:20.918 [debug] <0.521.0> Starting HTTP[S] listener with transport ranch_tcp, options [{port,15672}] and protocol options #{}, stream handlers [rabbit_cowboy_stream_h,cowboy_compress_h,cowboy_stream_h]
+2019-04-03 18:50:20.922 [info] <0.567.0> Management plugin: HTTP (non-TLS) listener started on port 15672
+2019-04-03 18:50:20.922 [info] <0.673.0> Statistics database started.
+2019-04-03 18:50:20.922 [debug] <0.671.0> Supervisor rabbit_mgmt_sup_sup started rabbit_mgmt_sup:start_link() at pid <0.672.0>
+2019-04-03 18:50:20.922 [notice] <0.106.0> Changed loghwm of /var/log/rabbitmq/rabbit.log to 5000
+2019-04-03 18:50:21.179 [info] <0.8.0> Server startup complete; 3 plugins started.
+ * rabbitmq_management
+ * rabbitmq_management_agent
+ * rabbitmq_web_dispatch
+2019-04-03 18:50:23.624 [debug] <0.686.0> User 'jack' authenticated successfully by backend rabbit_auth_backend_internal
+2019-04-03 18:50:23.644 [debug] <0.692.0> queue 'q_3' in vhost '/': ra_log:init recovered last_index_term {0,0} first index 0
+2019-04-03 18:50:23.652 [debug] <0.692.0> queue 'q_3' in vhost '/': recover -> recover in term: 0
+2019-04-03 18:50:23.652 [debug] <0.692.0> queue 'q_3' in vhost '/': recovering state machine version 0:0 from index 0 to 0
+2019-04-03 18:50:23.653 [debug] <0.692.0> queue 'q_3' in vhost '/': recover -> recovered in term: 0
+2019-04-03 18:50:23.653 [debug] <0.692.0> queue 'q_3' in vhost '/': recovered -> follower in term: 0
+2019-04-03 18:50:23.653 [debug] <0.692.0> queue 'q_3' in vhost '/': election triggered by <0.694.0>
+2019-04-03 18:50:23.653 [debug] <0.692.0> queue 'q_3' in vhost '/': pre_vote election called for in term 0
+2019-04-03 18:50:23.661 [debug] <0.692.0> queue 'q_3' in vhost '/': follower -> pre_vote in term: 0
+2019-04-03 18:50:23.662 [debug] <0.692.0> queue 'q_3' in vhost '/': election called for in term 1
+2019-04-03 18:50:23.680 [debug] <0.692.0> queue 'q_3' in vhost '/': pre_vote -> candidate in term: 1
+2019-04-03 18:50:23.691 [notice] <0.692.0> queue 'q_3' in vhost '/': candidate -> leader in term: 1
+2019-04-03 18:50:23.700 [debug] <0.692.0> queue 'q_3' in vhost '/': enabling ra cluster changes in 1
+2019-04-03 18:50:23.701 [info] <0.686.0> ra: started cluster %2F_q_3 with 3 servers
+0 servers failed to start: []
+Leader: {'%2F_q_3',rabbit@rabbitmq3}
+2019-04-03 18:54:51.148 [debug] <0.119.0> Lager installed handler lager_forwarder_backend into error_logger_lager_event
+2019-04-03 18:54:51.148 [debug] <0.146.0> Lager installed handler {lager_file_backend,
+                            "/var/log/rabbitmq/rabbit@rabbitmq3_upgrade.log"} into rabbit_log_upgrade_lager_event
+2019-04-03 18:54:51.148 [debug] <0.122.0> Lager installed handler lager_forwarder_backend into rabbit_log_lager_event
+2019-04-03 18:54:51.148 [debug] <0.125.0> Lager installed handler lager_forwarder_backend into rabbit_log_channel_lager_event
+2019-04-03 18:54:51.148 [debug] <0.128.0> Lager installed handler lager_forwarder_backend into rabbit_log_connection_lager_event
+2019-04-03 18:54:51.148 [debug] <0.131.0> Lager installed handler lager_forwarder_backend into rabbit_log_ldap_lager_event
+2019-04-03 18:54:51.148 [debug] <0.137.0> Lager installed handler lager_forwarder_backend into rabbit_log_queue_lager_event
+2019-04-03 18:54:51.148 [debug] <0.134.0> Lager installed handler lager_forwarder_backend into rabbit_log_mirroring_lager_event
+2019-04-03 18:54:51.148 [debug] <0.143.0> Lager installed handler lager_forwarder_backend into rabbit_log_federation_lager_event
+2019-04-03 18:54:51.148 [debug] <0.140.0> Lager installed handler lager_forwarder_backend into rabbit_log_ra_lager_event
+2019-04-03 18:54:51.148 [debug] <0.116.0> Lager installed handler error_logger_lager_h into error_logger
+2019-04-03 18:54:51.601 [debug] <0.109.0> Lager installed handler lager_backend_throttle into lager_event
+2019-04-03 18:54:51.860 [info] <0.8.0> Log file opened with Lager
+2019-04-03 18:54:52.769 [debug] <0.8.0> Feature flags: query feature flags in loaded applications
+2019-04-03 18:54:58.077 [debug] <0.8.0> Feature flags: application `rabbitmq_management_agent` has 1 feature flags
+2019-04-03 18:54:58.078 [debug] <0.8.0> Feature flags: application `rabbit` has 2 feature flags
+2019-04-03 18:54:58.078 [debug] <0.8.0> Feature flags: (re)initialize registry
+2019-04-03 18:54:58.078 [info] <0.8.0> Feature flags: list of feature flags found:
+2019-04-03 18:54:58.078 [info] <0.8.0> Feature flags:   [x] empty_basic_get_metric
+2019-04-03 18:54:58.078 [info] <0.8.0> Feature flags:   [x] implicit_default_bindings
+2019-04-03 18:54:58.078 [info] <0.8.0> Feature flags:   [x] quorum_queue
+2019-04-03 18:54:58.078 [info] <0.8.0> Feature flags: feature flag states written to disk: yes
+2019-04-03 18:54:58.082 [debug] <0.8.0> Feature flags: registry module ready, loading it...
+2019-04-03 18:54:58.086 [debug] <0.8.0> Feature flags: registry module loaded
+2019-04-03 18:54:58.313 [info] <0.43.0> Application mnesia exited with reason: stopped
+2019-04-03 18:54:58.313 [debug] <0.8.0> Feature flags: querying all feature flags on node `rabbit@rabbitmq1`...
+2019-04-03 18:54:58.314 [debug] <0.8.0> Feature flags: querying all feature flags on node `rabbit@rabbitmq1` done; all features: [empty_basic_get_metric,implicit_default_bindings,quorum_queue]
+2019-04-03 18:54:58.315 [debug] <0.8.0> Feature flags: register feature flags provided by applications unknown locally: []
+2019-04-03 18:54:58.315 [debug] <0.8.0> Feature flags: query feature flags in loaded applications
+2019-04-03 18:54:58.350 [debug] <0.8.0> Feature flags: application `rabbitmq_management_agent` has 1 feature flags
+2019-04-03 18:54:58.350 [debug] <0.8.0> Feature flags: application `rabbit` has 2 feature flags
+2019-04-03 18:54:58.350 [debug] <0.8.0> Feature flags: registry already up-to-date, skipping init
+2019-04-03 18:54:58.402 [debug] <0.8.0> Feature flags: node `rabbit@rabbitmq1` compatibility check, part 1/2
+2019-04-03 18:54:58.402 [debug] <0.8.0> Feature flags: querying `[empty_basic_get_metric,implicit_default_bindings,quorum_queue]` support on node rabbit@rabbitmq1...
+2019-04-03 18:54:58.402 [debug] <0.8.0> Feature flags: node `rabbit@rabbitmq1` supports `[empty_basic_get_metric,implicit_default_bindings,quorum_queue]`
+2019-04-03 18:54:58.402 [info] <0.8.0> Feature flags: all running remote nodes support `[empty_basic_get_metric,implicit_default_bindings,quorum_queue]`
+2019-04-03 18:54:58.402 [debug] <0.8.0> Feature flags: node `rabbit@rabbitmq1` compatibility check, part 2/2
+2019-04-03 18:54:58.402 [debug] <0.8.0> Feature flags: querying enabled feature flags on node `rabbit@rabbitmq1`...
+2019-04-03 18:54:58.403 [debug] <0.8.0> Feature flags: querying enabled feature flags on node `rabbit@rabbitmq1` done; enabled features: [empty_basic_get_metric,implicit_default_bindings,quorum_queue]
+2019-04-03 18:54:58.403 [debug] <0.8.0> Feature flags: node `rabbit@rabbitmq1` is compatible
+2019-04-03 18:54:58.627 [info] <0.313.0> ra: meta data store initialised. 1 record(s) recovered
+2019-04-03 18:54:58.628 [info] <0.318.0> WAL: recovering ["/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3/quorum/rabbit@rabbitmq3/00000001.wal"]
+2019-04-03 18:54:58.914 [debug] <0.318.0> wal: opening new file "00000002.wal"
+2019-04-03 18:54:58.916 [info] <0.400.0> 
+ Starting RabbitMQ 3.8.0-alpha.572 on Erlang 21.3
+ Copyright (C) 2007-2019 Pivotal Software, Inc.
+ Licensed under the MPL.  See https://www.rabbitmq.com/
+2019-04-03 18:54:58.918 [info] <0.400.0> 
+ node           : rabbit@rabbitmq3
+ home dir       : /var/lib/rabbitmq
+ config file(s) : /etc/rabbitmq/rabbitmq.config
+ cookie hash    : gnzLDuqKcGxMNKFokfhOew==
+ log(s)         : /var/log/rabbitmq/rabbit.log
+                : /var/log/rabbitmq/rabbit@rabbitmq3_upgrade.log
+ database dir   : /var/lib/rabbitmq/mnesia/rabbit@rabbitmq3
+2019-04-03 18:54:58.938 [info] <0.400.0> Running boot step pre_boot defined by app rabbit
+2019-04-03 18:54:58.938 [info] <0.400.0> Running boot step rabbit_core_metrics defined by app rabbit
+2019-04-03 18:54:58.938 [debug] <0.400.0> Applying MFA: M = rabbit_sup, F = start_child, A = [rabbit_metrics]
+2019-04-03 18:54:58.939 [info] <0.400.0> Running boot step rabbit_alarm defined by app rabbit
+2019-04-03 18:54:58.939 [debug] <0.400.0> Applying MFA: M = rabbit_alarm, F = start, A = []
+2019-04-03 18:54:58.939 [debug] <0.403.0> Supervisor rabbit_alarm_sup started rabbit_alarm:start_link() at pid <0.404.0>
+2019-04-03 18:54:58.943 [info] <0.406.0> Memory high watermark set to 3180 MiB (3334930432 bytes) of 7951 MiB (8337326080 bytes) total
+2019-04-03 18:54:58.944 [debug] <0.405.0> Supervisor vm_memory_monitor_sup started vm_memory_monitor:start_link(0.4, #Fun<rabbit_alarm.0.52593784>, #Fun<rabbit_alarm.1.52593784>) at pid <0.406.0>
+2019-04-03 18:54:58.967 [info] <0.408.0> Enabling free disk space monitoring
+2019-04-03 18:54:58.968 [info] <0.408.0> Disk free limit set to 50MB
+2019-04-03 18:54:58.975 [debug] <0.407.0> Supervisor rabbit_disk_monitor_sup started rabbit_disk_monitor:start_link(50000000) at pid <0.408.0>
+2019-04-03 18:54:58.975 [info] <0.400.0> Running boot step code_server_cache defined by app rabbit
+2019-04-03 18:54:58.975 [debug] <0.400.0> Applying MFA: M = rabbit_sup, F = start_child, A = [code_server_cache]
+2019-04-03 18:54:58.976 [info] <0.400.0> Running boot step file_handle_cache defined by app rabbit
+2019-04-03 18:54:58.976 [debug] <0.400.0> Applying MFA: M = rabbit, F = start_fhc, A = []
+2019-04-03 18:54:58.976 [info] <0.411.0> Limiting to approx 1048476 file handles (943626 sockets)
+2019-04-03 18:54:58.976 [debug] <0.410.0> Supervisor file_handle_cache_sup started file_handle_cache:start_link(fun rabbit_alarm:set_alarm/1, fun rabbit_alarm:clear_alarm/1) at pid <0.411.0>
+2019-04-03 18:54:58.976 [info] <0.412.0> FHC read buffering:  OFF
+2019-04-03 18:54:58.976 [info] <0.412.0> FHC write buffering: ON
+2019-04-03 18:54:58.977 [info] <0.400.0> Running boot step worker_pool defined by app rabbit
+2019-04-03 18:54:58.977 [debug] <0.400.0> Applying MFA: M = rabbit_sup, F = start_supervisor_child, A = [worker_pool_sup]
+2019-04-03 18:54:58.977 [info] <0.400.0> Running boot step database defined by app rabbit
+2019-04-03 18:54:58.978 [debug] <0.400.0> Applying MFA: M = rabbit_mnesia, F = init, A = []
+2019-04-03 18:54:58.981 [info] <0.400.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-03 18:54:58.986 [debug] <0.400.0> Feature flags: double-checking feature flag states...
+2019-04-03 18:54:58.987 [debug] <0.400.0> Feature flag `implicit_default_bindings`: run migration function implicit_default_bindings_migration with arg: is_enabled
+2019-04-03 18:54:58.987 [debug] <0.400.0> Feature flag `quorum_queue`: run migration function quorum_queue_migration with arg: is_enabled
+2019-04-03 18:54:58.987 [info] <0.400.0> Waiting for Mnesia tables for 30000 ms, 0 retries left
+2019-04-03 18:54:58.987 [debug] <0.400.0> Feature flags: SYNCING FEATURE FLAGS with node `rabbit@rabbitmq1`...
+2019-04-03 18:54:58.987 [debug] <0.400.0> Feature flags: querying enabled feature flags on node `rabbit@rabbitmq1`...
+2019-04-03 18:54:58.988 [debug] <0.400.0> Feature flags: querying enabled feature flags on node `rabbit@rabbitmq1` done; enabled features: [empty_basic_get_metric,implicit_default_bindings,quorum_queue]
+2019-04-03 18:54:58.988 [debug] <0.400.0> Feature flags: enabling locally feature flags already enabled on node `rabbit@rabbitmq1`...
+2019-04-03 18:54:58.988 [debug] <0.400.0> Feature flags: enabling on node `rabbit@rabbitmq1` feature flags already enabled locally...
+2019-04-03 18:54:58.988 [info] <0.400.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-03 18:54:59.050 [info] <0.400.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-03 18:54:59.051 [info] <0.400.0> Peer discovery backend rabbit_peer_discovery_classic_config does not support registration, skipping registration.
+2019-04-03 18:54:59.053 [info] <0.400.0> Running boot step database_sync defined by app rabbit
+2019-04-03 18:54:59.053 [debug] <0.400.0> Applying MFA: M = rabbit_sup, F = start_child, A = [mnesia_sync]
+2019-04-03 18:54:59.054 [info] <0.400.0> Running boot step feature_flags defined by app rabbit
+2019-04-03 18:54:59.054 [debug] <0.400.0> Applying MFA: M = rabbit_feature_flags, F = init, A = []
+2019-04-03 18:54:59.054 [info] <0.400.0> Running boot step codec_correctness_check defined by app rabbit
+2019-04-03 18:54:59.054 [debug] <0.400.0> Applying MFA: M = rabbit_binary_generator, F = check_empty_frame_size, A = []
+2019-04-03 18:54:59.054 [info] <0.400.0> Running boot step external_infrastructure defined by app rabbit
+2019-04-03 18:54:59.054 [info] <0.400.0> Running boot step rabbit_registry defined by app rabbit
+2019-04-03 18:54:59.054 [debug] <0.400.0> Applying MFA: M = rabbit_sup, F = start_child, A = [rabbit_registry]
+2019-04-03 18:54:59.055 [info] <0.400.0> Running boot step rabbit_auth_mechanism_cr_demo defined by app rabbit
+2019-04-03 18:54:59.055 [debug] <0.400.0> Applying MFA: M = rabbit_registry, F = register, A = [auth_mechanism,<<"RABBIT-CR-DEMO">>,rabbit_auth_mechanism_cr_demo]
+2019-04-03 18:54:59.055 [info] <0.400.0> Running boot step rabbit_queue_location_random defined by app rabbit
+2019-04-03 18:54:59.055 [debug] <0.400.0> Applying MFA: M = rabbit_registry, F = register, A = [queue_master_locator,<<"random">>,rabbit_queue_location_random]
+2019-04-03 18:54:59.055 [info] <0.400.0> Running boot step rabbit_event defined by app rabbit
+2019-04-03 18:54:59.055 [debug] <0.400.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_event]
+2019-04-03 18:54:59.055 [info] <0.400.0> Running boot step rabbit_auth_mechanism_amqplain defined by app rabbit
+2019-04-03 18:54:59.055 [debug] <0.400.0> Applying MFA: M = rabbit_registry, F = register, A = [auth_mechanism,<<"AMQPLAIN">>,rabbit_auth_mechanism_amqplain]
+2019-04-03 18:54:59.056 [info] <0.400.0> Running boot step rabbit_auth_mechanism_plain defined by app rabbit
+2019-04-03 18:54:59.056 [debug] <0.400.0> Applying MFA: M = rabbit_registry, F = register, A = [auth_mechanism,<<"PLAIN">>,rabbit_auth_mechanism_plain]
+2019-04-03 18:54:59.056 [debug] <0.430.0> Supervisor rabbit_event_sup started rabbit_event:start_link() at pid <0.431.0>
+2019-04-03 18:54:59.056 [info] <0.400.0> Running boot step rabbit_exchange_type_direct defined by app rabbit
+2019-04-03 18:54:59.056 [debug] <0.400.0> Applying MFA: M = rabbit_registry, F = register, A = [exchange,<<"direct">>,rabbit_exchange_type_direct]
+2019-04-03 18:54:59.056 [info] <0.400.0> Running boot step rabbit_exchange_type_fanout defined by app rabbit
+2019-04-03 18:54:59.056 [debug] <0.400.0> Applying MFA: M = rabbit_registry, F = register, A = [exchange,<<"fanout">>,rabbit_exchange_type_fanout]
+2019-04-03 18:54:59.056 [info] <0.400.0> Running boot step rabbit_exchange_type_headers defined by app rabbit
+2019-04-03 18:54:59.056 [debug] <0.400.0> Applying MFA: M = rabbit_registry, F = register, A = [exchange,<<"headers">>,rabbit_exchange_type_headers]
+2019-04-03 18:54:59.057 [info] <0.400.0> Running boot step rabbit_exchange_type_topic defined by app rabbit
+2019-04-03 18:54:59.057 [debug] <0.400.0> Applying MFA: M = rabbit_registry, F = register, A = [exchange,<<"topic">>,rabbit_exchange_type_topic]
+2019-04-03 18:54:59.057 [info] <0.400.0> Running boot step rabbit_mirror_queue_mode_all defined by app rabbit
+2019-04-03 18:54:59.057 [debug] <0.400.0> Applying MFA: M = rabbit_registry, F = register, A = [ha_mode,<<"all">>,rabbit_mirror_queue_mode_all]
+2019-04-03 18:54:59.057 [info] <0.400.0> Running boot step rabbit_mirror_queue_mode_exactly defined by app rabbit
+2019-04-03 18:54:59.057 [debug] <0.400.0> Applying MFA: M = rabbit_registry, F = register, A = [ha_mode,<<"exactly">>,rabbit_mirror_queue_mode_exactly]
+2019-04-03 18:54:59.057 [info] <0.400.0> Running boot step rabbit_mirror_queue_mode_nodes defined by app rabbit
+2019-04-03 18:54:59.058 [debug] <0.400.0> Applying MFA: M = rabbit_registry, F = register, A = [ha_mode,<<"nodes">>,rabbit_mirror_queue_mode_nodes]
+2019-04-03 18:54:59.058 [info] <0.400.0> Running boot step rabbit_priority_queue defined by app rabbit
+2019-04-03 18:54:59.058 [debug] <0.400.0> Applying MFA: M = rabbit_priority_queue, F = enable, A = []
+2019-04-03 18:54:59.058 [info] <0.400.0> Priority queues enabled, real BQ is rabbit_variable_queue
+2019-04-03 18:54:59.058 [info] <0.400.0> Running boot step rabbit_queue_location_client_local defined by app rabbit
+2019-04-03 18:54:59.059 [debug] <0.400.0> Applying MFA: M = rabbit_registry, F = register, A = [queue_master_locator,<<"client-local">>,rabbit_queue_location_client_local]
+2019-04-03 18:54:59.059 [info] <0.400.0> Running boot step rabbit_queue_location_min_masters defined by app rabbit
+2019-04-03 18:54:59.059 [debug] <0.400.0> Applying MFA: M = rabbit_registry, F = register, A = [queue_master_locator,<<"min-masters">>,rabbit_queue_location_min_masters]
+2019-04-03 18:54:59.059 [info] <0.400.0> Running boot step kernel_ready defined by app rabbit
+2019-04-03 18:54:59.059 [info] <0.400.0> Running boot step rabbit_sysmon_minder defined by app rabbit
+2019-04-03 18:54:59.059 [debug] <0.400.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_sysmon_minder]
+2019-04-03 18:54:59.060 [debug] <0.432.0> Supervisor rabbit_sysmon_minder_sup started rabbit_sysmon_minder:start_link() at pid <0.433.0>
+2019-04-03 18:54:59.060 [info] <0.400.0> Running boot step rabbit_epmd_monitor defined by app rabbit
+2019-04-03 18:54:59.060 [debug] <0.400.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_epmd_monitor]
+2019-04-03 18:54:59.065 [debug] <0.434.0> Supervisor rabbit_epmd_monitor_sup started rabbit_epmd_monitor:start_link() at pid <0.435.0>
+2019-04-03 18:54:59.066 [info] <0.400.0> Running boot step guid_generator defined by app rabbit
+2019-04-03 18:54:59.066 [debug] <0.400.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_guid]
+2019-04-03 18:54:59.074 [info] <0.400.0> Running boot step rabbit_node_monitor defined by app rabbit
+2019-04-03 18:54:59.074 [debug] <0.438.0> Supervisor rabbit_guid_sup started rabbit_guid:start_link() at pid <0.439.0>
+2019-04-03 18:54:59.074 [debug] <0.400.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_node_monitor]
+2019-04-03 18:54:59.076 [info] <0.441.0> Starting rabbit_node_monitor
+2019-04-03 18:54:59.076 [info] <0.400.0> Running boot step delegate_sup defined by app rabbit
+2019-04-03 18:54:59.076 [debug] <0.400.0> Applying MFA: M = rabbit, F = boot_delegate, A = []
+2019-04-03 18:54:59.076 [debug] <0.440.0> Supervisor rabbit_node_monitor_sup started rabbit_node_monitor:start_link() at pid <0.441.0>
+2019-04-03 18:54:59.077 [info] <0.400.0> Running boot step rabbit_memory_monitor defined by app rabbit
+2019-04-03 18:54:59.077 [debug] <0.400.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_memory_monitor]
+2019-04-03 18:54:59.078 [info] <0.400.0> Running boot step core_initialized defined by app rabbit
+2019-04-03 18:54:59.078 [info] <0.400.0> Running boot step upgrade_queues defined by app rabbit
+2019-04-03 18:54:59.078 [debug] <0.459.0> Supervisor rabbit_memory_monitor_sup started rabbit_memory_monitor:start_link() at pid <0.460.0>
+2019-04-03 18:54:59.078 [debug] <0.400.0> Applying MFA: M = rabbit_upgrade, F = maybe_migrate_queues_to_per_vhost_storage, A = []
+2019-04-03 18:54:59.206 [info] <0.400.0> Running boot step rabbit_connection_tracking_handler defined by app rabbit
+2019-04-03 18:54:59.206 [debug] <0.400.0> Applying MFA: M = gen_event, F = add_handler, A = [rabbit_event,rabbit_connection_tracking_handler,[]]
+2019-04-03 18:54:59.207 [info] <0.400.0> Running boot step rabbit_exchange_parameters defined by app rabbit
+2019-04-03 18:54:59.207 [debug] <0.400.0> Applying MFA: M = rabbit_exchange_parameters, F = register, A = []
+2019-04-03 18:54:59.207 [info] <0.400.0> Running boot step rabbit_mirror_queue_misc defined by app rabbit
+2019-04-03 18:54:59.207 [debug] <0.400.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-mode">>,rabbit_mirror_queue_misc]
+2019-04-03 18:54:59.207 [debug] <0.400.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-params">>,rabbit_mirror_queue_misc]
+2019-04-03 18:54:59.207 [debug] <0.400.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-sync-mode">>,rabbit_mirror_queue_misc]
+2019-04-03 18:54:59.207 [debug] <0.400.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-sync-batch-size">>,rabbit_mirror_queue_misc]
+2019-04-03 18:54:59.208 [debug] <0.400.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-promote-on-shutdown">>,rabbit_mirror_queue_misc]
+2019-04-03 18:54:59.208 [debug] <0.400.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-promote-on-failure">>,rabbit_mirror_queue_misc]
+2019-04-03 18:54:59.208 [info] <0.400.0> Running boot step rabbit_policies defined by app rabbit
+2019-04-03 18:54:59.208 [debug] <0.400.0> Applying MFA: M = rabbit_policies, F = register, A = []
+2019-04-03 18:54:59.209 [info] <0.400.0> Running boot step rabbit_policy defined by app rabbit
+2019-04-03 18:54:59.212 [debug] <0.400.0> Applying MFA: M = rabbit_policy, F = register, A = []
+2019-04-03 18:54:59.212 [info] <0.400.0> Running boot step rabbit_queue_location_validator defined by app rabbit
+2019-04-03 18:54:59.212 [debug] <0.400.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"queue-master-locator">>,rabbit_queue_location_validator]
+2019-04-03 18:54:59.213 [info] <0.400.0> Running boot step rabbit_quorum_memory_manager defined by app rabbit
+2019-04-03 18:54:59.213 [debug] <0.400.0> Applying MFA: M = rabbit_quorum_memory_manager, F = register, A = []
+2019-04-03 18:54:59.214 [info] <0.400.0> Running boot step rabbit_vhost_limit defined by app rabbit
+2019-04-03 18:54:59.214 [debug] <0.400.0> Applying MFA: M = rabbit_vhost_limit, F = register, A = []
+2019-04-03 18:54:59.214 [info] <0.400.0> Running boot step rabbit_mgmt_reset_handler defined by app rabbitmq_management
+2019-04-03 18:54:59.214 [debug] <0.400.0> Applying MFA: M = gen_event, F = add_handler, A = [rabbit_event,rabbit_mgmt_reset_handler,[]]
+2019-04-03 18:54:59.214 [info] <0.400.0> Running boot step rabbit_mgmt_db_handler defined by app rabbitmq_management_agent
+2019-04-03 18:54:59.214 [debug] <0.400.0> Applying MFA: M = rabbit_mgmt_db_handler, F = add_handler, A = []
+2019-04-03 18:54:59.214 [info] <0.400.0> Management plugin: using rates mode 'basic'
+2019-04-03 18:54:59.214 [info] <0.400.0> Running boot step recovery defined by app rabbit
+2019-04-03 18:54:59.214 [debug] <0.400.0> Applying MFA: M = rabbit, F = recover, A = []
+2019-04-03 18:54:59.226 [debug] <0.468.0> Recovering data for VHost <<"/">>
+2019-04-03 18:54:59.226 [info] <0.468.0> Making sure data directory '/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L' for vhost '/' exists
+2019-04-03 18:54:59.232 [debug] <0.467.0> Supervisor {<0.467.0>,rabbit_vhost_sup} started rabbit_recovery_terms:start_link(<<"/">>) at pid <0.469.0>
+2019-04-03 18:54:59.266 [info] <0.468.0> Starting message stores for vhost '/'
+2019-04-03 18:54:59.268 [info] <0.472.0> Message store "628WB79CIFDYO9LJI6DKMI09L/msg_store_transient": using rabbit_msg_store_ets_index to provide index
+2019-04-03 18:54:59.273 [info] <0.468.0> Started message store of type transient for vhost '/'
+2019-04-03 18:54:59.273 [debug] <0.467.0> Supervisor {<0.467.0>,rabbit_vhost_sup} started rabbit_msg_store:start_link(msg_store_transient, "/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L", undefined, {#Fun<rabbit_variable_queue.2.24443698>,ok}) at pid <0.472.0>
+2019-04-03 18:54:59.274 [info] <0.475.0> Message store "628WB79CIFDYO9LJI6DKMI09L/msg_store_persistent": using rabbit_msg_store_ets_index to provide index
+2019-04-03 18:54:59.278 [warning] <0.475.0> Message store "628WB79CIFDYO9LJI6DKMI09L/msg_store_persistent": rebuilding indices from scratch
+2019-04-03 18:54:59.285 [info] <0.468.0> Started message store of type persistent for vhost '/'
+2019-04-03 18:54:59.287 [debug] <0.467.0> Supervisor {<0.467.0>,rabbit_vhost_sup} started rabbit_msg_store:start_link(msg_store_persistent, "/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L", [], {#Fun<rabbit_queue_index.2.39046318>,{start,[]}}) at pid <0.475.0>
+2019-04-03 18:54:59.287 [debug] <0.467.0> Supervisor {<0.467.0>,rabbit_vhost_sup} started rabbit_amqqueue_sup_sup:start_link() at pid <0.481.0>
+2019-04-03 18:54:59.987 [debug] <0.316.0> ra_log_segment_writer: error sending ra_log_event to: 2F_Q_3UUPF8W7AZMJL. Error: No Pid
+2019-04-03 18:54:59.992 [debug] <0.316.0> ra_log_segment_writer: cleaning closed table for '2F_Q_3UUPF8W7AZMJL' range: 0-15882
+2019-04-03 18:54:59.992 [debug] <0.316.0> segment_writer: deleting wal file: 00000001.wal
+2019-04-03 18:55:00.020 [debug] <0.485.0> queue 'q_3' in vhost '/': ra_log:init recovered last_index_term {15882,1} first index 13203
+2019-04-03 18:55:00.020 [debug] <0.485.0> queue 'q_3' in vhost '/': 2 obsolete segments at 13202 - remaining: 1
+2019-04-03 18:55:00.026 [debug] <0.485.0> queue 'q_3' in vhost '/': recover -> recover in term: 1
+2019-04-03 18:55:00.026 [debug] <0.485.0> queue 'q_3' in vhost '/': recovering state machine version 0:0 from index 13202 to 15862
+2019-04-03 18:55:00.045 [info] <0.400.0> Running boot step load_definitions defined by app rabbitmq_management
+2019-04-03 18:55:00.046 [debug] <0.400.0> Applying MFA: M = rabbit_mgmt_load_definitions, F = maybe_load_definitions, A = []
+2019-04-03 18:55:00.046 [info] <0.400.0> Running boot step empty_db_check defined by app rabbit
+2019-04-03 18:55:00.046 [debug] <0.400.0> Applying MFA: M = rabbit, F = maybe_insert_default_data, A = []
+2019-04-03 18:55:00.046 [info] <0.400.0> Running boot step rabbit_looking_glass defined by app rabbit
+2019-04-03 18:55:00.046 [debug] <0.400.0> Applying MFA: M = rabbit_looking_glass, F = boot, A = []
+2019-04-03 18:55:00.046 [info] <0.400.0> Running boot step rabbit_core_metrics_gc defined by app rabbit
+2019-04-03 18:55:00.046 [debug] <0.400.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_core_metrics_gc]
+2019-04-03 18:55:00.046 [info] <0.400.0> Running boot step background_gc defined by app rabbit
+2019-04-03 18:55:00.046 [debug] <0.400.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [background_gc]
+2019-04-03 18:55:00.046 [debug] <0.500.0> Supervisor rabbit_core_metrics_gc_sup started rabbit_core_metrics_gc:start_link() at pid <0.501.0>
+2019-04-03 18:55:00.046 [info] <0.400.0> Running boot step connection_tracking defined by app rabbit
+2019-04-03 18:55:00.046 [debug] <0.400.0> Applying MFA: M = rabbit_connection_tracking, F = boot, A = []
+2019-04-03 18:55:00.046 [debug] <0.502.0> Supervisor background_gc_sup started background_gc:start_link() at pid <0.503.0>
+2019-04-03 18:55:00.048 [info] <0.400.0> Setting up a table for connection tracking on this node: tracked_connection_on_node_rabbit@rabbitmq3
+2019-04-03 18:55:00.049 [info] <0.400.0> Setting up a table for per-vhost connection counting on this node: tracked_connection_per_vhost_on_node_rabbit@rabbitmq3
+2019-04-03 18:55:00.050 [info] <0.400.0> Running boot step routing_ready defined by app rabbit
+2019-04-03 18:55:00.050 [info] <0.400.0> Running boot step pre_flight defined by app rabbit
+2019-04-03 18:55:00.050 [info] <0.400.0> Running boot step notify_cluster defined by app rabbit
+2019-04-03 18:55:00.051 [debug] <0.400.0> Applying MFA: M = rabbit_node_monitor, F = notify_node_up, A = []
+2019-04-03 18:55:00.051 [info] <0.400.0> Running boot step networking defined by app rabbit
+2019-04-03 18:55:00.051 [debug] <0.400.0> Applying MFA: M = rabbit_networking, F = boot, A = []
+2019-04-03 18:55:00.053 [info] <0.400.0> Running boot step direct_client defined by app rabbit
+2019-04-03 18:55:00.054 [debug] <0.400.0> Applying MFA: M = rabbit_direct, F = boot, A = []
+2019-04-03 18:55:00.054 [info] <0.520.0> started TCP listener on [::]:5672
+2019-04-03 18:55:00.057 [info] <0.441.0> rabbit on node rabbit@rabbitmq1 up
+2019-04-03 18:55:00.090 [info] <0.441.0> rabbit on node rabbit@rabbitmq2 up
+2019-04-03 18:55:00.115 [debug] <0.531.0> Supervisor rabbit_mgmt_agent_sup_sup started rabbit_mgmt_agent_sup:start_link() at pid <0.532.0>
+2019-04-03 18:55:00.198 [debug] <0.526.0> Starting HTTP[S] listener with transport ranch_tcp, options [{port,15672}] and protocol options #{}, stream handlers [rabbit_cowboy_stream_h,cowboy_compress_h,cowboy_stream_h]
+2019-04-03 18:55:00.201 [info] <0.572.0> Management plugin: HTTP (non-TLS) listener started on port 15672
+2019-04-03 18:55:00.201 [info] <0.678.0> Statistics database started.
+2019-04-03 18:55:00.202 [debug] <0.676.0> Supervisor rabbit_mgmt_sup_sup started rabbit_mgmt_sup:start_link() at pid <0.677.0>
+2019-04-03 18:55:00.202 [notice] <0.106.0> Changed loghwm of /var/log/rabbitmq/rabbit.log to 5000
+2019-04-03 18:55:00.304 [debug] <0.485.0> queue 'q_3' in vhost '/': recover -> recovered in term: 1
+2019-04-03 18:55:00.304 [debug] <0.485.0> queue 'q_3' in vhost '/': is not new, setting election timeout.
+2019-04-03 18:55:00.305 [debug] <0.485.0> queue 'q_3' in vhost '/': recovered -> follower in term: 1
+2019-04-03 18:55:00.305 [debug] <0.485.0> queue 'q_3' in vhost '/': begin_accept snapshot at index 62025 in term 3
+2019-04-03 18:55:00.312 [debug] <0.485.0> queue 'q_3' in vhost '/': follower -> receive_snapshot in term: 1
+2019-04-03 18:55:00.312 [debug] <0.485.0> queue 'q_3' in vhost '/': receiving snapshot chunk: 1 / last
+2019-04-03 18:55:00.339 [debug] <0.485.0> queue 'q_3' in vhost '/': 1 obsolete segments at 62025 - remaining: 0
+2019-04-03 18:55:00.340 [debug] <0.485.0> queue 'q_3' in vhost '/': receive_snapshot -> follower in term: 3
+2019-04-03 18:55:01.102 [debug] <0.485.0> queue 'q_3' in vhost '/': pre_vote election called for in term 3
+2019-04-03 18:55:01.103 [debug] <0.485.0> queue 'q_3' in vhost '/': follower -> pre_vote in term: 3
+2019-04-03 18:55:01.103 [debug] <0.485.0> queue 'q_3' in vhost '/': pre_vote -> follower in term: 3
+2019-04-03 18:55:01.104 [info] <0.485.0> queue 'q_3' in vhost '/': detected a new leader {'%2F_q_3',rabbit@rabbitmq2} in term 3
+2019-04-03 18:55:01.104 [warning] <0.485.0> queue 'q_3' in vhost '/': follower received unhandled msg: {node_event,rabbit@rabbitmq2,up}
+2019-04-03 18:55:01.288 [info] <0.8.0> Server startup complete; 3 plugins started.
+ * rabbitmq_management
+ * rabbitmq_management_agent
+ * rabbitmq_web_dispatch
+2019-04-03 18:56:07.706 [warning] <0.485.0> queue 'q_3' in vhost '/': Leader node rabbit@rabbitmq2 may be down, setting election timeout
+2019-04-03 18:56:07.976 [debug] <0.485.0> queue 'q_3' in vhost '/': pre_vote election called for in term 3
+2019-04-03 18:56:07.977 [debug] <0.485.0> queue 'q_3' in vhost '/': follower -> pre_vote in term: 3
+2019-04-03 18:56:07.990 [debug] <0.485.0> queue 'q_3' in vhost '/': granting pre-vote for {'%2F_q_3',rabbit@rabbitmq1} machine version (their:ours) 0:0 with last indexterm {92289,3} for term 3 previous term 3
+2019-04-03 18:56:08.030 [debug] <0.485.0> queue 'q_3' in vhost '/': pre_vote -> follower in term: 4
+2019-04-03 18:56:08.030 [info] <0.485.0> queue 'q_3' in vhost '/': granting vote for {'%2F_q_3',rabbit@rabbitmq1} with last indexterm {92289,3} for term 4 previous term was 4
+2019-04-03 18:56:08.031 [info] <0.485.0> queue 'q_3' in vhost '/': follower did not have entry at 92289 in 3. Requesting from 92026
+2019-04-03 18:56:08.032 [info] <0.485.0> queue 'q_3' in vhost '/': detected a new leader {'%2F_q_3',rabbit@rabbitmq1} in term 4
+2019-04-03 18:56:08.032 [debug] <0.485.0> queue 'q_3' in vhost '/': follower -> await_condition in term: 4
+2019-04-03 18:56:08.035 [debug] <0.485.0> queue 'q_3' in vhost '/': await_condition -> follower in term: 4
+2019-04-03 18:56:08.106 [debug] <0.485.0> queue 'q_3' in vhost '/': enabling ra cluster changes in 4
+2019-04-03 19:01:18.211 [debug] <0.119.0> Lager installed handler lager_forwarder_backend into error_logger_lager_event
+2019-04-03 19:01:18.211 [debug] <0.122.0> Lager installed handler lager_forwarder_backend into rabbit_log_lager_event
+2019-04-03 19:01:18.211 [debug] <0.131.0> Lager installed handler lager_forwarder_backend into rabbit_log_ldap_lager_event
+2019-04-03 19:01:18.211 [debug] <0.134.0> Lager installed handler lager_forwarder_backend into rabbit_log_mirroring_lager_event
+2019-04-03 19:01:18.211 [debug] <0.116.0> Lager installed handler error_logger_lager_h into error_logger
+2019-04-03 19:01:18.211 [debug] <0.125.0> Lager installed handler lager_forwarder_backend into rabbit_log_channel_lager_event
+2019-04-03 19:01:18.211 [debug] <0.128.0> Lager installed handler lager_forwarder_backend into rabbit_log_connection_lager_event
+2019-04-03 19:01:18.211 [debug] <0.137.0> Lager installed handler lager_forwarder_backend into rabbit_log_queue_lager_event
+2019-04-03 19:01:18.211 [debug] <0.140.0> Lager installed handler lager_forwarder_backend into rabbit_log_ra_lager_event
+2019-04-03 19:01:18.211 [debug] <0.143.0> Lager installed handler lager_forwarder_backend into rabbit_log_federation_lager_event
+2019-04-03 19:01:18.211 [debug] <0.146.0> Lager installed handler {lager_file_backend,
+                            "/var/log/rabbitmq/rabbit@rabbitmq3_upgrade.log"} into rabbit_log_upgrade_lager_event
+2019-04-03 19:01:18.652 [debug] <0.109.0> Lager installed handler lager_backend_throttle into lager_event
+2019-04-03 19:01:18.855 [info] <0.8.0> Log file opened with Lager
+2019-04-03 19:01:19.294 [debug] <0.8.0> Feature flags: query feature flags in loaded applications
+2019-04-03 19:01:23.188 [debug] <0.8.0> Feature flags: application `rabbitmq_management_agent` has 1 feature flags
+2019-04-03 19:01:23.188 [debug] <0.8.0> Feature flags: application `rabbit` has 2 feature flags
+2019-04-03 19:01:23.188 [debug] <0.8.0> Feature flags: (re)initialize registry
+2019-04-03 19:01:23.188 [info] <0.8.0> Feature flags: list of feature flags found:
+2019-04-03 19:01:23.188 [info] <0.8.0> Feature flags:   [x] empty_basic_get_metric
+2019-04-03 19:01:23.188 [info] <0.8.0> Feature flags:   [x] implicit_default_bindings
+2019-04-03 19:01:23.189 [info] <0.8.0> Feature flags:   [x] quorum_queue
+2019-04-03 19:01:23.189 [info] <0.8.0> Feature flags: feature flag states written to disk: yes
+2019-04-03 19:01:23.192 [debug] <0.8.0> Feature flags: registry module ready, loading it...
+2019-04-03 19:01:23.198 [debug] <0.8.0> Feature flags: registry module loaded
+2019-04-03 19:01:23.320 [info] <0.43.0> Application mnesia exited with reason: stopped
+2019-04-03 19:01:23.321 [debug] <0.8.0> Feature flags: querying all feature flags on node `rabbit@rabbitmq1`...
+2019-04-03 19:01:23.321 [debug] <0.8.0> Feature flags: querying all feature flags on node `rabbit@rabbitmq1` done; all features: [empty_basic_get_metric,implicit_default_bindings,quorum_queue]
+2019-04-03 19:01:23.322 [debug] <0.8.0> Feature flags: register feature flags provided by applications unknown locally: []
+2019-04-03 19:01:23.322 [debug] <0.8.0> Feature flags: query feature flags in loaded applications
+2019-04-03 19:01:23.336 [debug] <0.8.0> Feature flags: application `rabbitmq_management_agent` has 1 feature flags
+2019-04-03 19:01:23.336 [debug] <0.8.0> Feature flags: application `rabbit` has 2 feature flags
+2019-04-03 19:01:23.336 [debug] <0.8.0> Feature flags: registry already up-to-date, skipping init
+2019-04-03 19:01:23.353 [debug] <0.8.0> Feature flags: node `rabbit@rabbitmq1` compatibility check, part 1/2
+2019-04-03 19:01:23.353 [debug] <0.8.0> Feature flags: querying `[empty_basic_get_metric,implicit_default_bindings,quorum_queue]` support on node rabbit@rabbitmq1...
+2019-04-03 19:01:23.353 [debug] <0.8.0> Feature flags: node `rabbit@rabbitmq1` supports `[empty_basic_get_metric,implicit_default_bindings,quorum_queue]`
+2019-04-03 19:01:23.354 [info] <0.8.0> Feature flags: all running remote nodes support `[empty_basic_get_metric,implicit_default_bindings,quorum_queue]`
+2019-04-03 19:01:23.354 [debug] <0.8.0> Feature flags: node `rabbit@rabbitmq1` compatibility check, part 2/2
+2019-04-03 19:01:23.354 [debug] <0.8.0> Feature flags: querying enabled feature flags on node `rabbit@rabbitmq1`...
+2019-04-03 19:01:23.354 [debug] <0.8.0> Feature flags: querying enabled feature flags on node `rabbit@rabbitmq1` done; enabled features: [empty_basic_get_metric,implicit_default_bindings,quorum_queue]
+2019-04-03 19:01:23.354 [debug] <0.8.0> Feature flags: node `rabbit@rabbitmq1` is compatible
+2019-04-03 19:01:23.426 [info] <0.312.0> ra: meta data store initialised. 1 record(s) recovered
+2019-04-03 19:01:23.427 [info] <0.317.0> WAL: recovering ["/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3/quorum/rabbit@rabbitmq3/00000002.wal"]
+2019-04-03 19:01:23.933 [debug] <0.317.0> wal: opening new file "00000003.wal"
+2019-04-03 19:01:23.935 [info] <0.399.0> 
+ Starting RabbitMQ 3.8.0-alpha.572 on Erlang 21.3
+ Copyright (C) 2007-2019 Pivotal Software, Inc.
+ Licensed under the MPL.  See https://www.rabbitmq.com/
+2019-04-03 19:01:23.937 [info] <0.399.0> 
+ node           : rabbit@rabbitmq3
+ home dir       : /var/lib/rabbitmq
+ config file(s) : /etc/rabbitmq/rabbitmq.config
+ cookie hash    : gnzLDuqKcGxMNKFokfhOew==
+ log(s)         : /var/log/rabbitmq/rabbit.log
+                : /var/log/rabbitmq/rabbit@rabbitmq3_upgrade.log
+ database dir   : /var/lib/rabbitmq/mnesia/rabbit@rabbitmq3
+2019-04-03 19:01:23.967 [info] <0.399.0> Running boot step pre_boot defined by app rabbit
+2019-04-03 19:01:23.967 [info] <0.399.0> Running boot step rabbit_core_metrics defined by app rabbit
+2019-04-03 19:01:23.967 [debug] <0.399.0> Applying MFA: M = rabbit_sup, F = start_child, A = [rabbit_metrics]
+2019-04-03 19:01:23.968 [info] <0.399.0> Running boot step rabbit_alarm defined by app rabbit
+2019-04-03 19:01:23.968 [debug] <0.399.0> Applying MFA: M = rabbit_alarm, F = start, A = []
+2019-04-03 19:01:23.968 [debug] <0.402.0> Supervisor rabbit_alarm_sup started rabbit_alarm:start_link() at pid <0.403.0>
+2019-04-03 19:01:23.987 [info] <0.405.0> Memory high watermark set to 3180 MiB (3334930432 bytes) of 7951 MiB (8337326080 bytes) total
+2019-04-03 19:01:23.993 [debug] <0.404.0> Supervisor vm_memory_monitor_sup started vm_memory_monitor:start_link(0.4, #Fun<rabbit_alarm.0.52593784>, #Fun<rabbit_alarm.1.52593784>) at pid <0.405.0>
+2019-04-03 19:01:23.998 [info] <0.407.0> Enabling free disk space monitoring
+2019-04-03 19:01:23.999 [info] <0.407.0> Disk free limit set to 50MB
+2019-04-03 19:01:24.011 [debug] <0.406.0> Supervisor rabbit_disk_monitor_sup started rabbit_disk_monitor:start_link(50000000) at pid <0.407.0>
+2019-04-03 19:01:24.011 [info] <0.399.0> Running boot step code_server_cache defined by app rabbit
+2019-04-03 19:01:24.011 [debug] <0.399.0> Applying MFA: M = rabbit_sup, F = start_child, A = [code_server_cache]
+2019-04-03 19:01:24.012 [info] <0.399.0> Running boot step file_handle_cache defined by app rabbit
+2019-04-03 19:01:24.012 [debug] <0.399.0> Applying MFA: M = rabbit, F = start_fhc, A = []
+2019-04-03 19:01:24.013 [info] <0.410.0> Limiting to approx 1048476 file handles (943626 sockets)
+2019-04-03 19:01:24.013 [info] <0.411.0> FHC read buffering:  OFF
+2019-04-03 19:01:24.014 [debug] <0.409.0> Supervisor file_handle_cache_sup started file_handle_cache:start_link(fun rabbit_alarm:set_alarm/1, fun rabbit_alarm:clear_alarm/1) at pid <0.410.0>
+2019-04-03 19:01:24.014 [info] <0.411.0> FHC write buffering: ON
+2019-04-03 19:01:24.015 [info] <0.399.0> Running boot step worker_pool defined by app rabbit
+2019-04-03 19:01:24.015 [debug] <0.399.0> Applying MFA: M = rabbit_sup, F = start_supervisor_child, A = [worker_pool_sup]
+2019-04-03 19:01:24.015 [info] <0.399.0> Running boot step database defined by app rabbit
+2019-04-03 19:01:24.015 [debug] <0.399.0> Applying MFA: M = rabbit_mnesia, F = init, A = []
+2019-04-03 19:01:24.019 [info] <0.399.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-03 19:01:24.025 [debug] <0.399.0> Feature flags: double-checking feature flag states...
+2019-04-03 19:01:24.025 [debug] <0.399.0> Feature flag `implicit_default_bindings`: run migration function implicit_default_bindings_migration with arg: is_enabled
+2019-04-03 19:01:24.025 [debug] <0.399.0> Feature flag `quorum_queue`: run migration function quorum_queue_migration with arg: is_enabled
+2019-04-03 19:01:24.025 [info] <0.399.0> Waiting for Mnesia tables for 30000 ms, 0 retries left
+2019-04-03 19:01:24.025 [debug] <0.399.0> Feature flags: SYNCING FEATURE FLAGS with node `rabbit@rabbitmq1`...
+2019-04-03 19:01:24.025 [debug] <0.399.0> Feature flags: querying enabled feature flags on node `rabbit@rabbitmq1`...
+2019-04-03 19:01:24.037 [debug] <0.399.0> Feature flags: querying enabled feature flags on node `rabbit@rabbitmq1` done; enabled features: [empty_basic_get_metric,implicit_default_bindings,quorum_queue]
+2019-04-03 19:01:24.038 [debug] <0.399.0> Feature flags: enabling locally feature flags already enabled on node `rabbit@rabbitmq1`...
+2019-04-03 19:01:24.038 [debug] <0.399.0> Feature flags: enabling on node `rabbit@rabbitmq1` feature flags already enabled locally...
+2019-04-03 19:01:24.038 [info] <0.399.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-03 19:01:24.087 [info] <0.399.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-03 19:01:24.087 [info] <0.399.0> Peer discovery backend rabbit_peer_discovery_classic_config does not support registration, skipping registration.
+2019-04-03 19:01:24.087 [info] <0.399.0> Running boot step database_sync defined by app rabbit
+2019-04-03 19:01:24.087 [debug] <0.399.0> Applying MFA: M = rabbit_sup, F = start_child, A = [mnesia_sync]
+2019-04-03 19:01:24.087 [info] <0.399.0> Running boot step feature_flags defined by app rabbit
+2019-04-03 19:01:24.087 [debug] <0.399.0> Applying MFA: M = rabbit_feature_flags, F = init, A = []
+2019-04-03 19:01:24.087 [info] <0.399.0> Running boot step codec_correctness_check defined by app rabbit
+2019-04-03 19:01:24.088 [debug] <0.399.0> Applying MFA: M = rabbit_binary_generator, F = check_empty_frame_size, A = []
+2019-04-03 19:01:24.088 [info] <0.399.0> Running boot step external_infrastructure defined by app rabbit
+2019-04-03 19:01:24.088 [info] <0.399.0> Running boot step rabbit_registry defined by app rabbit
+2019-04-03 19:01:24.088 [debug] <0.399.0> Applying MFA: M = rabbit_sup, F = start_child, A = [rabbit_registry]
+2019-04-03 19:01:24.088 [info] <0.399.0> Running boot step rabbit_auth_mechanism_cr_demo defined by app rabbit
+2019-04-03 19:01:24.088 [debug] <0.399.0> Applying MFA: M = rabbit_registry, F = register, A = [auth_mechanism,<<"RABBIT-CR-DEMO">>,rabbit_auth_mechanism_cr_demo]
+2019-04-03 19:01:24.089 [info] <0.399.0> Running boot step rabbit_queue_location_random defined by app rabbit
+2019-04-03 19:01:24.090 [debug] <0.399.0> Applying MFA: M = rabbit_registry, F = register, A = [queue_master_locator,<<"random">>,rabbit_queue_location_random]
+2019-04-03 19:01:24.090 [info] <0.399.0> Running boot step rabbit_event defined by app rabbit
+2019-04-03 19:01:24.090 [debug] <0.399.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_event]
+2019-04-03 19:01:24.090 [debug] <0.429.0> Supervisor rabbit_event_sup started rabbit_event:start_link() at pid <0.430.0>
+2019-04-03 19:01:24.090 [info] <0.399.0> Running boot step rabbit_auth_mechanism_amqplain defined by app rabbit
+2019-04-03 19:01:24.091 [debug] <0.399.0> Applying MFA: M = rabbit_registry, F = register, A = [auth_mechanism,<<"AMQPLAIN">>,rabbit_auth_mechanism_amqplain]
+2019-04-03 19:01:24.091 [info] <0.399.0> Running boot step rabbit_auth_mechanism_plain defined by app rabbit
+2019-04-03 19:01:24.091 [debug] <0.399.0> Applying MFA: M = rabbit_registry, F = register, A = [auth_mechanism,<<"PLAIN">>,rabbit_auth_mechanism_plain]
+2019-04-03 19:01:24.091 [info] <0.399.0> Running boot step rabbit_exchange_type_direct defined by app rabbit
+2019-04-03 19:01:24.091 [debug] <0.399.0> Applying MFA: M = rabbit_registry, F = register, A = [exchange,<<"direct">>,rabbit_exchange_type_direct]
+2019-04-03 19:01:24.091 [info] <0.399.0> Running boot step rabbit_exchange_type_fanout defined by app rabbit
+2019-04-03 19:01:24.091 [debug] <0.399.0> Applying MFA: M = rabbit_registry, F = register, A = [exchange,<<"fanout">>,rabbit_exchange_type_fanout]
+2019-04-03 19:01:24.091 [info] <0.399.0> Running boot step rabbit_exchange_type_headers defined by app rabbit
+2019-04-03 19:01:24.091 [debug] <0.399.0> Applying MFA: M = rabbit_registry, F = register, A = [exchange,<<"headers">>,rabbit_exchange_type_headers]
+2019-04-03 19:01:24.092 [info] <0.399.0> Running boot step rabbit_exchange_type_topic defined by app rabbit
+2019-04-03 19:01:24.092 [debug] <0.399.0> Applying MFA: M = rabbit_registry, F = register, A = [exchange,<<"topic">>,rabbit_exchange_type_topic]
+2019-04-03 19:01:24.092 [info] <0.399.0> Running boot step rabbit_mirror_queue_mode_all defined by app rabbit
+2019-04-03 19:01:24.092 [debug] <0.399.0> Applying MFA: M = rabbit_registry, F = register, A = [ha_mode,<<"all">>,rabbit_mirror_queue_mode_all]
+2019-04-03 19:01:24.092 [info] <0.399.0> Running boot step rabbit_mirror_queue_mode_exactly defined by app rabbit
+2019-04-03 19:01:24.093 [debug] <0.399.0> Applying MFA: M = rabbit_registry, F = register, A = [ha_mode,<<"exactly">>,rabbit_mirror_queue_mode_exactly]
+2019-04-03 19:01:24.093 [info] <0.399.0> Running boot step rabbit_mirror_queue_mode_nodes defined by app rabbit
+2019-04-03 19:01:24.093 [debug] <0.399.0> Applying MFA: M = rabbit_registry, F = register, A = [ha_mode,<<"nodes">>,rabbit_mirror_queue_mode_nodes]
+2019-04-03 19:01:24.093 [info] <0.399.0> Running boot step rabbit_priority_queue defined by app rabbit
+2019-04-03 19:01:24.093 [debug] <0.399.0> Applying MFA: M = rabbit_priority_queue, F = enable, A = []
+2019-04-03 19:01:24.093 [info] <0.399.0> Priority queues enabled, real BQ is rabbit_variable_queue
+2019-04-03 19:01:24.093 [info] <0.399.0> Running boot step rabbit_queue_location_client_local defined by app rabbit
+2019-04-03 19:01:24.093 [debug] <0.399.0> Applying MFA: M = rabbit_registry, F = register, A = [queue_master_locator,<<"client-local">>,rabbit_queue_location_client_local]
+2019-04-03 19:01:24.093 [info] <0.399.0> Running boot step rabbit_queue_location_min_masters defined by app rabbit
+2019-04-03 19:01:24.093 [debug] <0.399.0> Applying MFA: M = rabbit_registry, F = register, A = [queue_master_locator,<<"min-masters">>,rabbit_queue_location_min_masters]
+2019-04-03 19:01:24.094 [info] <0.399.0> Running boot step kernel_ready defined by app rabbit
+2019-04-03 19:01:24.094 [info] <0.399.0> Running boot step rabbit_sysmon_minder defined by app rabbit
+2019-04-03 19:01:24.094 [debug] <0.399.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_sysmon_minder]
+2019-04-03 19:01:24.094 [debug] <0.431.0> Supervisor rabbit_sysmon_minder_sup started rabbit_sysmon_minder:start_link() at pid <0.432.0>
+2019-04-03 19:01:24.094 [info] <0.399.0> Running boot step rabbit_epmd_monitor defined by app rabbit
+2019-04-03 19:01:24.095 [debug] <0.399.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_epmd_monitor]
+2019-04-03 19:01:24.097 [debug] <0.433.0> Supervisor rabbit_epmd_monitor_sup started rabbit_epmd_monitor:start_link() at pid <0.434.0>
+2019-04-03 19:01:24.097 [info] <0.399.0> Running boot step guid_generator defined by app rabbit
+2019-04-03 19:01:24.097 [debug] <0.399.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_guid]
+2019-04-03 19:01:24.106 [debug] <0.435.0> Supervisor rabbit_guid_sup started rabbit_guid:start_link() at pid <0.436.0>
+2019-04-03 19:01:24.106 [info] <0.399.0> Running boot step rabbit_node_monitor defined by app rabbit
+2019-04-03 19:01:24.106 [debug] <0.399.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_node_monitor]
+2019-04-03 19:01:24.110 [info] <0.438.0> Starting rabbit_node_monitor
+2019-04-03 19:01:24.110 [debug] <0.437.0> Supervisor rabbit_node_monitor_sup started rabbit_node_monitor:start_link() at pid <0.438.0>
+2019-04-03 19:01:24.110 [info] <0.399.0> Running boot step delegate_sup defined by app rabbit
+2019-04-03 19:01:24.110 [debug] <0.399.0> Applying MFA: M = rabbit, F = boot_delegate, A = []
+2019-04-03 19:01:24.111 [info] <0.399.0> Running boot step rabbit_memory_monitor defined by app rabbit
+2019-04-03 19:01:24.112 [debug] <0.399.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_memory_monitor]
+2019-04-03 19:01:24.112 [debug] <0.456.0> Supervisor rabbit_memory_monitor_sup started rabbit_memory_monitor:start_link() at pid <0.457.0>
+2019-04-03 19:01:24.112 [info] <0.399.0> Running boot step core_initialized defined by app rabbit
+2019-04-03 19:01:24.112 [info] <0.399.0> Running boot step upgrade_queues defined by app rabbit
+2019-04-03 19:01:24.112 [debug] <0.399.0> Applying MFA: M = rabbit_upgrade, F = maybe_migrate_queues_to_per_vhost_storage, A = []
+2019-04-03 19:01:24.151 [info] <0.399.0> Running boot step rabbit_connection_tracking_handler defined by app rabbit
+2019-04-03 19:01:24.152 [debug] <0.399.0> Applying MFA: M = gen_event, F = add_handler, A = [rabbit_event,rabbit_connection_tracking_handler,[]]
+2019-04-03 19:01:24.152 [info] <0.399.0> Running boot step rabbit_exchange_parameters defined by app rabbit
+2019-04-03 19:01:24.152 [debug] <0.399.0> Applying MFA: M = rabbit_exchange_parameters, F = register, A = []
+2019-04-03 19:01:24.152 [info] <0.399.0> Running boot step rabbit_mirror_queue_misc defined by app rabbit
+2019-04-03 19:01:24.152 [debug] <0.399.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-mode">>,rabbit_mirror_queue_misc]
+2019-04-03 19:01:24.152 [debug] <0.399.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-params">>,rabbit_mirror_queue_misc]
+2019-04-03 19:01:24.152 [debug] <0.399.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-sync-mode">>,rabbit_mirror_queue_misc]
+2019-04-03 19:01:24.153 [debug] <0.399.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-sync-batch-size">>,rabbit_mirror_queue_misc]
+2019-04-03 19:01:24.153 [debug] <0.399.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-promote-on-shutdown">>,rabbit_mirror_queue_misc]
+2019-04-03 19:01:24.153 [debug] <0.399.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-promote-on-failure">>,rabbit_mirror_queue_misc]
+2019-04-03 19:01:24.153 [info] <0.399.0> Running boot step rabbit_policies defined by app rabbit
+2019-04-03 19:01:24.153 [debug] <0.399.0> Applying MFA: M = rabbit_policies, F = register, A = []
+2019-04-03 19:01:24.154 [info] <0.399.0> Running boot step rabbit_policy defined by app rabbit
+2019-04-03 19:01:24.155 [debug] <0.399.0> Applying MFA: M = rabbit_policy, F = register, A = []
+2019-04-03 19:01:24.155 [info] <0.399.0> Running boot step rabbit_queue_location_validator defined by app rabbit
+2019-04-03 19:01:24.155 [debug] <0.399.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"queue-master-locator">>,rabbit_queue_location_validator]
+2019-04-03 19:01:24.155 [info] <0.399.0> Running boot step rabbit_quorum_memory_manager defined by app rabbit
+2019-04-03 19:01:24.155 [debug] <0.399.0> Applying MFA: M = rabbit_quorum_memory_manager, F = register, A = []
+2019-04-03 19:01:24.155 [info] <0.399.0> Running boot step rabbit_vhost_limit defined by app rabbit
+2019-04-03 19:01:24.155 [debug] <0.399.0> Applying MFA: M = rabbit_vhost_limit, F = register, A = []
+2019-04-03 19:01:24.155 [info] <0.399.0> Running boot step rabbit_mgmt_reset_handler defined by app rabbitmq_management
+2019-04-03 19:01:24.155 [debug] <0.399.0> Applying MFA: M = gen_event, F = add_handler, A = [rabbit_event,rabbit_mgmt_reset_handler,[]]
+2019-04-03 19:01:24.155 [info] <0.399.0> Running boot step rabbit_mgmt_db_handler defined by app rabbitmq_management_agent
+2019-04-03 19:01:24.155 [debug] <0.399.0> Applying MFA: M = rabbit_mgmt_db_handler, F = add_handler, A = []
+2019-04-03 19:01:24.155 [info] <0.399.0> Management plugin: using rates mode 'basic'
+2019-04-03 19:01:24.155 [info] <0.399.0> Running boot step recovery defined by app rabbit
+2019-04-03 19:01:24.155 [debug] <0.399.0> Applying MFA: M = rabbit, F = recover, A = []
+2019-04-03 19:01:24.157 [debug] <0.465.0> Recovering data for VHost <<"/">>
+2019-04-03 19:01:24.157 [info] <0.465.0> Making sure data directory '/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L' for vhost '/' exists
+2019-04-03 19:01:24.162 [debug] <0.464.0> Supervisor {<0.464.0>,rabbit_vhost_sup} started rabbit_recovery_terms:start_link(<<"/">>) at pid <0.466.0>
+2019-04-03 19:01:24.163 [debug] <0.315.0> ra_log_segment_writer: error sending ra_log_event to: 2F_Q_3UUPF8W7AZMJL. Error: No Pid
+2019-04-03 19:01:24.173 [info] <0.465.0> Starting message stores for vhost '/'
+2019-04-03 19:01:24.173 [info] <0.469.0> Message store "628WB79CIFDYO9LJI6DKMI09L/msg_store_transient": using rabbit_msg_store_ets_index to provide index
+2019-04-03 19:01:24.178 [info] <0.465.0> Started message store of type transient for vhost '/'
+2019-04-03 19:01:24.179 [info] <0.472.0> Message store "628WB79CIFDYO9LJI6DKMI09L/msg_store_persistent": using rabbit_msg_store_ets_index to provide index
+2019-04-03 19:01:24.179 [debug] <0.464.0> Supervisor {<0.464.0>,rabbit_vhost_sup} started rabbit_msg_store:start_link(msg_store_transient, "/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L", undefined, {#Fun<rabbit_variable_queue.2.24443698>,ok}) at pid <0.469.0>
+2019-04-03 19:01:24.181 [warning] <0.472.0> Message store "628WB79CIFDYO9LJI6DKMI09L/msg_store_persistent": rebuilding indices from scratch
+2019-04-03 19:01:24.185 [debug] <0.464.0> Supervisor {<0.464.0>,rabbit_vhost_sup} started rabbit_msg_store:start_link(msg_store_persistent, "/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L", [], {#Fun<rabbit_queue_index.2.39046318>,{start,[]}}) at pid <0.472.0>
+2019-04-03 19:01:24.185 [info] <0.465.0> Started message store of type persistent for vhost '/'
+2019-04-03 19:01:24.185 [debug] <0.315.0> ra_log_segment_writer: cleaning closed table for '2F_Q_3UUPF8W7AZMJL' range: 114838-117637
+2019-04-03 19:01:24.185 [debug] <0.315.0> segment_writer: deleting wal file: 00000002.wal
+2019-04-03 19:01:24.191 [debug] <0.464.0> Supervisor {<0.464.0>,rabbit_vhost_sup} started rabbit_amqqueue_sup_sup:start_link() at pid <0.478.0>
+2019-04-03 19:01:24.202 [debug] <0.482.0> queue 'q_3' in vhost '/': ra_log:init recovered last_index_term {117637,4} first index 114838
+2019-04-03 19:01:24.206 [debug] <0.482.0> queue 'q_3' in vhost '/': recover -> recover in term: 4
+2019-04-03 19:01:24.206 [debug] <0.482.0> queue 'q_3' in vhost '/': recovering state machine version 0:0 from index 114837 to 117637
+2019-04-03 19:01:24.217 [info] <0.399.0> Running boot step load_definitions defined by app rabbitmq_management
+2019-04-03 19:01:24.217 [debug] <0.399.0> Applying MFA: M = rabbit_mgmt_load_definitions, F = maybe_load_definitions, A = []
+2019-04-03 19:01:24.217 [info] <0.399.0> Running boot step empty_db_check defined by app rabbit
+2019-04-03 19:01:24.218 [debug] <0.399.0> Applying MFA: M = rabbit, F = maybe_insert_default_data, A = []
+2019-04-03 19:01:24.218 [info] <0.399.0> Running boot step rabbit_looking_glass defined by app rabbit
+2019-04-03 19:01:24.218 [debug] <0.399.0> Applying MFA: M = rabbit_looking_glass, F = boot, A = []
+2019-04-03 19:01:24.218 [info] <0.399.0> Running boot step rabbit_core_metrics_gc defined by app rabbit
+2019-04-03 19:01:24.218 [debug] <0.399.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_core_metrics_gc]
+2019-04-03 19:01:24.218 [info] <0.399.0> Running boot step background_gc defined by app rabbit
+2019-04-03 19:01:24.218 [debug] <0.399.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [background_gc]
+2019-04-03 19:01:24.219 [info] <0.399.0> Running boot step connection_tracking defined by app rabbit
+2019-04-03 19:01:24.219 [debug] <0.399.0> Applying MFA: M = rabbit_connection_tracking, F = boot, A = []
+2019-04-03 19:01:24.218 [debug] <0.494.0> Supervisor rabbit_core_metrics_gc_sup started rabbit_core_metrics_gc:start_link() at pid <0.495.0>
+2019-04-03 19:01:24.219 [debug] <0.496.0> Supervisor background_gc_sup started background_gc:start_link() at pid <0.497.0>
+2019-04-03 19:01:24.220 [info] <0.399.0> Setting up a table for connection tracking on this node: tracked_connection_on_node_rabbit@rabbitmq3
+2019-04-03 19:01:24.221 [info] <0.399.0> Setting up a table for per-vhost connection counting on this node: tracked_connection_per_vhost_on_node_rabbit@rabbitmq3
+2019-04-03 19:01:24.222 [info] <0.399.0> Running boot step routing_ready defined by app rabbit
+2019-04-03 19:01:24.222 [info] <0.399.0> Running boot step pre_flight defined by app rabbit
+2019-04-03 19:01:24.222 [info] <0.399.0> Running boot step notify_cluster defined by app rabbit
+2019-04-03 19:01:24.222 [debug] <0.399.0> Applying MFA: M = rabbit_node_monitor, F = notify_node_up, A = []
+2019-04-03 19:01:24.222 [info] <0.399.0> Running boot step networking defined by app rabbit
+2019-04-03 19:01:24.222 [debug] <0.399.0> Applying MFA: M = rabbit_networking, F = boot, A = []
+2019-04-03 19:01:24.226 [info] <0.438.0> rabbit on node rabbit@rabbitmq2 up
+2019-04-03 19:01:24.238 [info] <0.514.0> started TCP listener on [::]:5672
+2019-04-03 19:01:24.240 [info] <0.399.0> Running boot step direct_client defined by app rabbit
+2019-04-03 19:01:24.240 [debug] <0.399.0> Applying MFA: M = rabbit_direct, F = boot, A = []
+2019-04-03 19:01:24.252 [info] <0.438.0> rabbit on node rabbit@rabbitmq1 up
+2019-04-03 19:01:24.279 [debug] <0.525.0> Supervisor rabbit_mgmt_agent_sup_sup started rabbit_mgmt_agent_sup:start_link() at pid <0.526.0>
+2019-04-03 19:01:24.324 [debug] <0.520.0> Starting HTTP[S] listener with transport ranch_tcp, options [{port,15672}] and protocol options #{}, stream handlers [rabbit_cowboy_stream_h,cowboy_compress_h,cowboy_stream_h]
+2019-04-03 19:01:24.327 [info] <0.566.0> Management plugin: HTTP (non-TLS) listener started on port 15672
+2019-04-03 19:01:24.328 [info] <0.672.0> Statistics database started.
+2019-04-03 19:01:24.328 [debug] <0.670.0> Supervisor rabbit_mgmt_sup_sup started rabbit_mgmt_sup:start_link() at pid <0.671.0>
+2019-04-03 19:01:24.329 [notice] <0.106.0> Changed loghwm of /var/log/rabbitmq/rabbit.log to 5000
+2019-04-03 19:01:24.432 [debug] <0.482.0> queue 'q_3' in vhost '/': recover -> recovered in term: 4
+2019-04-03 19:01:24.432 [debug] <0.482.0> queue 'q_3' in vhost '/': is not new, setting election timeout.
+2019-04-03 19:01:24.432 [debug] <0.482.0> queue 'q_3' in vhost '/': recovered -> follower in term: 4
+2019-04-03 19:01:24.540 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 4
+2019-04-03 19:01:24.551 [debug] <0.482.0> queue 'q_3' in vhost '/': follower -> pre_vote in term: 4
+2019-04-03 19:01:24.554 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote -> follower in term: 4
+2019-04-03 19:01:24.554 [debug] <0.482.0> queue 'q_3' in vhost '/': begin_accept snapshot at index 118044 in term 5
+2019-04-03 19:01:24.555 [debug] <0.482.0> queue 'q_3' in vhost '/': follower -> receive_snapshot in term: 4
+2019-04-03 19:01:24.555 [debug] <0.482.0> queue 'q_3' in vhost '/': receiving snapshot chunk: 1 / last
+2019-04-03 19:01:24.560 [debug] <0.482.0> queue 'q_3' in vhost '/': 1 obsolete segments at 118044 - remaining: 0
+2019-04-03 19:01:24.561 [debug] <0.482.0> queue 'q_3' in vhost '/': receive_snapshot -> follower in term: 5
+2019-04-03 19:01:24.598 [info] <0.8.0> Server startup complete; 3 plugins started.
+ * rabbitmq_management
+ * rabbitmq_management_agent
+ * rabbitmq_web_dispatch
+2019-04-03 19:01:24.713 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 5
+2019-04-03 19:01:24.713 [debug] <0.482.0> queue 'q_3' in vhost '/': follower -> pre_vote in term: 5
+2019-04-03 19:01:24.714 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote -> follower in term: 5
+2019-04-03 19:01:24.714 [info] <0.482.0> queue 'q_3' in vhost '/': detected a new leader {'%2F_q_3',rabbit@rabbitmq1} in term 5
+2019-04-03 19:01:24.716 [warning] <0.482.0> queue 'q_3' in vhost '/': follower received unhandled msg: {node_event,rabbit@rabbitmq1,up}
+2019-04-03 19:01:24.727 [debug] <0.482.0> queue 'q_3' in vhost '/': granting pre-vote for {'%2F_q_3',rabbit@rabbitmq2} machine version (their:ours) 0:0 with last indexterm {118044,5} for term 5 previous term 5
+2019-04-03 19:01:56.673 [debug] <0.732.0> Supervisor {<0.732.0>,rabbit_connection_sup} started rabbit_connection_helper_sup:start_link() at pid <0.733.0>
+2019-04-03 19:01:56.674 [info] <0.734.0> accepting AMQP connection <0.734.0> (172.20.0.1:43818 -> 172.20.0.4:5672)
+2019-04-03 19:01:56.674 [debug] <0.732.0> Supervisor {<0.732.0>,rabbit_connection_sup} started rabbit_reader:start_link(<0.733.0>, {acceptor,{0,0,0,0,0,0,0,0},5672}) at pid <0.734.0>
+2019-04-03 19:01:56.677 [debug] <0.734.0> User 'jack' authenticated successfully by backend rabbit_auth_backend_internal
+2019-04-03 19:01:56.679 [debug] <0.733.0> Supervisor {<0.733.0>,rabbit_connection_helper_sup} started rabbit_queue_collector:start_link(<<"172.20.0.1:43818 -> 172.20.0.4:5672">>) at pid <0.736.0>
+2019-04-03 19:01:56.681 [debug] <0.733.0> Supervisor {<0.733.0>,rabbit_connection_helper_sup} started rabbit_heartbeat:start_heartbeat_sender(#Port<0.34>, 60, #Fun<rabbit_reader.34.108952957>, {heartbeat_sender,<<"172.20.0.1:43818 -> 172.20.0.4:5672">>}) at pid <0.737.0>
+2019-04-03 19:01:56.681 [debug] <0.733.0> Supervisor {<0.733.0>,rabbit_connection_helper_sup} started rabbit_heartbeat:start_heartbeat_receiver(#Port<0.34>, 60, #Fun<rabbit_reader.35.108952957>, {heartbeat_receiver,<<"172.20.0.1:43818 -> 172.20.0.4:5672">>}) at pid <0.738.0>
+2019-04-03 19:01:56.683 [debug] <0.733.0> Supervisor {<0.733.0>,rabbit_connection_helper_sup} started rabbit_channel_sup_sup:start_link() at pid <0.739.0>
+2019-04-03 19:01:56.683 [info] <0.734.0> connection <0.734.0> (172.20.0.1:43818 -> 172.20.0.4:5672): user 'jack' authenticated and granted access to vhost '/'
+2019-04-03 19:01:56.684 [debug] <0.740.0> Supervisor {<0.740.0>,rabbit_channel_sup} started rabbit_writer:start_link(#Port<0.34>, 1, 131072, rabbit_framing_amqp_0_9_1, <0.734.0>, {<<"172.20.0.1:43818 -> 172.20.0.4:5672">>,1}, true) at pid <0.742.0>
+2019-04-03 19:01:56.684 [debug] <0.740.0> Supervisor {<0.740.0>,rabbit_channel_sup} started rabbit_limiter:start_link({<<"172.20.0.1:43818 -> 172.20.0.4:5672">>,1}) at pid <0.743.0>
+2019-04-03 19:01:56.685 [debug] <0.740.0> Supervisor {<0.740.0>,rabbit_channel_sup} started rabbit_channel:start_link(1, <0.734.0>, <0.742.0>, <0.734.0>, <<"172.20.0.1:43818 -> 172.20.0.4:5672">>, rabbit_framing_amqp_0_9_1, {user,<<"jack">>,[administrator],[{rabbit_auth_backend_internal,none}]}, <<"/">>, [{<<"authentication_failure_close">>,bool,true},{<<"basic.nack">>,bool,true},{<<"connection.block...">>,...},...], <0.736.0>, <0.743.0>) at pid <0.744.0>
+2019-04-03 19:02:24.062 [info] <0.438.0> rabbit on node rabbit@rabbitmq1 down
+2019-04-03 19:02:24.062 [info] <0.482.0> queue 'q_3' in vhost '/': Leader monitor down with noconnection, setting election timeout
+2019-04-03 19:02:24.063 [warning] <0.482.0> queue 'q_3' in vhost '/': follower received unhandled msg: {nodedown,rabbit@rabbitmq1}
+2019-04-03 19:02:24.082 [info] <0.438.0> Node rabbit@rabbitmq1 is down, deleting its listeners
+2019-04-03 19:02:24.084 [info] <0.438.0> node rabbit@rabbitmq1 down: connection_closed
+2019-04-03 19:02:24.302 [debug] <0.482.0> queue 'q_3' in vhost '/': granting pre-vote for {'%2F_q_3',rabbit@rabbitmq2} machine version (their:ours) 0:0 with last indexterm {128844,5} for term 5 previous term 5
+2019-04-03 19:02:24.397 [info] <0.482.0> queue 'q_3' in vhost '/': granting vote for {'%2F_q_3',rabbit@rabbitmq2} with last indexterm {128844,5} for term 6 previous term was 5
+2019-04-03 19:02:24.400 [info] <0.482.0> queue 'q_3' in vhost '/': detected a new leader {'%2F_q_3',rabbit@rabbitmq2} in term 6
+2019-04-03 19:02:24.400 [warning] <0.482.0> queue 'q_3' in vhost '/': follower received unhandled msg: {node_event,rabbit@rabbitmq2,up}
+2019-04-03 19:02:24.490 [debug] <0.482.0> queue 'q_3' in vhost '/': enabling ra cluster changes in 6
+2019-04-03 19:02:29.069 [debug] <0.812.0> Supervisor {<0.812.0>,rabbit_connection_sup} started rabbit_connection_helper_sup:start_link() at pid <0.813.0>
+2019-04-03 19:02:29.069 [debug] <0.812.0> Supervisor {<0.812.0>,rabbit_connection_sup} started rabbit_reader:start_link(<0.813.0>, {acceptor,{0,0,0,0,0,0,0,0},5672}) at pid <0.814.0>
+2019-04-03 19:02:29.069 [info] <0.814.0> accepting AMQP connection <0.814.0> (172.20.0.1:43822 -> 172.20.0.4:5672)
+2019-04-03 19:02:29.071 [debug] <0.814.0> User 'jack' authenticated successfully by backend rabbit_auth_backend_internal
+2019-04-03 19:02:29.072 [debug] <0.813.0> Supervisor {<0.813.0>,rabbit_connection_helper_sup} started rabbit_queue_collector:start_link(<<"172.20.0.1:43822 -> 172.20.0.4:5672">>) at pid <0.815.0>
+2019-04-03 19:02:29.072 [debug] <0.813.0> Supervisor {<0.813.0>,rabbit_connection_helper_sup} started rabbit_heartbeat:start_heartbeat_sender(#Port<0.47>, 60, #Fun<rabbit_reader.34.108952957>, {heartbeat_sender,<<"172.20.0.1:43822 -> 172.20.0.4:5672">>}) at pid <0.816.0>
+2019-04-03 19:02:29.072 [debug] <0.813.0> Supervisor {<0.813.0>,rabbit_connection_helper_sup} started rabbit_heartbeat:start_heartbeat_receiver(#Port<0.47>, 60, #Fun<rabbit_reader.35.108952957>, {heartbeat_receiver,<<"172.20.0.1:43822 -> 172.20.0.4:5672">>}) at pid <0.817.0>
+2019-04-03 19:02:29.073 [debug] <0.813.0> Supervisor {<0.813.0>,rabbit_connection_helper_sup} started rabbit_channel_sup_sup:start_link() at pid <0.818.0>
+2019-04-03 19:02:29.073 [info] <0.814.0> connection <0.814.0> (172.20.0.1:43822 -> 172.20.0.4:5672): user 'jack' authenticated and granted access to vhost '/'
+2019-04-03 19:02:29.073 [debug] <0.819.0> Supervisor {<0.819.0>,rabbit_channel_sup} started rabbit_writer:start_link(#Port<0.47>, 1, 131072, rabbit_framing_amqp_0_9_1, <0.814.0>, {<<"172.20.0.1:43822 -> 172.20.0.4:5672">>,1}, true) at pid <0.821.0>
+2019-04-03 19:02:29.074 [debug] <0.819.0> Supervisor {<0.819.0>,rabbit_channel_sup} started rabbit_limiter:start_link({<<"172.20.0.1:43822 -> 172.20.0.4:5672">>,1}) at pid <0.822.0>
+2019-04-03 19:02:29.074 [debug] <0.819.0> Supervisor {<0.819.0>,rabbit_channel_sup} started rabbit_channel:start_link(1, <0.814.0>, <0.821.0>, <0.814.0>, <<"172.20.0.1:43822 -> 172.20.0.4:5672">>, rabbit_framing_amqp_0_9_1, {user,<<"jack">>,[administrator],[{rabbit_auth_backend_internal,none}]}, <<"/">>, [{<<"authentication_failure_close">>,bool,true},{<<"basic.nack">>,bool,true},{<<"connection.block...">>,...},...], <0.815.0>, <0.822.0>) at pid <0.823.0>
+2019-04-03 19:02:41.656 [warning] <0.814.0> closing AMQP connection <0.814.0> (172.20.0.1:43822 -> 172.20.0.4:5672, vhost: '/', user: 'jack'):
+client unexpectedly closed TCP connection
+2019-04-03 19:02:41.659 [warning] <0.734.0> closing AMQP connection <0.734.0> (172.20.0.1:43818 -> 172.20.0.4:5672, vhost: '/', user: 'jack'):
+client unexpectedly closed TCP connection
+2019-04-03 19:05:20.718 [debug] <0.1225.0> queue 'q100_0' in vhost '/': ra_log:init recovered last_index_term {0,0} first index 0
+2019-04-03 19:05:20.728 [debug] <0.1225.0> queue 'q100_0' in vhost '/': recover -> recover in term: 0
+2019-04-03 19:05:20.729 [debug] <0.1225.0> queue 'q100_0' in vhost '/': recovering state machine version 0:0 from index 0 to 0
+2019-04-03 19:05:20.729 [debug] <0.1225.0> queue 'q100_0' in vhost '/': recover -> recovered in term: 0
+2019-04-03 19:05:20.729 [debug] <0.1225.0> queue 'q100_0' in vhost '/': recovered -> follower in term: 0
+2019-04-03 19:05:20.747 [debug] <0.1225.0> queue 'q100_0' in vhost '/': granting pre-vote for {'%2F_q100_0',rabbit@rabbitmq2} machine version (their:ours) 0:0 with last indexterm {0,0} for term 0 previous term 0
+2019-04-03 19:05:20.785 [info] <0.1225.0> queue 'q100_0' in vhost '/': granting vote for {'%2F_q100_0',rabbit@rabbitmq2} with last indexterm {0,0} for term 1 previous term was 0
+2019-04-03 19:05:20.786 [info] <0.1225.0> queue 'q100_0' in vhost '/': detected a new leader {'%2F_q100_0',rabbit@rabbitmq2} in term 1
+2019-04-03 19:05:20.786 [warning] <0.1225.0> queue 'q100_0' in vhost '/': follower received unhandled msg: {node_event,rabbit@rabbitmq2,up}
+2019-04-03 19:05:20.795 [debug] <0.1225.0> queue 'q100_0' in vhost '/': enabling ra cluster changes in 1
+2019-04-03 19:05:31.151 [debug] <0.1255.0> Supervisor {<0.1255.0>,rabbit_connection_sup} started rabbit_connection_helper_sup:start_link() at pid <0.1256.0>
+2019-04-03 19:05:31.151 [debug] <0.1255.0> Supervisor {<0.1255.0>,rabbit_connection_sup} started rabbit_reader:start_link(<0.1256.0>, {acceptor,{0,0,0,0,0,0,0,0},5672}) at pid <0.1257.0>
+2019-04-03 19:05:31.153 [info] <0.1257.0> accepting AMQP connection <0.1257.0> (172.20.0.1:43852 -> 172.20.0.4:5672)
+2019-04-03 19:05:31.155 [debug] <0.1257.0> User 'jack' authenticated successfully by backend rabbit_auth_backend_internal
+2019-04-03 19:05:31.155 [debug] <0.1256.0> Supervisor {<0.1256.0>,rabbit_connection_helper_sup} started rabbit_queue_collector:start_link(<<"172.20.0.1:43852 -> 172.20.0.4:5672">>) at pid <0.1258.0>
+2019-04-03 19:05:31.156 [debug] <0.1256.0> Supervisor {<0.1256.0>,rabbit_connection_helper_sup} started rabbit_heartbeat:start_heartbeat_sender(#Port<0.73>, 60, #Fun<rabbit_reader.34.108952957>, {heartbeat_sender,<<"172.20.0.1:43852 -> 172.20.0.4:5672">>}) at pid <0.1259.0>
+2019-04-03 19:05:31.156 [debug] <0.1256.0> Supervisor {<0.1256.0>,rabbit_connection_helper_sup} started rabbit_heartbeat:start_heartbeat_receiver(#Port<0.73>, 60, #Fun<rabbit_reader.35.108952957>, {heartbeat_receiver,<<"172.20.0.1:43852 -> 172.20.0.4:5672">>}) at pid <0.1260.0>
+2019-04-03 19:05:31.156 [debug] <0.1256.0> Supervisor {<0.1256.0>,rabbit_connection_helper_sup} started rabbit_channel_sup_sup:start_link() at pid <0.1261.0>
+2019-04-03 19:05:31.156 [info] <0.1257.0> connection <0.1257.0> (172.20.0.1:43852 -> 172.20.0.4:5672): user 'jack' authenticated and granted access to vhost '/'
+2019-04-03 19:05:31.158 [debug] <0.1263.0> Supervisor {<0.1263.0>,rabbit_channel_sup} started rabbit_writer:start_link(#Port<0.73>, 1, 131072, rabbit_framing_amqp_0_9_1, <0.1257.0>, {<<"172.20.0.1:43852 -> 172.20.0.4:5672">>,1}, true) at pid <0.1264.0>
+2019-04-03 19:05:31.158 [debug] <0.1263.0> Supervisor {<0.1263.0>,rabbit_channel_sup} started rabbit_limiter:start_link({<<"172.20.0.1:43852 -> 172.20.0.4:5672">>,1}) at pid <0.1265.0>
+2019-04-03 19:05:31.158 [debug] <0.1263.0> Supervisor {<0.1263.0>,rabbit_channel_sup} started rabbit_channel:start_link(1, <0.1257.0>, <0.1264.0>, <0.1257.0>, <<"172.20.0.1:43852 -> 172.20.0.4:5672">>, rabbit_framing_amqp_0_9_1, {user,<<"jack">>,[administrator],[{rabbit_auth_backend_internal,none}]}, <<"/">>, [{<<"authentication_failure_close">>,bool,true},{<<"basic.nack">>,bool,true},{<<"connection.block...">>,...},...], <0.1258.0>, <0.1265.0>) at pid <0.1266.0>
+2019-04-03 19:05:31.168 [debug] <0.1269.0> Supervisor {<0.1269.0>,rabbit_connection_sup} started rabbit_connection_helper_sup:start_link() at pid <0.1270.0>
+2019-04-03 19:05:31.169 [debug] <0.1269.0> Supervisor {<0.1269.0>,rabbit_connection_sup} started rabbit_reader:start_link(<0.1270.0>, {acceptor,{0,0,0,0,0,0,0,0},5672}) at pid <0.1271.0>
+2019-04-03 19:05:31.169 [info] <0.1271.0> accepting AMQP connection <0.1271.0> (172.20.0.1:43856 -> 172.20.0.4:5672)
+2019-04-03 19:05:31.183 [debug] <0.1271.0> User 'jack' authenticated successfully by backend rabbit_auth_backend_internal
+2019-04-03 19:05:31.189 [debug] <0.1270.0> Supervisor {<0.1270.0>,rabbit_connection_helper_sup} started rabbit_queue_collector:start_link(<<"172.20.0.1:43856 -> 172.20.0.4:5672">>) at pid <0.1272.0>
+2019-04-03 19:05:31.191 [debug] <0.1270.0> Supervisor {<0.1270.0>,rabbit_connection_helper_sup} started rabbit_heartbeat:start_heartbeat_sender(#Port<0.75>, 60, #Fun<rabbit_reader.34.108952957>, {heartbeat_sender,<<"172.20.0.1:43856 -> 172.20.0.4:5672">>}) at pid <0.1273.0>
+2019-04-03 19:05:31.194 [debug] <0.1270.0> Supervisor {<0.1270.0>,rabbit_connection_helper_sup} started rabbit_heartbeat:start_heartbeat_receiver(#Port<0.75>, 60, #Fun<rabbit_reader.35.108952957>, {heartbeat_receiver,<<"172.20.0.1:43856 -> 172.20.0.4:5672">>}) at pid <0.1274.0>
+2019-04-03 19:05:31.195 [debug] <0.1270.0> Supervisor {<0.1270.0>,rabbit_connection_helper_sup} started rabbit_channel_sup_sup:start_link() at pid <0.1275.0>
+2019-04-03 19:05:31.195 [info] <0.1271.0> connection <0.1271.0> (172.20.0.1:43856 -> 172.20.0.4:5672): user 'jack' authenticated and granted access to vhost '/'
+2019-04-03 19:05:31.201 [debug] <0.1277.0> Supervisor {<0.1277.0>,rabbit_channel_sup} started rabbit_writer:start_link(#Port<0.75>, 1, 131072, rabbit_framing_amqp_0_9_1, <0.1271.0>, {<<"172.20.0.1:43856 -> 172.20.0.4:5672">>,1}, true) at pid <0.1278.0>
+2019-04-03 19:05:31.201 [debug] <0.1277.0> Supervisor {<0.1277.0>,rabbit_channel_sup} started rabbit_limiter:start_link({<<"172.20.0.1:43856 -> 172.20.0.4:5672">>,1}) at pid <0.1279.0>
+2019-04-03 19:05:31.202 [debug] <0.1277.0> Supervisor {<0.1277.0>,rabbit_channel_sup} started rabbit_channel:start_link(1, <0.1271.0>, <0.1278.0>, <0.1271.0>, <<"172.20.0.1:43856 -> 172.20.0.4:5672">>, rabbit_framing_amqp_0_9_1, {user,<<"jack">>,[administrator],[{rabbit_auth_backend_internal,none}]}, <<"/">>, [{<<"authentication_failure_close">>,bool,true},{<<"basic.nack">>,bool,true},{<<"connection.block...">>,...},...], <0.1272.0>, <0.1279.0>) at pid <0.1280.0>
+2019-04-03 19:06:17.996 [debug] <0.119.0> Lager installed handler lager_forwarder_backend into error_logger_lager_event
+2019-04-03 19:06:17.996 [debug] <0.122.0> Lager installed handler lager_forwarder_backend into rabbit_log_lager_event
+2019-04-03 19:06:17.996 [debug] <0.125.0> Lager installed handler lager_forwarder_backend into rabbit_log_channel_lager_event
+2019-04-03 19:06:17.996 [debug] <0.128.0> Lager installed handler lager_forwarder_backend into rabbit_log_connection_lager_event
+2019-04-03 19:06:17.996 [debug] <0.134.0> Lager installed handler lager_forwarder_backend into rabbit_log_mirroring_lager_event
+2019-04-03 19:06:17.996 [debug] <0.131.0> Lager installed handler lager_forwarder_backend into rabbit_log_ldap_lager_event
+2019-04-03 19:06:17.996 [debug] <0.116.0> Lager installed handler error_logger_lager_h into error_logger
+2019-04-03 19:06:17.996 [debug] <0.140.0> Lager installed handler lager_forwarder_backend into rabbit_log_ra_lager_event
+2019-04-03 19:06:17.996 [debug] <0.137.0> Lager installed handler lager_forwarder_backend into rabbit_log_queue_lager_event
+2019-04-03 19:06:17.996 [debug] <0.143.0> Lager installed handler lager_forwarder_backend into rabbit_log_federation_lager_event
+2019-04-03 19:06:17.996 [debug] <0.146.0> Lager installed handler {lager_file_backend,
+                            "/var/log/rabbitmq/rabbit@rabbitmq3_upgrade.log"} into rabbit_log_upgrade_lager_event
+2019-04-03 19:06:18.193 [info] <0.8.0> Log file opened with Lager
+2019-04-03 19:06:18.478 [debug] <0.109.0> Lager installed handler lager_backend_throttle into lager_event
+2019-04-03 19:06:18.681 [debug] <0.8.0> Feature flags: query feature flags in loaded applications
+2019-04-03 19:06:24.454 [debug] <0.8.0> Feature flags: application `rabbitmq_management_agent` has 1 feature flags
+2019-04-03 19:06:24.454 [debug] <0.8.0> Feature flags: application `rabbit` has 2 feature flags
+2019-04-03 19:06:24.454 [debug] <0.8.0> Feature flags: (re)initialize registry
+2019-04-03 19:06:24.454 [info] <0.8.0> Feature flags: list of feature flags found:
+2019-04-03 19:06:24.454 [info] <0.8.0> Feature flags:   [x] empty_basic_get_metric
+2019-04-03 19:06:24.454 [info] <0.8.0> Feature flags:   [x] implicit_default_bindings
+2019-04-03 19:06:24.454 [info] <0.8.0> Feature flags:   [x] quorum_queue
+2019-04-03 19:06:24.454 [info] <0.8.0> Feature flags: feature flag states written to disk: yes
+2019-04-03 19:06:24.457 [debug] <0.8.0> Feature flags: registry module ready, loading it...
+2019-04-03 19:06:24.461 [debug] <0.8.0> Feature flags: registry module loaded
+2019-04-03 19:06:24.559 [info] <0.43.0> Application mnesia exited with reason: stopped
+2019-04-03 19:06:24.560 [debug] <0.8.0> Feature flags: querying all feature flags on node `rabbit@rabbitmq2`...
+2019-04-03 19:06:24.561 [debug] <0.8.0> Feature flags: querying all feature flags on node `rabbit@rabbitmq2` done; all features: [empty_basic_get_metric,implicit_default_bindings,quorum_queue]
+2019-04-03 19:06:24.561 [debug] <0.8.0> Feature flags: register feature flags provided by applications unknown locally: []
+2019-04-03 19:06:24.561 [debug] <0.8.0> Feature flags: query feature flags in loaded applications
+2019-04-03 19:06:24.573 [debug] <0.8.0> Feature flags: application `rabbitmq_management_agent` has 1 feature flags
+2019-04-03 19:06:24.573 [debug] <0.8.0> Feature flags: application `rabbit` has 2 feature flags
+2019-04-03 19:06:24.573 [debug] <0.8.0> Feature flags: registry already up-to-date, skipping init
+2019-04-03 19:06:24.589 [debug] <0.8.0> Feature flags: node `rabbit@rabbitmq2` compatibility check, part 1/2
+2019-04-03 19:06:24.589 [debug] <0.8.0> Feature flags: querying `[empty_basic_get_metric,implicit_default_bindings,quorum_queue]` support on node rabbit@rabbitmq2...
+2019-04-03 19:06:24.590 [debug] <0.8.0> Feature flags: node `rabbit@rabbitmq2` supports `[empty_basic_get_metric,implicit_default_bindings,quorum_queue]`
+2019-04-03 19:06:24.590 [info] <0.8.0> Feature flags: all running remote nodes support `[empty_basic_get_metric,implicit_default_bindings,quorum_queue]`
+2019-04-03 19:06:24.590 [debug] <0.8.0> Feature flags: node `rabbit@rabbitmq2` compatibility check, part 2/2
+2019-04-03 19:06:24.590 [debug] <0.8.0> Feature flags: querying enabled feature flags on node `rabbit@rabbitmq2`...
+2019-04-03 19:06:24.590 [debug] <0.8.0> Feature flags: querying enabled feature flags on node `rabbit@rabbitmq2` done; enabled features: [empty_basic_get_metric,implicit_default_bindings,quorum_queue]
+2019-04-03 19:06:24.590 [debug] <0.8.0> Feature flags: node `rabbit@rabbitmq2` is compatible
+2019-04-03 19:06:24.650 [info] <0.310.0> ra: meta data store initialised. 2 record(s) recovered
+2019-04-03 19:06:24.651 [info] <0.315.0> WAL: recovering ["/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3/quorum/rabbit@rabbitmq3/00000003.wal"]
+2019-04-03 19:06:24.908 [debug] <0.315.0> wal: opening new file "00000004.wal"
+2019-04-03 19:06:24.910 [info] <0.391.0> 
+ Starting RabbitMQ 3.8.0-alpha.572 on Erlang 21.3
+ Copyright (C) 2007-2019 Pivotal Software, Inc.
+ Licensed under the MPL.  See https://www.rabbitmq.com/
+2019-04-03 19:06:24.913 [info] <0.391.0> 
+ node           : rabbit@rabbitmq3
+ home dir       : /var/lib/rabbitmq
+ config file(s) : /etc/rabbitmq/rabbitmq.config
+ cookie hash    : gnzLDuqKcGxMNKFokfhOew==
+ log(s)         : /var/log/rabbitmq/rabbit.log
+                : /var/log/rabbitmq/rabbit@rabbitmq3_upgrade.log
+ database dir   : /var/lib/rabbitmq/mnesia/rabbit@rabbitmq3
+2019-04-03 19:06:24.981 [info] <0.391.0> Running boot step pre_boot defined by app rabbit
+2019-04-03 19:06:24.981 [info] <0.391.0> Running boot step rabbit_core_metrics defined by app rabbit
+2019-04-03 19:06:24.981 [debug] <0.391.0> Applying MFA: M = rabbit_sup, F = start_child, A = [rabbit_metrics]
+2019-04-03 19:06:24.982 [info] <0.391.0> Running boot step rabbit_alarm defined by app rabbit
+2019-04-03 19:06:24.982 [debug] <0.391.0> Applying MFA: M = rabbit_alarm, F = start, A = []
+2019-04-03 19:06:24.982 [debug] <0.394.0> Supervisor rabbit_alarm_sup started rabbit_alarm:start_link() at pid <0.395.0>
+2019-04-03 19:06:24.992 [info] <0.397.0> Memory high watermark set to 3180 MiB (3334930432 bytes) of 7951 MiB (8337326080 bytes) total
+2019-04-03 19:06:24.992 [debug] <0.396.0> Supervisor vm_memory_monitor_sup started vm_memory_monitor:start_link(0.4, #Fun<rabbit_alarm.0.52593784>, #Fun<rabbit_alarm.1.52593784>) at pid <0.397.0>
+2019-04-03 19:06:25.000 [debug] <0.313.0> ra_log_segment_writer: error sending ra_log_event to: 2F_Q10ASUERU6VQOOR. Error: No Pid
+2019-04-03 19:06:25.001 [debug] <0.313.0> ra_log_segment_writer: cleaning closed table for '2F_Q10ASUERU6VQOOR' range: 4403-5437
+2019-04-03 19:06:25.005 [info] <0.399.0> Enabling free disk space monitoring
+2019-04-03 19:06:25.006 [info] <0.399.0> Disk free limit set to 50MB
+2019-04-03 19:06:25.021 [debug] <0.398.0> Supervisor rabbit_disk_monitor_sup started rabbit_disk_monitor:start_link(50000000) at pid <0.399.0>
+2019-04-03 19:06:25.021 [info] <0.391.0> Running boot step code_server_cache defined by app rabbit
+2019-04-03 19:06:25.021 [debug] <0.391.0> Applying MFA: M = rabbit_sup, F = start_child, A = [code_server_cache]
+2019-04-03 19:06:25.022 [info] <0.391.0> Running boot step file_handle_cache defined by app rabbit
+2019-04-03 19:06:25.022 [debug] <0.391.0> Applying MFA: M = rabbit, F = start_fhc, A = []
+2019-04-03 19:06:25.022 [info] <0.402.0> Limiting to approx 1048476 file handles (943626 sockets)
+2019-04-03 19:06:25.022 [debug] <0.401.0> Supervisor file_handle_cache_sup started file_handle_cache:start_link(fun rabbit_alarm:set_alarm/1, fun rabbit_alarm:clear_alarm/1) at pid <0.402.0>
+2019-04-03 19:06:25.022 [info] <0.403.0> FHC read buffering:  OFF
+2019-04-03 19:06:25.022 [info] <0.403.0> FHC write buffering: ON
+2019-04-03 19:06:25.023 [info] <0.391.0> Running boot step worker_pool defined by app rabbit
+2019-04-03 19:06:25.023 [debug] <0.391.0> Applying MFA: M = rabbit_sup, F = start_supervisor_child, A = [worker_pool_sup]
+2019-04-03 19:06:25.023 [info] <0.391.0> Running boot step database defined by app rabbit
+2019-04-03 19:06:25.023 [debug] <0.391.0> Applying MFA: M = rabbit_mnesia, F = init, A = []
+2019-04-03 19:06:25.308 [debug] <0.313.0> ra_log_segment_writer: error sending ra_log_event to: 2F_Q_3UUPF8W7AZMJL. Error: No Pid
+2019-04-03 19:06:25.314 [debug] <0.313.0> ra_log_segment_writer: cleaning closed table for '2F_Q_3UUPF8W7AZMJL' range: 126845-135651
+2019-04-03 19:06:25.314 [debug] <0.313.0> segment_writer: deleting wal file: 00000003.wal
+2019-04-03 19:06:27.055 [info] <0.391.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-03 19:06:27.057 [debug] <0.391.0> Feature flags: double-checking feature flag states...
+2019-04-03 19:06:27.057 [debug] <0.391.0> Feature flag `implicit_default_bindings`: run migration function implicit_default_bindings_migration with arg: is_enabled
+2019-04-03 19:06:27.057 [debug] <0.391.0> Feature flag `quorum_queue`: run migration function quorum_queue_migration with arg: is_enabled
+2019-04-03 19:06:27.057 [info] <0.391.0> Waiting for Mnesia tables for 30000 ms, 0 retries left
+2019-04-03 19:06:27.058 [debug] <0.391.0> Feature flags: SYNCING FEATURE FLAGS with node `rabbit@rabbitmq2`...
+2019-04-03 19:06:27.058 [debug] <0.391.0> Feature flags: querying enabled feature flags on node `rabbit@rabbitmq2`...
+2019-04-03 19:06:27.058 [debug] <0.391.0> Feature flags: querying enabled feature flags on node `rabbit@rabbitmq2` done; enabled features: [empty_basic_get_metric,implicit_default_bindings,quorum_queue]
+2019-04-03 19:06:27.058 [debug] <0.391.0> Feature flags: enabling locally feature flags already enabled on node `rabbit@rabbitmq2`...
+2019-04-03 19:06:27.058 [debug] <0.391.0> Feature flags: enabling on node `rabbit@rabbitmq2` feature flags already enabled locally...
+2019-04-03 19:06:27.059 [info] <0.391.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-03 19:06:27.107 [info] <0.391.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-03 19:06:27.107 [info] <0.391.0> Peer discovery backend rabbit_peer_discovery_classic_config does not support registration, skipping registration.
+2019-04-03 19:06:27.107 [info] <0.391.0> Running boot step database_sync defined by app rabbit
+2019-04-03 19:06:27.107 [debug] <0.391.0> Applying MFA: M = rabbit_sup, F = start_child, A = [mnesia_sync]
+2019-04-03 19:06:27.107 [info] <0.391.0> Running boot step feature_flags defined by app rabbit
+2019-04-03 19:06:27.107 [debug] <0.391.0> Applying MFA: M = rabbit_feature_flags, F = init, A = []
+2019-04-03 19:06:27.107 [info] <0.391.0> Running boot step codec_correctness_check defined by app rabbit
+2019-04-03 19:06:27.107 [debug] <0.391.0> Applying MFA: M = rabbit_binary_generator, F = check_empty_frame_size, A = []
+2019-04-03 19:06:27.108 [info] <0.391.0> Running boot step external_infrastructure defined by app rabbit
+2019-04-03 19:06:27.108 [info] <0.391.0> Running boot step rabbit_registry defined by app rabbit
+2019-04-03 19:06:27.108 [debug] <0.391.0> Applying MFA: M = rabbit_sup, F = start_child, A = [rabbit_registry]
+2019-04-03 19:06:27.108 [info] <0.391.0> Running boot step rabbit_auth_mechanism_cr_demo defined by app rabbit
+2019-04-03 19:06:27.108 [debug] <0.391.0> Applying MFA: M = rabbit_registry, F = register, A = [auth_mechanism,<<"RABBIT-CR-DEMO">>,rabbit_auth_mechanism_cr_demo]
+2019-04-03 19:06:27.108 [info] <0.391.0> Running boot step rabbit_queue_location_random defined by app rabbit
+2019-04-03 19:06:27.108 [debug] <0.391.0> Applying MFA: M = rabbit_registry, F = register, A = [queue_master_locator,<<"random">>,rabbit_queue_location_random]
+2019-04-03 19:06:27.108 [info] <0.391.0> Running boot step rabbit_event defined by app rabbit
+2019-04-03 19:06:27.108 [debug] <0.391.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_event]
+2019-04-03 19:06:27.108 [debug] <0.424.0> Supervisor rabbit_event_sup started rabbit_event:start_link() at pid <0.425.0>
+2019-04-03 19:06:27.108 [info] <0.391.0> Running boot step rabbit_auth_mechanism_amqplain defined by app rabbit
+2019-04-03 19:06:27.108 [debug] <0.391.0> Applying MFA: M = rabbit_registry, F = register, A = [auth_mechanism,<<"AMQPLAIN">>,rabbit_auth_mechanism_amqplain]
+2019-04-03 19:06:27.109 [info] <0.391.0> Running boot step rabbit_auth_mechanism_plain defined by app rabbit
+2019-04-03 19:06:27.109 [debug] <0.391.0> Applying MFA: M = rabbit_registry, F = register, A = [auth_mechanism,<<"PLAIN">>,rabbit_auth_mechanism_plain]
+2019-04-03 19:06:27.109 [info] <0.391.0> Running boot step rabbit_exchange_type_direct defined by app rabbit
+2019-04-03 19:06:27.109 [debug] <0.391.0> Applying MFA: M = rabbit_registry, F = register, A = [exchange,<<"direct">>,rabbit_exchange_type_direct]
+2019-04-03 19:06:27.109 [info] <0.391.0> Running boot step rabbit_exchange_type_fanout defined by app rabbit
+2019-04-03 19:06:27.109 [debug] <0.391.0> Applying MFA: M = rabbit_registry, F = register, A = [exchange,<<"fanout">>,rabbit_exchange_type_fanout]
+2019-04-03 19:06:27.109 [info] <0.391.0> Running boot step rabbit_exchange_type_headers defined by app rabbit
+2019-04-03 19:06:27.109 [debug] <0.391.0> Applying MFA: M = rabbit_registry, F = register, A = [exchange,<<"headers">>,rabbit_exchange_type_headers]
+2019-04-03 19:06:27.109 [info] <0.391.0> Running boot step rabbit_exchange_type_topic defined by app rabbit
+2019-04-03 19:06:27.109 [debug] <0.391.0> Applying MFA: M = rabbit_registry, F = register, A = [exchange,<<"topic">>,rabbit_exchange_type_topic]
+2019-04-03 19:06:27.109 [info] <0.391.0> Running boot step rabbit_mirror_queue_mode_all defined by app rabbit
+2019-04-03 19:06:27.109 [debug] <0.391.0> Applying MFA: M = rabbit_registry, F = register, A = [ha_mode,<<"all">>,rabbit_mirror_queue_mode_all]
+2019-04-03 19:06:27.109 [info] <0.391.0> Running boot step rabbit_mirror_queue_mode_exactly defined by app rabbit
+2019-04-03 19:06:27.110 [debug] <0.391.0> Applying MFA: M = rabbit_registry, F = register, A = [ha_mode,<<"exactly">>,rabbit_mirror_queue_mode_exactly]
+2019-04-03 19:06:27.110 [info] <0.391.0> Running boot step rabbit_mirror_queue_mode_nodes defined by app rabbit
+2019-04-03 19:06:27.110 [debug] <0.391.0> Applying MFA: M = rabbit_registry, F = register, A = [ha_mode,<<"nodes">>,rabbit_mirror_queue_mode_nodes]
+2019-04-03 19:06:27.110 [info] <0.391.0> Running boot step rabbit_priority_queue defined by app rabbit
+2019-04-03 19:06:27.110 [debug] <0.391.0> Applying MFA: M = rabbit_priority_queue, F = enable, A = []
+2019-04-03 19:06:27.110 [info] <0.391.0> Priority queues enabled, real BQ is rabbit_variable_queue
+2019-04-03 19:06:27.110 [info] <0.391.0> Running boot step rabbit_queue_location_client_local defined by app rabbit
+2019-04-03 19:06:27.110 [debug] <0.391.0> Applying MFA: M = rabbit_registry, F = register, A = [queue_master_locator,<<"client-local">>,rabbit_queue_location_client_local]
+2019-04-03 19:06:27.110 [info] <0.391.0> Running boot step rabbit_queue_location_min_masters defined by app rabbit
+2019-04-03 19:06:27.111 [debug] <0.391.0> Applying MFA: M = rabbit_registry, F = register, A = [queue_master_locator,<<"min-masters">>,rabbit_queue_location_min_masters]
+2019-04-03 19:06:27.111 [info] <0.391.0> Running boot step kernel_ready defined by app rabbit
+2019-04-03 19:06:27.112 [info] <0.391.0> Running boot step rabbit_sysmon_minder defined by app rabbit
+2019-04-03 19:06:27.112 [debug] <0.391.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_sysmon_minder]
+2019-04-03 19:06:27.112 [info] <0.391.0> Running boot step rabbit_epmd_monitor defined by app rabbit
+2019-04-03 19:06:27.112 [debug] <0.391.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_epmd_monitor]
+2019-04-03 19:06:27.112 [debug] <0.426.0> Supervisor rabbit_sysmon_minder_sup started rabbit_sysmon_minder:start_link() at pid <0.427.0>
+2019-04-03 19:06:27.113 [debug] <0.428.0> Supervisor rabbit_epmd_monitor_sup started rabbit_epmd_monitor:start_link() at pid <0.429.0>
+2019-04-03 19:06:27.113 [info] <0.391.0> Running boot step guid_generator defined by app rabbit
+2019-04-03 19:06:27.113 [debug] <0.391.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_guid]
+2019-04-03 19:06:27.117 [debug] <0.430.0> Supervisor rabbit_guid_sup started rabbit_guid:start_link() at pid <0.431.0>
+2019-04-03 19:06:27.117 [info] <0.391.0> Running boot step rabbit_node_monitor defined by app rabbit
+2019-04-03 19:06:27.117 [debug] <0.391.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_node_monitor]
+2019-04-03 19:06:27.118 [info] <0.433.0> Starting rabbit_node_monitor
+2019-04-03 19:06:27.118 [debug] <0.432.0> Supervisor rabbit_node_monitor_sup started rabbit_node_monitor:start_link() at pid <0.433.0>
+2019-04-03 19:06:27.118 [info] <0.391.0> Running boot step delegate_sup defined by app rabbit
+2019-04-03 19:06:27.118 [debug] <0.391.0> Applying MFA: M = rabbit, F = boot_delegate, A = []
+2019-04-03 19:06:27.119 [info] <0.391.0> Running boot step rabbit_memory_monitor defined by app rabbit
+2019-04-03 19:06:27.119 [debug] <0.391.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_memory_monitor]
+2019-04-03 19:06:27.119 [info] <0.391.0> Running boot step core_initialized defined by app rabbit
+2019-04-03 19:06:27.119 [debug] <0.451.0> Supervisor rabbit_memory_monitor_sup started rabbit_memory_monitor:start_link() at pid <0.452.0>
+2019-04-03 19:06:27.119 [info] <0.391.0> Running boot step upgrade_queues defined by app rabbit
+2019-04-03 19:06:27.119 [debug] <0.391.0> Applying MFA: M = rabbit_upgrade, F = maybe_migrate_queues_to_per_vhost_storage, A = []
+2019-04-03 19:06:27.153 [info] <0.391.0> Running boot step rabbit_connection_tracking_handler defined by app rabbit
+2019-04-03 19:06:27.153 [debug] <0.391.0> Applying MFA: M = gen_event, F = add_handler, A = [rabbit_event,rabbit_connection_tracking_handler,[]]
+2019-04-03 19:06:27.153 [info] <0.391.0> Running boot step rabbit_exchange_parameters defined by app rabbit
+2019-04-03 19:06:27.153 [debug] <0.391.0> Applying MFA: M = rabbit_exchange_parameters, F = register, A = []
+2019-04-03 19:06:27.153 [info] <0.391.0> Running boot step rabbit_mirror_queue_misc defined by app rabbit
+2019-04-03 19:06:27.154 [debug] <0.391.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-mode">>,rabbit_mirror_queue_misc]
+2019-04-03 19:06:27.154 [debug] <0.391.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-params">>,rabbit_mirror_queue_misc]
+2019-04-03 19:06:27.154 [debug] <0.391.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-sync-mode">>,rabbit_mirror_queue_misc]
+2019-04-03 19:06:27.154 [debug] <0.391.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-sync-batch-size">>,rabbit_mirror_queue_misc]
+2019-04-03 19:06:27.154 [debug] <0.391.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-promote-on-shutdown">>,rabbit_mirror_queue_misc]
+2019-04-03 19:06:27.155 [debug] <0.391.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"ha-promote-on-failure">>,rabbit_mirror_queue_misc]
+2019-04-03 19:06:27.155 [info] <0.391.0> Running boot step rabbit_policies defined by app rabbit
+2019-04-03 19:06:27.155 [debug] <0.391.0> Applying MFA: M = rabbit_policies, F = register, A = []
+2019-04-03 19:06:27.156 [info] <0.391.0> Running boot step rabbit_policy defined by app rabbit
+2019-04-03 19:06:27.156 [debug] <0.391.0> Applying MFA: M = rabbit_policy, F = register, A = []
+2019-04-03 19:06:27.156 [info] <0.391.0> Running boot step rabbit_queue_location_validator defined by app rabbit
+2019-04-03 19:06:27.156 [debug] <0.391.0> Applying MFA: M = rabbit_registry, F = register, A = [policy_validator,<<"queue-master-locator">>,rabbit_queue_location_validator]
+2019-04-03 19:06:27.156 [info] <0.391.0> Running boot step rabbit_quorum_memory_manager defined by app rabbit
+2019-04-03 19:06:27.156 [debug] <0.391.0> Applying MFA: M = rabbit_quorum_memory_manager, F = register, A = []
+2019-04-03 19:06:27.157 [info] <0.391.0> Running boot step rabbit_vhost_limit defined by app rabbit
+2019-04-03 19:06:27.157 [debug] <0.391.0> Applying MFA: M = rabbit_vhost_limit, F = register, A = []
+2019-04-03 19:06:27.157 [info] <0.391.0> Running boot step rabbit_mgmt_reset_handler defined by app rabbitmq_management
+2019-04-03 19:06:27.157 [debug] <0.391.0> Applying MFA: M = gen_event, F = add_handler, A = [rabbit_event,rabbit_mgmt_reset_handler,[]]
+2019-04-03 19:06:27.157 [info] <0.391.0> Running boot step rabbit_mgmt_db_handler defined by app rabbitmq_management_agent
+2019-04-03 19:06:27.157 [debug] <0.391.0> Applying MFA: M = rabbit_mgmt_db_handler, F = add_handler, A = []
+2019-04-03 19:06:27.157 [info] <0.391.0> Management plugin: using rates mode 'basic'
+2019-04-03 19:06:27.157 [info] <0.391.0> Running boot step recovery defined by app rabbit
+2019-04-03 19:06:27.157 [debug] <0.391.0> Applying MFA: M = rabbit, F = recover, A = []
+2019-04-03 19:06:27.159 [debug] <0.460.0> Recovering data for VHost <<"/">>
+2019-04-03 19:06:27.159 [info] <0.460.0> Making sure data directory '/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L' for vhost '/' exists
+2019-04-03 19:06:27.162 [debug] <0.459.0> Supervisor {<0.459.0>,rabbit_vhost_sup} started rabbit_recovery_terms:start_link(<<"/">>) at pid <0.461.0>
+2019-04-03 19:06:27.163 [info] <0.460.0> Starting message stores for vhost '/'
+2019-04-03 19:06:27.164 [info] <0.464.0> Message store "628WB79CIFDYO9LJI6DKMI09L/msg_store_transient": using rabbit_msg_store_ets_index to provide index
+2019-04-03 19:06:27.168 [info] <0.460.0> Started message store of type transient for vhost '/'
+2019-04-03 19:06:27.168 [debug] <0.459.0> Supervisor {<0.459.0>,rabbit_vhost_sup} started rabbit_msg_store:start_link(msg_store_transient, "/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L", undefined, {#Fun<rabbit_variable_queue.2.24443698>,ok}) at pid <0.464.0>
+2019-04-03 19:06:27.168 [info] <0.467.0> Message store "628WB79CIFDYO9LJI6DKMI09L/msg_store_persistent": using rabbit_msg_store_ets_index to provide index
+2019-04-03 19:06:27.169 [warning] <0.467.0> Message store "628WB79CIFDYO9LJI6DKMI09L/msg_store_persistent": rebuilding indices from scratch
+2019-04-03 19:06:27.171 [info] <0.460.0> Started message store of type persistent for vhost '/'
+2019-04-03 19:06:27.171 [debug] <0.459.0> Supervisor {<0.459.0>,rabbit_vhost_sup} started rabbit_msg_store:start_link(msg_store_persistent, "/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3/msg_stores/vhosts/628WB79CIFDYO9LJI6DKMI09L", [], {#Fun<rabbit_queue_index.2.39046318>,{start,[]}}) at pid <0.467.0>
+2019-04-03 19:06:27.171 [debug] <0.459.0> Supervisor {<0.459.0>,rabbit_vhost_sup} started rabbit_amqqueue_sup_sup:start_link() at pid <0.473.0>
+2019-04-03 19:06:27.177 [debug] <0.477.0> queue 'q100_0' in vhost '/': ra_log:init recovered last_index_term {5437,1} first index 4403
+2019-04-03 19:06:27.180 [debug] <0.477.0> queue 'q100_0' in vhost '/': recover -> recover in term: 1
+2019-04-03 19:06:27.180 [debug] <0.477.0> queue 'q100_0' in vhost '/': recovering state machine version 0:0 from index 4402 to 5419
+2019-04-03 19:06:27.226 [debug] <0.482.0> queue 'q_3' in vhost '/': ra_log:init recovered last_index_term {135651,6} first index 134850
+2019-04-03 19:06:27.226 [debug] <0.482.0> queue 'q_3' in vhost '/': 1 obsolete segments at 134849 - remaining: 2
+2019-04-03 19:06:27.231 [debug] <0.482.0> queue 'q_3' in vhost '/': recover -> recover in term: 6
+2019-04-03 19:06:27.231 [debug] <0.482.0> queue 'q_3' in vhost '/': recovering state machine version 0:0 from index 134849 to 135651
+2019-04-03 19:06:27.242 [info] <0.391.0> Running boot step load_definitions defined by app rabbitmq_management
+2019-04-03 19:06:27.242 [debug] <0.391.0> Applying MFA: M = rabbit_mgmt_load_definitions, F = maybe_load_definitions, A = []
+2019-04-03 19:06:27.242 [info] <0.391.0> Running boot step empty_db_check defined by app rabbit
+2019-04-03 19:06:27.242 [debug] <0.391.0> Applying MFA: M = rabbit, F = maybe_insert_default_data, A = []
+2019-04-03 19:06:27.242 [info] <0.391.0> Running boot step rabbit_looking_glass defined by app rabbit
+2019-04-03 19:06:27.242 [debug] <0.391.0> Applying MFA: M = rabbit_looking_glass, F = boot, A = []
+2019-04-03 19:06:27.242 [info] <0.391.0> Running boot step rabbit_core_metrics_gc defined by app rabbit
+2019-04-03 19:06:27.242 [debug] <0.391.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [rabbit_core_metrics_gc]
+2019-04-03 19:06:27.243 [info] <0.391.0> Running boot step background_gc defined by app rabbit
+2019-04-03 19:06:27.243 [debug] <0.391.0> Applying MFA: M = rabbit_sup, F = start_restartable_child, A = [background_gc]
+2019-04-03 19:06:27.243 [info] <0.391.0> Running boot step connection_tracking defined by app rabbit
+2019-04-03 19:06:27.243 [debug] <0.391.0> Applying MFA: M = rabbit_connection_tracking, F = boot, A = []
+2019-04-03 19:06:27.243 [debug] <0.494.0> Supervisor rabbit_core_metrics_gc_sup started rabbit_core_metrics_gc:start_link() at pid <0.495.0>
+2019-04-03 19:06:27.244 [debug] <0.496.0> Supervisor background_gc_sup started background_gc:start_link() at pid <0.497.0>
+2019-04-03 19:06:27.245 [info] <0.391.0> Setting up a table for connection tracking on this node: tracked_connection_on_node_rabbit@rabbitmq3
+2019-04-03 19:06:27.246 [info] <0.391.0> Setting up a table for per-vhost connection counting on this node: tracked_connection_per_vhost_on_node_rabbit@rabbitmq3
+2019-04-03 19:06:27.246 [info] <0.391.0> Running boot step routing_ready defined by app rabbit
+2019-04-03 19:06:27.246 [info] <0.391.0> Running boot step pre_flight defined by app rabbit
+2019-04-03 19:06:27.246 [info] <0.391.0> Running boot step notify_cluster defined by app rabbit
+2019-04-03 19:06:27.247 [debug] <0.391.0> Applying MFA: M = rabbit_node_monitor, F = notify_node_up, A = []
+2019-04-03 19:06:27.247 [info] <0.391.0> Running boot step networking defined by app rabbit
+2019-04-03 19:06:27.247 [debug] <0.391.0> Applying MFA: M = rabbit_networking, F = boot, A = []
+2019-04-03 19:06:27.249 [info] <0.433.0> rabbit on node rabbit@rabbitmq2 up
+2019-04-03 19:06:27.258 [info] <0.514.0> started TCP listener on [::]:5672
+2019-04-03 19:06:27.258 [info] <0.391.0> Running boot step direct_client defined by app rabbit
+2019-04-03 19:06:27.259 [debug] <0.391.0> Applying MFA: M = rabbit_direct, F = boot, A = []
+2019-04-03 19:06:27.265 [debug] <0.477.0> queue 'q100_0' in vhost '/': recover -> recovered in term: 1
+2019-04-03 19:06:27.266 [debug] <0.477.0> queue 'q100_0' in vhost '/': is not new, setting election timeout.
+2019-04-03 19:06:27.266 [debug] <0.477.0> queue 'q100_0' in vhost '/': recovered -> follower in term: 1
+2019-04-03 19:06:27.266 [debug] <0.477.0> queue 'q100_0' in vhost '/': granting pre-vote for {'%2F_q100_0',rabbit@rabbitmq2} machine version (their:ours) 0:0 with last indexterm {5442,1} for term 1 previous term 1
+2019-04-03 19:06:27.282 [debug] <0.525.0> Supervisor rabbit_mgmt_agent_sup_sup started rabbit_mgmt_agent_sup:start_link() at pid <0.526.0>
+2019-04-03 19:06:27.300 [info] <0.477.0> queue 'q100_0' in vhost '/': granting vote for {'%2F_q100_0',rabbit@rabbitmq2} with last indexterm {5442,1} for term 2 previous term was 1
+2019-04-03 19:06:27.312 [info] <0.477.0> queue 'q100_0' in vhost '/': follower did not have entry at 5442 in 1. Requesting from 5438
+2019-04-03 19:06:27.312 [info] <0.477.0> queue 'q100_0' in vhost '/': detected a new leader {'%2F_q100_0',rabbit@rabbitmq2} in term 2
+2019-04-03 19:06:27.314 [debug] <0.477.0> queue 'q100_0' in vhost '/': follower -> await_condition in term: 2
+2019-04-03 19:06:27.320 [debug] <0.477.0> queue 'q100_0' in vhost '/': await_condition -> follower in term: 2
+2019-04-03 19:06:27.327 [warning] <0.477.0> queue 'q100_0' in vhost '/': follower received unhandled msg: {node_event,rabbit@rabbitmq2,up}
+2019-04-03 19:06:27.343 [debug] <0.520.0> Starting HTTP[S] listener with transport ranch_tcp, options [{port,15672}] and protocol options #{}, stream handlers [rabbit_cowboy_stream_h,cowboy_compress_h,cowboy_stream_h]
+2019-04-03 19:06:27.350 [info] <0.565.0> Management plugin: HTTP (non-TLS) listener started on port 15672
+2019-04-03 19:06:27.351 [debug] <0.477.0> queue 'q100_0' in vhost '/': enabling ra cluster changes in 2
+2019-04-03 19:06:27.351 [info] <0.676.0> Statistics database started.
+2019-04-03 19:06:27.352 [debug] <0.674.0> Supervisor rabbit_mgmt_sup_sup started rabbit_mgmt_sup:start_link() at pid <0.675.0>
+2019-04-03 19:06:27.352 [notice] <0.106.0> Changed loghwm of /var/log/rabbitmq/rabbit.log to 5000
+2019-04-03 19:06:27.372 [debug] <0.482.0> queue 'q_3' in vhost '/': recover -> recovered in term: 6
+2019-04-03 19:06:27.372 [debug] <0.482.0> queue 'q_3' in vhost '/': is not new, setting election timeout.
+2019-04-03 19:06:27.372 [debug] <0.482.0> queue 'q_3' in vhost '/': recovered -> follower in term: 6
+2019-04-03 19:06:27.380 [debug] <0.482.0> queue 'q_3' in vhost '/': granting pre-vote for {'%2F_q_3',rabbit@rabbitmq2} machine version (their:ours) 0:0 with last indexterm {135652,6} for term 6 previous term 6
+2019-04-03 19:06:27.412 [info] <0.482.0> queue 'q_3' in vhost '/': granting vote for {'%2F_q_3',rabbit@rabbitmq2} with last indexterm {135652,6} for term 7 previous term was 6
+2019-04-03 19:06:27.418 [info] <0.482.0> queue 'q_3' in vhost '/': follower did not have entry at 135652 in 6. Requesting from 135652
+2019-04-03 19:06:27.418 [info] <0.482.0> queue 'q_3' in vhost '/': detected a new leader {'%2F_q_3',rabbit@rabbitmq2} in term 7
+2019-04-03 19:06:27.418 [debug] <0.482.0> queue 'q_3' in vhost '/': follower -> await_condition in term: 7
+2019-04-03 19:06:27.426 [debug] <0.482.0> queue 'q_3' in vhost '/': await_condition -> follower in term: 7
+2019-04-03 19:06:27.432 [debug] <0.482.0> queue 'q_3' in vhost '/': enabling ra cluster changes in 7
+2019-04-03 19:06:27.581 [info] <0.8.0> Server startup complete; 3 plugins started.
+ * rabbitmq_management
+ * rabbitmq_management_agent
+ * rabbitmq_web_dispatch
+2019-04-03 19:06:31.574 [debug] <0.477.0> queue 'q100_0' in vhost '/': 1 obsolete segments at 6411 - remaining: 0
+2019-04-03 19:06:47.699 [warning] <0.477.0> queue 'q100_0' in vhost '/': Leader node rabbit@rabbitmq2 may be down, setting election timeout
+2019-04-03 19:06:47.699 [warning] <0.482.0> queue 'q_3' in vhost '/': Leader node rabbit@rabbitmq2 may be down, setting election timeout
+2019-04-03 19:06:47.951 [debug] <0.477.0> queue 'q100_0' in vhost '/': pre_vote election called for in term 2
+2019-04-03 19:06:47.963 [debug] <0.477.0> queue 'q100_0' in vhost '/': follower -> pre_vote in term: 2
+2019-04-03 19:06:48.007 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 7
+2019-04-03 19:06:48.023 [debug] <0.482.0> queue 'q_3' in vhost '/': follower -> pre_vote in term: 7
+2019-04-03 19:06:48.267 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 7
+2019-04-03 19:06:48.308 [debug] <0.477.0> queue 'q100_0' in vhost '/': pre_vote election called for in term 2
+2019-04-03 19:06:48.510 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 7
+2019-04-03 19:06:48.581 [debug] <0.477.0> queue 'q100_0' in vhost '/': pre_vote election called for in term 2
+2019-04-03 19:06:48.772 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 7
+2019-04-03 19:06:48.838 [debug] <0.477.0> queue 'q100_0' in vhost '/': pre_vote election called for in term 2
+2019-04-03 19:06:49.114 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 7
+2019-04-03 19:06:49.172 [debug] <0.477.0> queue 'q100_0' in vhost '/': pre_vote election called for in term 2
+2019-04-03 19:06:49.428 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 7
+2019-04-03 19:06:49.481 [debug] <0.477.0> queue 'q100_0' in vhost '/': pre_vote election called for in term 2
+2019-04-03 19:06:49.738 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 7
+2019-04-03 19:06:49.810 [debug] <0.477.0> queue 'q100_0' in vhost '/': pre_vote election called for in term 2
+2019-04-03 19:06:49.982 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 7
+2019-04-03 19:06:50.097 [debug] <0.477.0> queue 'q100_0' in vhost '/': pre_vote election called for in term 2
+2019-04-03 19:06:50.291 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 7
+2019-04-03 19:06:50.363 [debug] <0.477.0> queue 'q100_0' in vhost '/': pre_vote election called for in term 2
+2019-04-03 19:06:50.548 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 7
+2019-04-03 19:06:50.658 [debug] <0.477.0> queue 'q100_0' in vhost '/': pre_vote election called for in term 2
+2019-04-03 19:06:50.814 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 7
+2019-04-03 19:06:50.941 [debug] <0.477.0> queue 'q100_0' in vhost '/': pre_vote election called for in term 2
+2019-04-03 19:06:51.023 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 7
+2019-04-03 19:06:51.236 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 7
+2019-04-03 19:06:51.279 [debug] <0.477.0> queue 'q100_0' in vhost '/': pre_vote election called for in term 2
+2019-04-03 19:06:51.457 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 7
+2019-04-03 19:06:51.585 [debug] <0.477.0> queue 'q100_0' in vhost '/': pre_vote election called for in term 2
+2019-04-03 19:06:51.792 [debug] <0.477.0> queue 'q100_0' in vhost '/': pre_vote election called for in term 2
+2019-04-03 19:06:51.796 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 7
+2019-04-03 19:06:52.105 [debug] <0.477.0> queue 'q100_0' in vhost '/': pre_vote election called for in term 2
+2019-04-03 19:06:52.127 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 7
+2019-04-03 19:06:52.400 [debug] <0.477.0> queue 'q100_0' in vhost '/': pre_vote election called for in term 2
+2019-04-03 19:06:52.437 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 7
+2019-04-03 19:06:52.709 [debug] <0.477.0> queue 'q100_0' in vhost '/': pre_vote election called for in term 2
+2019-04-03 19:06:52.742 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 7
+2019-04-03 19:06:53.003 [debug] <0.477.0> queue 'q100_0' in vhost '/': pre_vote election called for in term 2
+2019-04-03 19:06:53.093 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 7
+2019-04-03 19:06:53.281 [debug] <0.477.0> queue 'q100_0' in vhost '/': pre_vote election called for in term 2
+2019-04-03 19:06:53.294 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 7
+2019-04-03 19:06:53.505 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 7
+2019-04-03 19:06:53.595 [debug] <0.477.0> queue 'q100_0' in vhost '/': pre_vote election called for in term 2
+2019-04-03 19:06:53.795 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 7
+2019-04-03 19:06:53.895 [debug] <0.477.0> queue 'q100_0' in vhost '/': pre_vote election called for in term 2
+2019-04-03 19:06:54.130 [debug] <0.482.0> queue 'q_3' in vhost '/': pre_vote election called for in term 7
+2019-04-03 19:06:54.196 [debug] <0.477.0> queue 'q100_0' in vhost '/': pre_vote election called for in term 2
+2019-04-03 19:07:17.301 [debug] <0.119.0> Lager installed handler lager_forwarder_backend into error_logger_lager_event
+2019-04-03 19:07:17.301 [debug] <0.128.0> Lager installed handler lager_forwarder_backend into rabbit_log_connection_lager_event
+2019-04-03 19:07:17.301 [debug] <0.131.0> Lager installed handler lager_forwarder_backend into rabbit_log_ldap_lager_event
+2019-04-03 19:07:17.301 [debug] <0.122.0> Lager installed handler lager_forwarder_backend into rabbit_log_lager_event
+2019-04-03 19:07:17.301 [debug] <0.134.0> Lager installed handler lager_forwarder_backend into rabbit_log_mirroring_lager_event
+2019-04-03 19:07:17.301 [debug] <0.125.0> Lager installed handler lager_forwarder_backend into rabbit_log_channel_lager_event
+2019-04-03 19:07:17.301 [debug] <0.137.0> Lager installed handler lager_forwarder_backend into rabbit_log_queue_lager_event
+2019-04-03 19:07:17.305 [debug] <0.146.0> Lager installed handler {lager_file_backend,
+                            "/var/log/rabbitmq/rabbit@rabbitmq3_upgrade.log"} into rabbit_log_upgrade_lager_event
+2019-04-03 19:07:17.301 [debug] <0.140.0> Lager installed handler lager_forwarder_backend into rabbit_log_ra_lager_event
+2019-04-03 19:07:17.301 [debug] <0.143.0> Lager installed handler lager_forwarder_backend into rabbit_log_federation_lager_event
+2019-04-03 19:07:17.301 [debug] <0.116.0> Lager installed handler error_logger_lager_h into error_logger
+2019-04-03 19:07:17.754 [info] <0.8.0> Log file opened with Lager
+2019-04-03 19:07:17.768 [debug] <0.109.0> Lager installed handler lager_backend_throttle into lager_event
+2019-04-03 19:07:18.126 [debug] <0.8.0> Feature flags: query feature flags in loaded applications
+2019-04-03 19:07:21.539 [debug] <0.8.0> Feature flags: application `rabbitmq_management_agent` has 1 feature flags
+2019-04-03 19:07:21.539 [debug] <0.8.0> Feature flags: application `rabbit` has 2 feature flags
+2019-04-03 19:07:21.540 [debug] <0.8.0> Feature flags: (re)initialize registry
+2019-04-03 19:07:21.540 [info] <0.8.0> Feature flags: list of feature flags found:
+2019-04-03 19:07:21.540 [info] <0.8.0> Feature flags:   [x] empty_basic_get_metric
+2019-04-03 19:07:21.540 [info] <0.8.0> Feature flags:   [x] implicit_default_bindings
+2019-04-03 19:07:21.540 [info] <0.8.0> Feature flags:   [x] quorum_queue
+2019-04-03 19:07:21.540 [info] <0.8.0> Feature flags: feature flag states written to disk: yes
+2019-04-03 19:07:21.543 [debug] <0.8.0> Feature flags: registry module ready, loading it...
+2019-04-03 19:07:21.548 [debug] <0.8.0> Feature flags: registry module loaded
+2019-04-03 19:07:37.736 [info] <0.292.0> ra: meta data store initialised. 2 record(s) recovered
+2019-04-03 19:07:37.739 [info] <0.297.0> WAL: recovering ["/var/lib/rabbitmq/mnesia/rabbit@rabbitmq3/quorum/rabbit@rabbitmq3/00000004.wal"]
+2019-04-03 19:07:37.803 [debug] <0.297.0> wal: opening new file "00000005.wal"
+2019-04-03 19:07:37.809 [info] <0.301.0> 
+ Starting RabbitMQ 3.8.0-alpha.572 on Erlang 21.3
+ Copyright (C) 2007-2019 Pivotal Software, Inc.
+ Licensed under the MPL.  See https://www.rabbitmq.com/
+2019-04-03 19:07:37.811 [info] <0.301.0> 
+ node           : rabbit@rabbitmq3
+ home dir       : /var/lib/rabbitmq
+ config file(s) : /etc/rabbitmq/rabbitmq.config
+ cookie hash    : gnzLDuqKcGxMNKFokfhOew==
+ log(s)         : /var/log/rabbitmq/rabbit.log
+                : /var/log/rabbitmq/rabbit@rabbitmq3_upgrade.log
+ database dir   : /var/lib/rabbitmq/mnesia/rabbit@rabbitmq3
+2019-04-03 19:07:37.872 [info] <0.301.0> Running boot step pre_boot defined by app rabbit
+2019-04-03 19:07:37.873 [info] <0.301.0> Running boot step rabbit_core_metrics defined by app rabbit
+2019-04-03 19:07:37.873 [debug] <0.301.0> Applying MFA: M = rabbit_sup, F = start_child, A = [rabbit_metrics]
+2019-04-03 19:07:37.876 [info] <0.301.0> Running boot step rabbit_alarm defined by app rabbit
+2019-04-03 19:07:37.876 [debug] <0.301.0> Applying MFA: M = rabbit_alarm, F = start, A = []
+2019-04-03 19:07:37.876 [debug] <0.304.0> Supervisor rabbit_alarm_sup started rabbit_alarm:start_link() at pid <0.305.0>
+2019-04-03 19:07:37.891 [info] <0.307.0> Memory high watermark set to 3180 MiB (3334930432 bytes) of 7951 MiB (8337326080 bytes) total
+2019-04-03 19:07:37.892 [debug] <0.306.0> Supervisor vm_memory_monitor_sup started vm_memory_monitor:start_link(0.4, #Fun<rabbit_alarm.0.52593784>, #Fun<rabbit_alarm.1.52593784>) at pid <0.307.0>
+2019-04-03 19:07:37.904 [info] <0.309.0> Enabling free disk space monitoring
+2019-04-03 19:07:37.904 [info] <0.309.0> Disk free limit set to 50MB
+2019-04-03 19:07:37.911 [info] <0.301.0> Running boot step code_server_cache defined by app rabbit
+2019-04-03 19:07:37.911 [debug] <0.301.0> Applying MFA: M = rabbit_sup, F = start_child, A = [code_server_cache]
+2019-04-03 19:07:37.911 [debug] <0.308.0> Supervisor rabbit_disk_monitor_sup started rabbit_disk_monitor:start_link(50000000) at pid <0.309.0>
+2019-04-03 19:07:37.911 [info] <0.301.0> Running boot step file_handle_cache defined by app rabbit
+2019-04-03 19:07:37.911 [debug] <0.301.0> Applying MFA: M = rabbit, F = start_fhc, A = []
+2019-04-03 19:07:37.912 [info] <0.312.0> Limiting to approx 1048476 file handles (943626 sockets)
+2019-04-03 19:07:37.912 [info] <0.313.0> FHC read buffering:  OFF
+2019-04-03 19:07:37.912 [info] <0.313.0> FHC write buffering: ON
+2019-04-03 19:07:37.912 [debug] <0.311.0> Supervisor file_handle_cache_sup started file_handle_cache:start_link(fun rabbit_alarm:set_alarm/1, fun rabbit_alarm:clear_alarm/1) at pid <0.312.0>
+2019-04-03 19:07:37.913 [info] <0.301.0> Running boot step worker_pool defined by app rabbit
+2019-04-03 19:07:37.913 [debug] <0.301.0> Applying MFA: M = rabbit_sup, F = start_supervisor_child, A = [worker_pool_sup]
+2019-04-03 19:07:37.914 [info] <0.301.0> Running boot step database defined by app rabbit
+2019-04-03 19:07:37.914 [debug] <0.301.0> Applying MFA: M = rabbit_mnesia, F = init, A = []
+2019-04-03 19:07:37.999 [debug] <0.295.0> ra_log_segment_writer: error sending ra_log_event to: 2F_Q10ASUERU6VQOOR. Error: No Pid
+2019-04-03 19:07:38.003 [debug] <0.295.0> ra_log_segment_writer: cleaning closed table for '2F_Q10ASUERU6VQOOR' range: 6412-12272
+2019-04-03 19:07:38.020 [debug] <0.295.0> ra_log_segment_writer: error sending ra_log_event to: 2F_Q_3UUPF8W7AZMJL. Error: No Pid
+2019-04-03 19:07:38.020 [debug] <0.295.0> ra_log_segment_writer: cleaning closed table for '2F_Q_3UUPF8W7AZMJL' range: 135652-135655
+2019-04-03 19:07:38.020 [debug] <0.295.0> segment_writer: deleting wal file: 00000004.wal
+2019-04-03 19:07:51.924 [debug] <0.301.0> Feature flags: double-checking feature flag states...
+2019-04-03 19:07:51.924 [debug] <0.301.0> Feature flag `implicit_default_bindings`: run migration function implicit_default_bindings_migration with arg: is_enabled
+2019-04-03 19:07:51.924 [debug] <0.301.0> Feature flag `quorum_queue`: run migration function quorum_queue_migration with arg: is_enabled
+2019-04-03 19:07:51.924 [info] <0.301.0> Waiting for Mnesia tables for 30000 ms, 0 retries left
+2019-04-03 19:08:21.926 [error] <0.301.0> Feature flag `quorum_queue`: migration function crashed: {error,{timeout_waiting_for_tables,[rabbit_durable_queue]}}
+[{rabbit_table,wait,3,[{file,"src/rabbit_table.erl"},{line,117}]},{rabbit_core_ff,quorum_queue_migration,3,[{file,"src/rabbit_core_ff.erl"},{line,52}]},{rabbit_feature_flags,run_migration_fun,3,[{file,"src/rabbit_feature_flags.erl"},{line,1484}]},{rabbit_feature_flags,'-verify_which_feature_flags_are_actually_enabled/0-fun-2-',3,[{file,"src/rabbit_feature_flags.erl"},{line,2123}]},{maps,fold_1,3,[{file,"maps.erl"},{line,257}]},{rabbit_feature_flags,verify_which_feature_flags_are_actually_enabled,0,[{file,"src/rabbit_feature_flags.erl"},{line,2121}]},{rabbit_feature_flags,sync_feature_flags_with_cluster,3,[{file,"src/rabbit_feature_flags.erl"},{line,1942}]},{rabbit_mnesia,ensure_feature_flags_are_in_sync,2,[{file,"src/rabbit_mnesia.erl"},{line,626}]}]
+2019-04-03 19:08:21.926 [debug] <0.301.0> Feature flags: starting an unclustered node which is already initialized: all feature flags left in their current state
+2019-04-03 19:08:21.926 [info] <0.301.0> Waiting for Mnesia tables for 30000 ms, 9 retries left
+2019-04-03 19:08:51.927 [warning] <0.301.0> Error while waiting for Mnesia tables: {timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]}
+2019-04-03 19:08:51.927 [info] <0.301.0> Waiting for Mnesia tables for 30000 ms, 8 retries left
+2019-04-03 19:09:21.928 [warning] <0.301.0> Error while waiting for Mnesia tables: {timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]}
+2019-04-03 19:09:21.928 [info] <0.301.0> Waiting for Mnesia tables for 30000 ms, 7 retries left
+2019-04-03 19:09:51.929 [warning] <0.301.0> Error while waiting for Mnesia tables: {timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]}
+2019-04-03 19:09:51.930 [info] <0.301.0> Waiting for Mnesia tables for 30000 ms, 6 retries left
+2019-04-03 19:10:21.932 [warning] <0.301.0> Error while waiting for Mnesia tables: {timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]}
+2019-04-03 19:10:21.932 [info] <0.301.0> Waiting for Mnesia tables for 30000 ms, 5 retries left
+2019-04-03 19:10:51.934 [warning] <0.301.0> Error while waiting for Mnesia tables: {timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]}
+2019-04-03 19:10:51.934 [info] <0.301.0> Waiting for Mnesia tables for 30000 ms, 4 retries left
+2019-04-03 19:11:21.936 [warning] <0.301.0> Error while waiting for Mnesia tables: {timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]}
+2019-04-03 19:11:21.936 [info] <0.301.0> Waiting for Mnesia tables for 30000 ms, 3 retries left
+2019-04-03 19:11:51.938 [warning] <0.301.0> Error while waiting for Mnesia tables: {timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]}
+2019-04-03 19:11:51.938 [info] <0.301.0> Waiting for Mnesia tables for 30000 ms, 2 retries left
+2019-04-03 19:12:21.939 [warning] <0.301.0> Error while waiting for Mnesia tables: {timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]}
+2019-04-03 19:12:21.939 [info] <0.301.0> Waiting for Mnesia tables for 30000 ms, 1 retries left
+2019-04-03 19:12:51.940 [warning] <0.301.0> Error while waiting for Mnesia tables: {timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]}
+2019-04-03 19:12:51.940 [info] <0.301.0> Waiting for Mnesia tables for 30000 ms, 0 retries left
+2019-04-03 19:13:21.943 [error] <0.300.0> CRASH REPORT Process <0.300.0> with 0 neighbours exited with reason: {{timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]},{rabbit,start,[normal,[]]}} in application_master:init/4 line 138
+2019-04-03 19:13:21.943 [info] <0.43.0> Application rabbit exited with reason: {{timeout_waiting_for_tables,[rabbit_user,rabbit_user_permission,rabbit_topic_permission,rabbit_vhost,rabbit_durable_route,rabbit_durable_exchange,rabbit_runtime_parameters,rabbit_durable_queue]},{rabbit,start,[normal,[]]}}
