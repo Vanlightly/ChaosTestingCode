@@ -1,4 +1,4 @@
-confluent-kafka==0.11.5
+confluent-kafka==1.0.0
 args==0.1.0
 blockade==0.4.0
 certifi==2018.8.24

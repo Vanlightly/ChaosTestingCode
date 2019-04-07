@@ -21,44 +21,41 @@ def main():
 
     tests = int(get_mandatory_arg(args, "--tests"))
     run_minutes = int(get_mandatory_arg(args, "--run-minutes"))
-    consumer_count = int(get_mandatory_arg(args, "--consumers"))
-    grace_period_sec = int(get_mandatory_arg(args, "--grace-period-sec"))
+    consumer_count = 1
     topic = get_mandatory_arg(args, "--topic")
-    partitions = get_mandatory_arg(args, "--partitions")
+    idempotence_str = get_mandatory_arg(args, "--idempotence")
+    partitions = 1
 
     cluster_size = get_optional_arg(args, "--cluster", "3")
-    in_flight_max = int(get_optional_arg(args, "--in-flight-max", 100))
-    min_insync_reps = int(get_optional_arg(args, "--min-insync-replicas", "1"))
-    unclean_failover = get_optional_arg(args, "--unclean-failover", "false")
-    sequence_count = int(get_optional_arg(args, "--sequences", "1"))
+    in_flight_max = int(get_optional_arg(args, "--in-flight-max", 10000))
+    buffering_max = int(get_optional_arg(args, "--buffering-max-ms", 0))
+    min_insync_reps = 1
+    unclean_failover = "false"
+    sequence_count = 1
     rep_factor = get_optional_arg(args, "--rep-factor", "3")
     acks_mode = get_optional_arg(args, "--acks-mode", "all")
     print_mod = int(get_optional_arg(args, "--print-mod", "0"))
-    chaos = get_optional_arg(args, "--chaos-actions", "true")
-    chaos_min_interval = int(get_optional_arg(args, "--chaos-min-interval", "60"))
-    chaos_max_interval = int(get_optional_arg(args, "--chaos-max-interval", "120"))
-    consumer_actions = get_optional_arg(args, "--consumer-actions", "true")
-    con_action_min_interval = int(get_optional_arg(args, "--consumer-min-interval", "20"))
-    con_action_max_interval = int(get_optional_arg(args, "--consumer-max-interval", "60"))
-
-    include_chaos = True
-    if chaos.upper() == "FALSE":
-        include_chaos = False
-
-    include_con_actions = True
-    if consumer_actions.upper() == "FALSE":
-        include_con_actions = False
+    new_cluster_str = get_optional_arg(args, "--new-cluster", "true")
 
     if print_mod == 0:
         print_mod = in_flight_max * 3;
+
+    idempotence = False
+    if idempotence_str.upper() == "TRUE":
+        idempotence = True
+
+    new_cluster = False
+    if new_cluster_str.upper() == "TRUE":
+        new_cluster = True
     
     for test_number in range(tests):
 
         print("")
-        console_out(f"TEST RUN: {str(test_number)} --------------------------", "TEST RUNNER")
-        subprocess.call(["bash", "../automated/setup-test-run.sh", cluster_size, "3.8"])
-        console_out(f"Waiting for cluster...", "TEST RUNNER")
-        time.sleep(30)
+        console_out(f"TEST RUN: {str(test_number)} with idempotence={idempotence_str}--------------------------", "TEST RUNNER")
+        if new_cluster:
+            subprocess.call(["bash", "../automated/setup-test-run.sh", cluster_size, "3.8"])
+            console_out(f"Waiting for cluster...", "TEST RUNNER")
+            time.sleep(30)
         console_out(f"Cluster status:", "TEST RUNNER")
         subprocess.call(["bash", "../cluster/cluster-status.sh"])
         
@@ -77,20 +74,21 @@ def main():
 
         msg_monitor = MessageMonitor(print_mod)
         chaos = ChaosExecutor(broker_manager)
-        consumer_manager = ConsumerManager(broker_manager, msg_monitor, "TEST RUNNER", topic_name)
-
+        
         pub_node = broker_manager.get_random_init_node()
         producer = KafkaProducer(test_number, 1, broker_manager, acks_mode, in_flight_max, print_mod)
-        producer.create_producer(0)
-        producer.configure_as_sequence(sequence_count)
-        consumer_manager.add_consumers(consumer_count, test_number)
+        
+        if idempotence:
+            producer.create_idempotent_producer(buffering_max)
+        else:
+            producer.create_producer_with_buffering(1000000, buffering_max)
 
+        producer.configure_as_sequence(sequence_count)
+        
         monitor_thread = threading.Thread(target=msg_monitor.process_messages)
         monitor_thread.start()
         
-        consumer_manager.start_consumers()
-
-        pub_thread = threading.Thread(target=producer.start_producing,args=(topic_name, 10000000))
+        pub_thread = threading.Thread(target=producer.start_producing,args=(topic_name, 1000000000))
         pub_thread.start()
         console_out("producer started", "TEST RUNNER")
 
@@ -98,61 +96,61 @@ def main():
         console_out(f"Will start chaos and consumer actions in {init_wait_sec} seconds", "TEST RUNNER")
         time.sleep(init_wait_sec)
 
-        if include_chaos:
-            chaos_thread = threading.Thread(target=chaos.start_random_single_action_and_repair,args=(chaos_min_interval, chaos_max_interval))
-            chaos_thread.start()
-            console_out("Chaos executor started", "TEST RUNNER")
+        chaos_thread = threading.Thread(target=chaos.start_kill_leader_or_connections,args=(topic_name, 0))
+        chaos_thread.start()
+        console_out("Chaos executor started", "TEST RUNNER")
 
-        if include_con_actions:
-            consumer_action_thread = threading.Thread(target=consumer_manager.start_random_consumer_actions,args=(con_action_min_interval, con_action_max_interval))
-            consumer_action_thread.start()
-            console_out("Consumer actions started", "TEST RUNNER")
-
-        ctr = 0
+        ctr = 1
         while ctr < run_minutes:
             time.sleep(60)
             console_out(f"Test at {ctr} minute mark, {run_minutes-ctr} minutes left", "TEST RUNNER")
             ctr += 1
 
+        producer.stop_producing()
+
         try:
             chaos.stop_chaos_actions()
-            consumer_manager.stop_random_consumer_actions()
-            
-            if include_chaos:
-                chaos_thread.join()
-            
-            if include_con_actions:
-                consumer_action_thread.join()
+            chaos_thread.join()
+            console_out(f"Chaos executor shutdown", "TEST RUNNER")
         except Exception as e:
             console_out("Failed to stop chaos cleanly: " + str(e), "TEST RUNNER")
-
-        console_out("Resuming consumers", "TEST RUNNER")
-        consumer_manager.resume_all_consumers()
         
-        producer.stop_producing()
-        console_out("starting grace period for consumer to catch up", "TEST RUNNER")
+
+        subprocess.call(["bash", "../cluster/cluster-status.sh"])
+        time.sleep(60)
+        
+        consumer_manager = ConsumerManager(broker_manager, msg_monitor, "TEST RUNNER", topic_name)
+        consumer_manager.add_consumers(consumer_count, test_number)
+        consumer_manager.start_consumers()
+        
         ctr = 0
         
-        while ctr < grace_period_sec:
+        while ctr < 300:
             if msg_monitor.get_unique_count() >= producer.get_pos_ack_count() and len(producer.get_msg_set().difference(msg_monitor.get_msg_set())) == 0:
-                break
+               break
             time.sleep(1)
             ctr += 1
 
         confirmed_set = producer.get_msg_set()
         lost_msgs = confirmed_set.difference(msg_monitor.get_msg_set())
+        duplicates = msg_monitor.get_receive_count() - msg_monitor.get_unique_count()
 
         console_out("RESULTS------------------------------------", "TEST RUNNER")
         console_out(f"Confirmed count: {producer.get_pos_ack_count()} Received count: {msg_monitor.get_receive_count()} Unique received: {msg_monitor.get_unique_count()}", "TEST RUNNER")
+        console_out(f"Duplication count: {duplicates}", "TEST RUNNER")
 
         success = True
         if len(lost_msgs) > 0:
             console_out(f"FAILED TEST: Lost messages: {len(lost_msgs)}", "TEST RUNNER")
             success = False
 
-        if msg_monitor.get_out_of_order() == True:
+        if idempotence and msg_monitor.get_out_of_order():
             success = False
             console_out(f"FAILED TEST: Received out-of-order messages", "TEST RUNNER")
+
+        if idempotence and duplicates:
+            success = False
+            console_out(f"FAILED TEST: Duplicates", "TEST RUNNER")
 
         if success:
             console_out("TEST OK", "TEST RUNNER")

@@ -34,13 +34,34 @@ class KafkaProducer(object):
         self.msg_set = set()
         self.pending_ack = set()
 
-    def create_producer(self):
+    def create_producer(self, retry_limit):
         self.producer = Producer({'bootstrap.servers': self.broker_manager.get_bootstrap_servers(),
-                            'message.send.max.retries': 0,
+                            'message.send.max.retries': retry_limit,
+                            #'queue.buffering.max.ms': 100,
                             #'batch.num.messages': 1000,
                             #'stats_cb': my_stats_callback,
                             #'statistics.interval.ms': 100,
                             'default.topic.config': { 'request.required.acks': self.acks_mode }})
+
+    def create_producer_with_buffering(self, retry_limit, buffering_max):
+        self.producer = Producer({'bootstrap.servers': self.broker_manager.get_bootstrap_servers(),
+                            'message.send.max.retries': retry_limit,
+                            'queue.buffering.max.ms': buffering_max,
+                            #'batch.num.messages': 1000,
+                            #'stats_cb': my_stats_callback,
+                            #'statistics.interval.ms': 100,
+                            'default.topic.config': { 'request.required.acks': self.acks_mode }})
+
+    def create_idempotent_producer(self, buffering_max):
+        self.producer = Producer({'bootstrap.servers': self.broker_manager.get_bootstrap_servers(),
+                            'message.send.max.retries': retry_limit,
+                            'enable.idempotence': True,
+                            'queue.buffering.max.ms': buffering_max,
+                            #'batch.num.messages': 1000,
+                            #'stats_cb': my_stats_callback,
+                            #'statistics.interval.ms': 100,
+                            'default.topic.config': { 'request.required.acks': self.acks_mode }
+                        })
 
     def get_actor(self):
         return self.producer_id

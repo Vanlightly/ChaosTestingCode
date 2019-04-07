@@ -14,6 +14,9 @@ class MessageMonitor:
         self.out_of_order = False
         self.concurrent_consumers = False
         self.stop = False
+        self.last_message_body = ""
+        self.sequential_dup_ctr = 0
+        self.last_sequential_dup_ctr = 0
 
     def append(self, message_body, consumer_id, actor):
         self.msg_queue.append((message_body, consumer_id, actor))
@@ -64,6 +67,14 @@ class MessageMonitor:
 
         if key in self.keys:
             last_value = self.keys[key]
+
+            if is_dup:
+                if last_value + 1 == curr_value:
+                    self.sequential_dup_ctr += 1
+                else:
+                    self.sequential_dup_ctr = 0
+            else:
+                self.sequential_dup_ctr = 0
             
             if last_value + 1 < curr_value:
                 jump = curr_value - last_value
@@ -78,7 +89,12 @@ class MessageMonitor:
             elif self.receive_ctr % self.print_mod == 0:
                 console_out(f"Sample msg: {message_body} {duplicate}", actor)
             elif is_dup:
-                console_out(f"Msg: {message_body} {duplicate}", actor)
+                if self.sequential_dup_ctr <= 10:
+                    console_out(f"Msg: {message_body} {duplicate}", actor)
+                elif self.sequential_dup_ctr == 11:
+                    console_out(f"Too many duplicates...", actor)
+            elif self.last_sequential_dup_ctr > 10:
+                console_out(f"Run of duplicates ended with {self.last_sequential_dup_ctr} duplicates and msg:{self.last_message_body}", actor)
         else:
             if curr_value == 1:
                 console_out(f"Latest msg: {message_body} {duplicate}", actor)
@@ -87,6 +103,8 @@ class MessageMonitor:
                 self.out_of_order = True
         
         self.keys[key] = curr_value
+        self.last_message_body = message_body
+        self.last_sequential_dup_ctr = self.sequential_dup_ctr
 
     def stop_consuming(self):
         self.stop = True

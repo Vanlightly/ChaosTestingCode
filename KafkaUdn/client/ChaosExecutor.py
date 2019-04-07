@@ -4,6 +4,7 @@ import subprocess
 import datetime
 import uuid
 import random
+from printer import console_out
 
 class ChaosExecutor(object):
     def __init__(self, broker_manager):
@@ -14,7 +15,7 @@ class ChaosExecutor(object):
         self.network_actions = ["slow-network-one", "slow-network-all", "flaky-network-one", "flaky-network-all"]
         self.broker_manager = broker_manager
         self.node_names = broker_manager.get_initial_nodes()
-        self.stop_random = False
+        self.stop_actions = False
 
     def choose_live_victim(self):
         live_nodes = self.broker_manager.get_live_nodes()
@@ -99,14 +100,15 @@ class ChaosExecutor(object):
             subprocess.call(["bash", "../cluster/heal-partitions.sh"])
             self.partition_state = "healed"
 
-    def stop_random_single_action_and_repair(self):
-        self.stop_random = True
+    def stop_chaos_actions(self):
+        self.stop_actions = True
     
-    def start_random_single_action_and_repair(self, duration_seconds):
-        while self.stop_random == False:
-            self.single_action_and_repair(duration_seconds)
+    def start_random_single_action_and_repair(self, chaos_min_interval, chaos_max_interval):
+        while self.stop_actions == False:
+            self.single_action_and_repair(chaos_min_interval, chaos_max_interval)
 
-    def single_action_and_repair(self, duration_seconds):
+    def single_action_and_repair(self, chaos_min_interval, chaos_max_interval):
+        duration_seconds = random.randint(chaos_min_interval, chaos_max_interval)
         chaos_action = self.sac_actions[random.randint(0, len(self.sac_actions)-1)]
         live_nodes = self.broker_manager.get_live_nodes()
 
@@ -133,8 +135,42 @@ class ChaosExecutor(object):
         subprocess.call(["bash", "../cluster/cluster-status.sh"])
         self.wait_for(duration_seconds)
 
+    def start_kill_leader_or_connections(self, topic, partition):
+        node = self.choose_live_victim()
+        while not self.stop_actions:
+            action_val = random.randint(0, 2)
+            if action_val in [0, 1]:
+                self.kill_tcp_connections()
+                self.wait_for(20)
+            else:
+                victim = self.get_partition_leader(node, topic, partition)
+                subprocess.call(["bash", "../cluster/kill-node.sh", victim])
+                self.wait_for(60)
+                subprocess.call(["bash", "../cluster/start-node.sh", victim])
+                self.wait_for(10)
+            
+
     def wait_for(self, seconds):
         ctr = 0
-        while self.stop_random == False and ctr < seconds:
+        while self.stop_actions == False and ctr < seconds:
             ctr += 1
             time.sleep(1)
+
+    def get_blockade_interface(self):
+        bash_command = f"bash ../cluster/get-blockade-interface.sh"
+        process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
+        output, error = process.communicate()
+        interfac = output.decode('ascii').replace('\n', '')
+        return interfac
+
+    def kill_tcp_connections(self):
+        console_out("Killing connections for 10 second period", "CHAOS")
+        cmd = f"sudo timeout 10s sudo tcpkill -i {self.get_blockade_interface()} -9 port 9092  > /dev/null 2>&1"
+        subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+
+    def get_partition_leader(self, node, topic, partition):
+        bash_command = f"bash ../cluster/get-partition-leader-node.sh {node} {topic} {partition}"
+        process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
+        output, error = process.communicate()
+        leader = output.decode('ascii').replace('\n', '')
+        return leader

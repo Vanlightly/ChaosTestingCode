@@ -5,6 +5,13 @@ This KafkaUdn stands for Kafka User Defined Network. It uses the UDN feature of 
 
 There is one one workaround to make Kafka work with Blockade's UDN feature, we must dynamically reconfigure the cluster after start-up to set the correct value for "advertised.listeners". This is because we cannot use the ${DOCKER_HOST_IP} variable in a blockade.yml and each test run creates a new cluster with dynamically assigned IPs. We can only hard-code the IPs in the blockade.yml. TO get around this limitation of Blockade, we use Kafka's dynamic configuration feature to correct the "advertised.listeners" to the dynamically assigned IP once the cluster has been brought up.
 
+## Note on sudo
+Some scripts use sudo. In order to run those commands without the need to enter my password I have modified my sudoers file.
+
+ALL=(ALL) NOPASSWD: /usr/sbin/tcpkill, /usr/bin/timeout, /usr/sbin/ip
+
+This is not a recommended approach for a personal Linux machine or any kinds of production machine.
+
 ## Different tests
 
 ### Automated Random test
