@@ -60,7 +60,7 @@ class KafkaConsumer:
         while not subscribed:
             try:
                 console_out(f"Starting subscription to {self.topic}", self.actor)
-                self.consumer.subscribe([self.topic]) #, on_assign=self.on_assignment, on_revoke=self.on_revoke)
+                self.consumer.subscribe([self.topic]), on_assign=self.on_assignment, on_revoke=self.on_revoke)
                 console_out(f"Subscribed to {self.topic}", self.actor)
                 subscribed = True
             except KafkaError as e:
