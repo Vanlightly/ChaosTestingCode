@@ -6,8 +6,9 @@ import random
 import threading
 import requests
 import json
+import uuid
 
-from command_args import get_args, get_mandatory_arg, get_optional_arg
+from command_args import get_args, get_mandatory_arg, get_optional_arg, is_true
 from KafkaProducer import KafkaProducer
 from KafkaConsumer import KafkaConsumer
 from ChaosExecutor import ChaosExecutor
@@ -23,7 +24,7 @@ def main():
     run_minutes = int(get_mandatory_arg(args, "--run-minutes"))
     consumer_count = 1
     topic = get_mandatory_arg(args, "--topic")
-    idempotence_str = get_mandatory_arg(args, "--idempotence")
+    idempotence = is_true(get_mandatory_arg(args, "--idempotence"))
     partitions = 1
 
     cluster_size = get_optional_arg(args, "--cluster", "3")
@@ -35,31 +36,21 @@ def main():
     rep_factor = get_optional_arg(args, "--rep-factor", "3")
     acks_mode = get_optional_arg(args, "--acks-mode", "all")
     print_mod = int(get_optional_arg(args, "--print-mod", "0"))
-    new_cluster_str = get_optional_arg(args, "--new-cluster", "true")
+    new_cluster = is_true(get_optional_arg(args, "--new-cluster", "true"))
+    group_id = get_optional_arg(args, "--group-id", str(uuid.uuid1()))
 
     if print_mod == 0:
         print_mod = in_flight_max * 3;
 
-    idempotence = False
-    if idempotence_str.upper() == "TRUE":
-        idempotence = True
-
-    new_cluster = False
-    if new_cluster_str.upper() == "TRUE":
-        new_cluster = True
-    
     for test_number in range(tests):
 
         print("")
-        console_out(f"TEST RUN: {str(test_number)} with idempotence={idempotence_str}--------------------------", "TEST RUNNER")
-        if new_cluster:
-            subprocess.call(["bash", "../automated/setup-test-run.sh", cluster_size, "3.8"])
-            console_out(f"Waiting for cluster...", "TEST RUNNER")
-            time.sleep(30)
-        console_out(f"Cluster status:", "TEST RUNNER")
-        subprocess.call(["bash", "../cluster/cluster-status.sh"])
+        console_out(f"TEST RUN: {str(test_number)} with idempotence={idempotence}--------------------------", "TEST RUNNER")
+        broker_manager = BrokerManager("confluent", True)
         
-        broker_manager = BrokerManager()
+        if new_cluster:
+            broker_manager.deploy(cluster_size, True)
+            
         broker_manager.load_initial_nodes()
         initial_nodes = broker_manager.get_initial_nodes()
         console_out(f"Initial nodes: {initial_nodes}", "TEST RUNNER")
@@ -72,16 +63,16 @@ def main():
         
         time.sleep(10)
 
-        msg_monitor = MessageMonitor(print_mod)
+        msg_monitor = MessageMonitor(print_mod, True)
         chaos = ChaosExecutor(broker_manager)
         
         pub_node = broker_manager.get_random_init_node()
         producer = KafkaProducer(test_number, 1, broker_manager, acks_mode, in_flight_max, print_mod)
         
         if idempotence:
-            producer.create_idempotent_producer(buffering_max)
+            producer.create_idempotent_producer(10000000, buffering_max)
         else:
-            producer.create_producer_with_buffering(1000000, buffering_max)
+            producer.create_producer(1000000, buffering_max)
 
         producer.configure_as_sequence(sequence_count)
         
@@ -119,7 +110,7 @@ def main():
         subprocess.call(["bash", "../cluster/cluster-status.sh"])
         time.sleep(60)
         
-        consumer_manager = ConsumerManager(broker_manager, msg_monitor, "TEST RUNNER", topic_name)
+        consumer_manager = ConsumerManager(broker_manager, msg_monitor, "TEST RUNNER", topic_name, group_id)
         consumer_manager.add_consumers(consumer_count, test_number)
         consumer_manager.start_consumers()
         

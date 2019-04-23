@@ -6,8 +6,9 @@ import random
 import threading
 import requests
 import json
+import uuid
 
-from command_args import get_args, get_mandatory_arg, get_optional_arg
+from command_args import get_args, get_mandatory_arg, get_optional_arg, is_true
 from KafkaProducer import KafkaProducer
 from KafkaConsumer import KafkaConsumer
 from ChaosExecutor import ChaosExecutor
@@ -34,20 +35,13 @@ def main():
     rep_factor = get_optional_arg(args, "--rep-factor", "3")
     acks_mode = get_optional_arg(args, "--acks-mode", "all")
     print_mod = int(get_optional_arg(args, "--print-mod", "0"))
-    chaos = get_optional_arg(args, "--chaos-actions", "true")
+    group_id = get_optional_arg(args, "--group-id", str(uuid.uuid1()))
+    include_chaos = is_true(get_optional_arg(args, "--chaos-actions", "true"))
     chaos_min_interval = int(get_optional_arg(args, "--chaos-min-interval", "60"))
     chaos_max_interval = int(get_optional_arg(args, "--chaos-max-interval", "120"))
-    consumer_actions = get_optional_arg(args, "--consumer-actions", "true")
+    include_con_actions = is_true(get_optional_arg(args, "--consumer-actions", "true"))
     con_action_min_interval = int(get_optional_arg(args, "--consumer-min-interval", "20"))
     con_action_max_interval = int(get_optional_arg(args, "--consumer-max-interval", "60"))
-
-    include_chaos = True
-    if chaos.upper() == "FALSE":
-        include_chaos = False
-
-    include_con_actions = True
-    if consumer_actions.upper() == "FALSE":
-        include_con_actions = False
 
     if print_mod == 0:
         print_mod = in_flight_max * 3;
@@ -56,18 +50,13 @@ def main():
 
         print("")
         console_out(f"TEST RUN: {str(test_number)} --------------------------", "TEST RUNNER")
-        subprocess.call(["bash", "../automated/setup-test-run.sh", cluster_size, "3.8"])
-        console_out(f"Waiting for cluster...", "TEST RUNNER")
-        time.sleep(30)
-        console_out(f"Cluster status:", "TEST RUNNER")
-        subprocess.call(["bash", "../cluster/cluster-status.sh"])
         
-        broker_manager = BrokerManager()
-        broker_manager.load_initial_nodes()
+        broker_manager = BrokerManager("confluent", True)
+        broker_manager.deploy(cluster_size, True)
+        
         initial_nodes = broker_manager.get_initial_nodes()
         console_out(f"Initial nodes: {initial_nodes}", "TEST RUNNER")
-        broker_manager.correct_advertised_listeners()
-
+        
         topic_name = topic + "_" + str(test_number)
         mgmt_node = broker_manager.get_random_init_node()
         console_out(f"Creating topic {topic_name} using node {mgmt_node}", "TEST RUNNER")
@@ -75,13 +64,12 @@ def main():
         
         time.sleep(10)
 
-        msg_monitor = MessageMonitor(print_mod)
+        msg_monitor = MessageMonitor(print_mod, True)
         chaos = ChaosExecutor(broker_manager)
-        consumer_manager = ConsumerManager(broker_manager, msg_monitor, "TEST RUNNER", topic_name)
+        consumer_manager = ConsumerManager(broker_manager, msg_monitor, "TEST RUNNER", topic_name, group_id)
 
-        pub_node = broker_manager.get_random_init_node()
         producer = KafkaProducer(test_number, 1, broker_manager, acks_mode, in_flight_max, print_mod)
-        producer.create_producer(0)
+        producer.create_producer(0, 0)
         producer.configure_as_sequence(sequence_count)
         consumer_manager.add_consumers(consumer_count, test_number)
 
@@ -110,9 +98,13 @@ def main():
 
         ctr = 0
         while ctr < run_minutes:
-            time.sleep(60)
-            console_out(f"Test at {ctr} minute mark, {run_minutes-ctr} minutes left", "TEST RUNNER")
-            ctr += 1
+            try:
+                time.sleep(60)
+                console_out(f"Test at {ctr} minute mark, {run_minutes-ctr} minutes left", "TEST RUNNER")
+                ctr += 1
+            except KeyboardInterrupt:
+                console_out("Stopping test early", "TEST_RUNNER")
+                break
 
         try:
             chaos.stop_chaos_actions()

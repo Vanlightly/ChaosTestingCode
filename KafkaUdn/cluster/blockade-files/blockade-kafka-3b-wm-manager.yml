@@ -9,11 +9,12 @@ containers:
     expose: [2181]
 
   kafka1:
-    image: jackvanlightly/kafka-cp-with-http-reporter:5.2.1-0.3.2
+    image: jackvanlightly/kafka-wurstmeister-with-http-reporter:2.2.0-0.3.2
     hostname: kafka1
     container_name: kafka1
     expose: [9092]
     environment: { 
+      "KAFKA_LISTENERS": "PLAINTEXT://kafka1:9092,PLAINTEXT_IB://kafka1:29092", 
       "KAFKA_ADVERTISED_LISTENERS": "PLAINTEXT://kafka1:9092,PLAINTEXT_IB://kafka1:29092", 
       "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP": "PLAINTEXT:PLAINTEXT,PLAINTEXT_IB:PLAINTEXT", 
       "KAFKA_INTER_BROKER_LISTENER_NAME": "PLAINTEXT_IB",
@@ -27,11 +28,12 @@ containers:
     start_delay: 5
     
   kafka2:
-    image: jackvanlightly/kafka-cp-with-http-reporter:5.2.1-0.3.2
+    image: jackvanlightly/kafka-wurstmeister-with-http-reporter:2.2.0-0.3.2
     hostname: kafka2
     container_name: kafka2
     expose: [9092]
     environment: { 
+      "KAFKA_LISTENERS": "PLAINTEXT://kafka2:9092,PLAINTEXT_IB://kafka2:29092",
       "KAFKA_ADVERTISED_LISTENERS": "PLAINTEXT://kafka2:9092,PLAINTEXT_IB://kafka2:29092",
       "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP": "PLAINTEXT:PLAINTEXT,PLAINTEXT_IB:PLAINTEXT", 
       "KAFKA_INTER_BROKER_LISTENER_NAME": "PLAINTEXT_IB",
@@ -45,11 +47,12 @@ containers:
     start_delay: 1
 
   kafka3:
-    image: jackvanlightly/kafka-cp-with-http-reporter:5.2.1-0.3.2
+    image: jackvanlightly/kafka-wurstmeister-with-http-reporter:2.2.0-0.3.2
     hostname: kafka3
     container_name: kafka3
     expose: [9092]
     environment: { 
+      "KAFKA_LISTENERS": "PLAINTEXT://kafka3:9092,PLAINTEXT_IB://kafka3:29092",
       "KAFKA_ADVERTISED_LISTENERS": "PLAINTEXT://kafka3:9092,PLAINTEXT_IB://kafka3:29092",
       "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP": "PLAINTEXT:PLAINTEXT,PLAINTEXT_IB:PLAINTEXT", 
       "KAFKA_INTER_BROKER_LISTENER_NAME": "PLAINTEXT_IB",

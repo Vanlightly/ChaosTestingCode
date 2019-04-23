@@ -4,7 +4,7 @@ from collections import deque
 from printer import console_out
 
 class MessageMonitor:
-    def __init__(self, print_mod):
+    def __init__(self, print_mod, analyze):
         self.msg_queue = deque()
         self.msg_set = set()
         self.keys = dict()
@@ -17,6 +17,7 @@ class MessageMonitor:
         self.last_message_body = ""
         self.sequential_dup_ctr = 0
         self.last_sequential_dup_ctr = 0
+        self.analyze = analyze
 
     def append(self, message_body, consumer_id, actor):
         self.msg_queue.append((message_body, consumer_id, actor))
@@ -44,67 +45,73 @@ class MessageMonitor:
     def consume(self, message_body, consumer_id, actor):
         self.receive_ctr += 1
         body_str = str(message_body, "utf-8")
-        parts = body_str.split('=')
-        key = parts[0]
-        curr_value = int(parts[1])
+        
+        if self.analyze:
+            parts = body_str.split('=')
+            key = parts[0]
+            curr_value = int(parts[1])
 
-        if body_str in self.msg_set:
-            duplicate = f"DUPLICATE"
-            is_dup = True
-        else:
-            duplicate = ""
-            is_dup = False
+            if body_str in self.msg_set:
+                duplicate = f"DUPLICATE"
+                is_dup = True
+            else:
+                duplicate = ""
+                is_dup = False
 
-        self.msg_set.add(body_str)
+            self.msg_set.add(body_str)
 
-        if key in self.consumer_ids:
-            if self.consumer_ids[key] != consumer_id:
-                console_out(f"CONSUMER CHANGE FOR SEQUENCE {key.upper()}! Last id: {self.consumer_ids[key]} New id: {consumer_id} Msg: {message_body} {duplicate}", actor)
+            if key in self.consumer_ids:
+                if self.consumer_ids[key] != consumer_id:
+                    console_out(f"CONSUMER CHANGE FOR SEQUENCE {key.upper()}! Last id: {self.consumer_ids[key]} New id: {consumer_id} Msg: {message_body} {duplicate}", actor)
+                    self.consumer_ids[key] = consumer_id
+            else:
+                console_out(f"CONSUMER {consumer_id} CONSUMING SEQUENCE {key.upper()}! Msg: {message_body} {duplicate}", actor)
                 self.consumer_ids[key] = consumer_id
-        else:
-            console_out(f"CONSUMER {consumer_id} CONSUMING SEQUENCE {key.upper()}! Msg: {message_body} {duplicate}", actor)
-            self.consumer_ids[key] = consumer_id
 
-        if key in self.keys:
-            last_value = self.keys[key]
+            if key in self.keys:
+                last_value = self.keys[key]
 
-            if is_dup:
-                if last_value + 1 == curr_value:
-                    self.sequential_dup_ctr += 1
+                if is_dup:
+                    if last_value + 1 == curr_value:
+                        self.sequential_dup_ctr += 1
+                    else:
+                        self.sequential_dup_ctr = 0
                 else:
                     self.sequential_dup_ctr = 0
+                
+                if last_value + 1 < curr_value:
+                    jump = curr_value - last_value
+                    last = f"Last-acked={last_value}"
+                    console_out(f"{message_body} {last} JUMP FORWARD {jump} {duplicate}", actor)
+                elif last_value > curr_value:
+                    jump = last_value - curr_value
+                    last = f"Last-acked={last_value}"
+                    console_out(f"{message_body} {last} JUMP BACK {jump} {duplicate}", actor)
+                    if is_dup == False:
+                        self.out_of_order = True
+                elif self.receive_ctr % self.print_mod == 0:
+                    console_out(f"Sample msg: {message_body} {duplicate}", actor)
+                elif is_dup:
+                    if self.sequential_dup_ctr <= 10:
+                        console_out(f"Msg: {message_body} {duplicate}", actor)
+                    elif self.sequential_dup_ctr == 11:
+                        console_out(f"Too many duplicates...", actor)
+                elif self.last_sequential_dup_ctr > 10:
+                    console_out(f"Run of duplicates ended with {self.last_sequential_dup_ctr} duplicates and msg:{self.last_message_body}", actor)
             else:
-                self.sequential_dup_ctr = 0
-            
-            if last_value + 1 < curr_value:
-                jump = curr_value - last_value
-                last = f"Last-acked={last_value}"
-                console_out(f"{message_body} {last} JUMP FORWARD {jump} {duplicate}", actor)
-            elif last_value > curr_value:
-                jump = last_value - curr_value
-                last = f"Last-acked={last_value}"
-                console_out(f"{message_body} {last} JUMP BACK {jump} {duplicate}", actor)
-                if is_dup == False:
+                if curr_value == 1:
+                    console_out(f"Latest msg: {message_body} {duplicate}", actor)
+                else:
+                    console_out(f"{message_body} JUMP FORWARD {curr_value} {duplicate}", actor)
                     self.out_of_order = True
-            elif self.receive_ctr % self.print_mod == 0:
-                console_out(f"Sample msg: {message_body} {duplicate}", actor)
-            elif is_dup:
-                if self.sequential_dup_ctr <= 10:
-                    console_out(f"Msg: {message_body} {duplicate}", actor)
-                elif self.sequential_dup_ctr == 11:
-                    console_out(f"Too many duplicates...", actor)
-            elif self.last_sequential_dup_ctr > 10:
-                console_out(f"Run of duplicates ended with {self.last_sequential_dup_ctr} duplicates and msg:{self.last_message_body}", actor)
-        else:
-            if curr_value == 1:
-                console_out(f"Latest msg: {message_body} {duplicate}", actor)
-            else:
-                console_out(f"{message_body} JUMP FORWARD {curr_value} {duplicate}", actor)
-                self.out_of_order = True
+            
+            self.keys[key] = curr_value
+            self.last_message_body = message_body
+            self.last_sequential_dup_ctr = self.sequential_dup_ctr
         
-        self.keys[key] = curr_value
-        self.last_message_body = message_body
-        self.last_sequential_dup_ctr = self.sequential_dup_ctr
+        elif self.receive_ctr % self.print_mod == 0:
+            self.msg_set.add(body_str)
+            console_out(f"Receive counter: {self.receive_ctr} Sample msg: {body_str}", actor)
 
     def stop_consuming(self):
         self.stop = True

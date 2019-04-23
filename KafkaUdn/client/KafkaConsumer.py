@@ -1,5 +1,6 @@
 from confluent_kafka import Consumer, KafkaError
 import sys
+import time
 import uuid
 from printer import console_out
 
@@ -27,10 +28,10 @@ class KafkaConsumer:
     def on_assignment(self, con, partitions):
         console_out(f"Assigned partitions: {self.get_partitions(partitions)}", self.actor)
 
-        if self.on_assignment_ctr == 0:
-            self.on_assignment_ctr += 1
-            for part in partitions:
-                part.offset = 0
+        # if self.on_assignment_ctr == 0:
+        #     self.on_assignment_ctr += 1
+        #     for part in partitions:
+        #         part.offset = 0
 
         self.consumer.assign(partitions)
 
@@ -45,6 +46,7 @@ class KafkaConsumer:
                             'bootstrap.servers': self.broker_manager.get_bootstrap_servers(),
                             'api.version.request': True,
                             'enable.auto.commit': True,
+                            'metadata.max.age.ms': 60000,
                             'group.id': group_id,
                             'auto.offset.reset': 'earliest',
                             'default.topic.config': {
@@ -58,7 +60,7 @@ class KafkaConsumer:
         while not subscribed:
             try:
                 console_out(f"Starting subscription to {self.topic}", self.actor)
-                self.consumer.subscribe([self.topic], on_assign=self.on_assignment, on_revoke=self.on_revoke)
+                self.consumer.subscribe([self.topic]) #, on_assign=self.on_assignment, on_revoke=self.on_revoke)
                 console_out(f"Subscribed to {self.topic}", self.actor)
                 subscribed = True
             except KafkaError as e:
@@ -70,7 +72,6 @@ class KafkaConsumer:
         self.subscribe()
 
         try:
-            msg_ctr = 0
             while not self.terminate:
                 msg = self.consumer.poll(2.0)
 

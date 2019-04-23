@@ -9,7 +9,7 @@ import uuid
 import threading
 
 class ConsumerManager:
-    def __init__(self, broker_manager, msg_monitor, actor, topic_name):
+    def __init__(self, broker_manager, msg_monitor, actor, topic_name, group_id):
         self.consumers = list()
         self.consumer_threads = list()
         self.broker_manager = broker_manager
@@ -17,7 +17,7 @@ class ConsumerManager:
         self.actor = actor
         self.stop_random = False
         self.topic_name = topic_name
-        self.group_id = str(uuid.uuid1())
+        self.group_id = group_id
 
     def add_consumers(self, consumer_count, test_number):
         for con_id in range (1, consumer_count+1):
@@ -31,6 +31,25 @@ class ConsumerManager:
             con_thread.start()
             self.consumer_threads.append(con_thread)
             console_out(f"consumer {con_id} started", self.actor)
+
+    def add_consumer_and_start_consumer(self, test_number):
+        con_id = len(self.consumers)+1
+        consumer = KafkaConsumer(self.broker_manager, self.msg_monitor, con_id, test_number)
+        consumer.create_consumer(self.group_id, self.topic_name)
+        self.consumers.append(consumer)
+        con_thread = threading.Thread(target=consumer.start_consuming)
+        con_thread.start()
+        self.consumer_threads.append(con_thread)
+        console_out(f"consumer {con_id} added and started", self.actor)
+
+    def stop_and_remove_consumer(self):
+        if len(self.consumers) > 0:
+            console_out("Stopping consumer...", self.actor)
+            self.consumers[0].stop_consuming()
+            self.consumer_threads[0].join()
+            self.consumers.remove(self.consumers[0])
+            self.consumer_threads.remove(self.consumer_threads[0])
+            console_out("Consumer removed", self.actor)
 
     def do_consumer_action(self):
         con_indexes = [i for i in range(len(self.consumers))]

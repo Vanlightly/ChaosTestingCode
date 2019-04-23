@@ -27,7 +27,7 @@ This is not a recommended approach for a personal Linux machine or any kinds of 
 
 ## Different tests
 
-### Automated Random test
+### Automated Random test with chaos
 
 Runs a single producer, producing one or more monotonic sequences, each denoted by a letter.
 
@@ -67,6 +67,7 @@ Optional arguments:
 - --min-insync-replicas The minimum number of insync replicas required to ack a message. Default: 1
 - --unclean-failover Enable/disable unclean failover. Default: false
 - --print-mod The sample rate for printing producer and consumer messages. For example 1000 would print every 1000th message.
+- --group_id. The id of the consumer group. Default is a UUID.
 
 Example:
 
@@ -93,26 +94,74 @@ All tests log the following output:
 
 Mandatory arguments:
 
+- --use-blockade false/true
+- --image-version wurstmeister/confluent
 - --new-cluster (true/false) Whether to create a new cluster or reuse an already running one. If false then ensure that the topic name does not already exist as the consumers start at the earliest offset and will spuriously log duplicates if messages already exist in that topic.
-- --topic The name of the topic
-- --partitions The number of partitions of the topic
-- --rep-factor The replication factor of the topic
-- --consumers The number of consumers in the consumer group
+
+Conditionally Mandatory arguments:
+
+- --new-topic The name of the topic to create
+- --existing-topic The name of an existing topic to use
+
+If you specify a new cluster then --new-topic is mandatory, else one or the other is mandatory.
 
 Optional arguments:
 
+- --partitions The number of partitions of the topic. Default 3.
+- --rep-factor The replication factor of the topic. Default 3.
+- --consumers The number of consumers in the consumer group. Default 1.
+- --producers The number of producers. Default 1.
+- --group_id. The id of the consumer group. Default is a UUID.
+- --analyze When true, checks consumed message ordering, duplicates, message loss. Default true.
 - --acks-mode The acks mode of the producer. Default: all
 - --in-flight-max The number of unacknowledged messages the producer can have at any moment. Default: 100
-- --sequences The number of monotonic sequences produced. Supports up to 10. Default: 1
+- --sequences The number of monotonic sequences produced. Default: 1
 - --cluster The number of Kafka brokers in the cluster. Default 3.
 - --min-insync-replicas The minimum number of insync replicas required to ack a message. Default: 1
 - --unclean-failover Enable/disable unclean failover. Default: false
 - --print-mod The sample rate for printing producer and consumer messages. For example 1000 would print every 1000th message.
+- --grace-period-sec Once producers have stopped, a period for consumers to catch up if behind. Default 300 seconds.
 
-Example:
+Example 1: Create a new cluster and topic, with one producer and three consumers
 
 ```bash
-python producer-consumer.py --new-cluster false --consumers 3 --in-flight-max 10 --grace-period-sec 300 --cluster 3 --topic topic7 --partitions 3 --rep-factor 3 --acks-mode all --sequences 10 --print-mod 100
+python producer-consumer.py --use-blockade false --new-cluster true --image-version wurstmeister --consumers 3 --in-flight-max 10000 --new-topic topic1 --partitions 3 --rep-factor 3 --acks-mode all --sequences 10 --print-mod 1000
+```
+
+Example 2: Use an existing cluster and create a new topic, with one producer and three consumers
+
+```bash
+python producer-consumer.py --use-blockade false --new-cluster true --image-version wurstmeister --consumers 3 --in-flight-max 10000 --existing-topic topic1 --acks-mode all --sequences 10 --print-mod 1000
+```
+
+Example 3: Use an existing cluster and an existing topic, with one producer and three consumers
+
+```bash
+python producer-consumer.py --use-blockade false --new-cluster true --image-version wurstmeister --consumers 3 --in-flight-max 10000 --existing-topic topic1 --acks-mode all --sequences 10 --print-mod 1000
+```
+
+Example 4: Use an existing cluster and an existing topic, with three producers and five consumers
+
+```bash
+python producer-consumer.py --use-blockade false --new-cluster false --image-version wurstmeister --producers 3 --consumers 5 --in-flight-max 10000 --existing-topic topic1 --acks-mode all --sequences 10 --print-mod 1000
+```
+
+Example 5: Use an existing cluster and an existing topic, with one producers and no consumers
+
+```bash
+python producer-consumer.py --use-blockade false --new-cluster false --image-version wurstmeister --producers 1 --consumers 0 --in-flight-max 10000 --existing-topic topic1 --acks-mode all --sequences 10 --print-mod 1000
+```
+
+Example 6: Use an existing cluster and an existing topic, with no producers and one consumers
+
+```bash
+python producer-consumer.py --use-blockade false --new-cluster false --image-version wurstmeister --producers 0 --consumers 1 --in-flight-max 10000 --existing-topic topic1 --acks-mode all --sequences 10 --print-mod 1000
+```
+
+If not using Blockade then you need to run the CloudKarafka MGMT separately. Get the network gateway IP, and use that for the ZOOKEEPER IP.
+
+```bash
+docker run --net=host -e AUTH_MODE=none-with-write -e ZOOKEEPER=172.28.0.1:2181 -d --name manager jackvanlightly/cloudkarafka-manager:latest
 ```
 
 ## Deduplication test (Idempotent Producer)
@@ -124,23 +173,23 @@ The result is duplication when enable.idempotence is set to false, and no duplic
 Example without idempotent producer enabled with the default buffering (linger) value:
 
 ```bash
-python -u dedup-test.py --tests 1 --run-minutes 5 --topic topic1 --idempotence false --buffering-max-ms 0 --new-cluster true
+python dedup-test.py --tests 1 --run-minutes 5 --topic topic1 --idempotence false --buffering-max-ms 0 --new-cluster true
 ```
 
 Example without idempotent producer enabled with the 100ms buffering (linger) value:
 
 ```bash
-python -u dedup-test.py --tests 1 --run-minutes 5 --topic topic1 --idempotence false --buffering-max-ms 100 --new-cluster true
+python dedup-test.py --tests 1 --run-minutes 5 --topic topic1 --idempotence false --buffering-max-ms 100 --new-cluster true
 ```
 
 Example with idempotent producer enabled with the default buffering (linger) value:
 
 ```bash
-python -u dedup-test.py --tests 1 --run-minutes 5 --topic topic1 --idempotence true --buffering-max-ms 0 --new-cluster true
+python dedup-test.py --tests 1 --run-minutes 5 --topic topic1 --idempotence true --buffering-max-ms 0 --new-cluster true
 ```
 
 Example with idempotent producer enabled with the 100ms buffering (linger) value:
 
 ```bash
-python -u dedup-test.py --tests 1 --run-minutes 5 --topic topic1 --idempotence true --buffering-max-ms 100 --new-cluster true
+python dedup-test.py --tests 1 --run-minutes 5 --topic topic1 --idempotence true --buffering-max-ms 100 --new-cluster true
 ```

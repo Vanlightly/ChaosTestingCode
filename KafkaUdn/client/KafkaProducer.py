@@ -5,10 +5,11 @@ import datetime
 import uuid
 import random
 import json
+from itertools import permutations 
 
 from confluent_kafka import Producer
 
-from printer import console_out
+from printer import console_out, console_out_many
 
 class KafkaProducer(object):
     
@@ -29,30 +30,36 @@ class KafkaProducer(object):
         self.pos_acks = 0
         self.neg_acks = 0
         self.key_index = 0
-        self.keys = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
+        self.keys = [str(producer_id) + ''.join(p) for p in permutations(['a', 'b', 'c', 'd', 'e'])]
         self.val = 1
         self.msg_set = set()
         self.pending_ack = set()
 
-    def create_producer(self, retry_limit):
+    def create_producer(self, retry_limit, buffering_max):
+        console_out_many(["Creating producer with:", 
+                f"       bootstrap.servers={self.broker_manager.get_bootstrap_servers()}",
+                f"       acks={self.acks_mode}",
+                f"       retries={retry_limit}",
+                f"       buffering={buffering_max}"], self.get_actor())
+
         self.producer = Producer({'bootstrap.servers': self.broker_manager.get_bootstrap_servers(),
                             'message.send.max.retries': retry_limit,
+                            'queue.buffering.max.ms': buffering_max,
                             #'queue.buffering.max.ms': 100,
                             #'batch.num.messages': 1000,
                             #'stats_cb': my_stats_callback,
                             #'statistics.interval.ms': 100,
+                            'metadata.max.age.ms': 60000,
                             'default.topic.config': { 'request.required.acks': self.acks_mode }})
 
-    def create_producer_with_buffering(self, retry_limit, buffering_max):
-        self.producer = Producer({'bootstrap.servers': self.broker_manager.get_bootstrap_servers(),
-                            'message.send.max.retries': retry_limit,
-                            'queue.buffering.max.ms': buffering_max,
-                            #'batch.num.messages': 1000,
-                            #'stats_cb': my_stats_callback,
-                            #'statistics.interval.ms': 100,
-                            'default.topic.config': { 'request.required.acks': self.acks_mode }})
+    def create_idempotent_producer(self, retry_limit, buffering_max):
+        console_out_many(["Creating idempotent producer with:", 
+                f"       bootstrap.servers={self.broker_manager.get_bootstrap_servers()}",
+                f"       acks={self.acks_mode}",
+                f"       retries={retry_limit}",
+                "        metadata.max.age.ms: 60000",
+                f"       buffering={buffering_max}"], self.get_actor())
 
-    def create_idempotent_producer(self, buffering_max):
         self.producer = Producer({'bootstrap.servers': self.broker_manager.get_bootstrap_servers(),
                             'message.send.max.retries': retry_limit,
                             'enable.idempotence': True,
@@ -60,6 +67,7 @@ class KafkaProducer(object):
                             #'batch.num.messages': 1000,
                             #'stats_cb': my_stats_callback,
                             #'statistics.interval.ms': 100,
+                            'metadata.max.age.ms': 60000,
                             'default.topic.config': { 'request.required.acks': self.acks_mode }
                         })
 
@@ -75,7 +83,7 @@ class KafkaProducer(object):
 
         if err:
             self.neg_acks += 1
-            #console_out(err, self.get_actor())
+            console_out(str(err), self.get_actor())
         else:
             self.pos_acks += 1
             self.msg_set.add(val)
@@ -92,6 +100,7 @@ class KafkaProducer(object):
         self.message_type = "partitioned-sequence"
 
     def start_producing(self, topic, msg_count):
+        console_out(f"{self.key_count} sequences of a possible {len(self.keys)} to be sent", self.get_actor())
         for msg_index in range(0, msg_count):
             if self.terminate:
                 break
