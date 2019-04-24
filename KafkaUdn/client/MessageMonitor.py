@@ -109,9 +109,10 @@ class MessageMonitor:
             self.last_message_body = message_body
             self.last_sequential_dup_ctr = self.sequential_dup_ctr
         
-        elif self.receive_ctr % self.print_mod == 0:
+        else:
             self.msg_set.add(body_str)
-            console_out(f"Receive counter: {self.receive_ctr} Sample msg: {body_str}", actor)
+            if self.receive_ctr % self.print_mod == 0:
+                console_out(f"Receive counter: {self.receive_ctr} Sample msg: {body_str}", actor)
 
     def stop_consuming(self):
         self.stop = True
