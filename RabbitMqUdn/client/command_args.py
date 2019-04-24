@@ -22,3 +22,14 @@ def get_optional_arg(args_dict, key, default_value):
         return args_dict[key]
     else:
         return default_value
+
+def is_true(val):
+    if val.upper() == "TRUE":
+        return True
+    elif val.upper() == "FALSE":
+        return False
+    else:
+        raise ValueError("Must be a boolean value")
+
+def as_list(val):
+    return val.split()

@@ -8,7 +8,7 @@ import threading
 import requests
 import json
 
-from command_args import get_args, get_mandatory_arg, get_optional_arg
+from command_args import get_args, get_mandatory_arg, get_optional_arg, is_true
 from RabbitPublisher import RabbitPublisher
 from MultiTopicConsumer import MultiTopicConsumer
 from QueueStats import QueueStats
@@ -21,7 +21,6 @@ from BrokerManager import BrokerManager
 def main():
     args = get_args(sys.argv)
 
-    node_count = 3
     count = -1 # no limit
     tests = int(get_mandatory_arg(args, "--tests"))
     actions = int(get_mandatory_arg(args, "--actions"))
@@ -29,29 +28,18 @@ def main():
     grace_period_sec = int(get_mandatory_arg(args, "--grace-period-sec"))
     cluster_size = get_optional_arg(args, "--cluster", "3")
     queue = get_mandatory_arg(args, "--queue")
-    sac = get_mandatory_arg(args, "--sac")
+    sac_enabled = is_true(get_mandatory_arg(args, "--sac"))
     chaos_mode = get_optional_arg(args, "--chaos-mode", "mixed")
     chaos_min_interval = int(get_optional_arg(args, "--chaos-min-interval", "30"))
     chaos_max_interval = int(get_optional_arg(args, "--chaos-max-interval", "120"))
-    message_type = "sequence"
     queue_type = get_mandatory_arg(args, "--queue-type")
-
-    sac_enabled = True
-    if sac.upper() == "FALSE":
-        sac_enabled = False
 
     for test_number in range(tests):
 
         print("")
         console_out(f"TEST RUN: {str(test_number)} --------------------------", "TEST RUNNER")
-        subprocess.call(["bash", "../automated/setup-test-run.sh", cluster_size, "3.8"])
-        console_out(f"Waiting for cluster...", "TEST RUNNER")
-        time.sleep(30)
-        console_out(f"Cluster status:", "TEST RUNNER")
-        subprocess.call(["bash", "../cluster/cluster-status.sh"])
-        
         broker_manager = BrokerManager()
-        broker_manager.load_initial_nodes()
+        broker_manager.deploy(cluster_size, True, "3.8")
         initial_nodes = broker_manager.get_initial_nodes()
         
         console_out(f"Initial nodes: {initial_nodes}", "TEST RUNNER")
@@ -76,12 +64,12 @@ def main():
 
         time.sleep(10)
 
-        msg_monitor = MessageMonitor(print_mod)
-        publisher = RabbitPublisher(f"PUBLISHER(Test:{test_number} Id:P1)", initial_nodes, pub_node, in_flight_max, 120, print_mod)
+        msg_monitor = MessageMonitor(print_mod, True)
+        publisher = RabbitPublisher(1, test_number, broker_manager, pub_node, in_flight_max, 120, print_mod)
+        publisher.configure_sequence_direct(queue_name, count, 0, 1)
         consumer_manager = ConsumerManager(broker_manager, msg_monitor, "TEST RUNNER")
         consumer_manager.add_consumers(1, test_number, queue_name)
 
-        stats = QueueStats('jack', 'jack', queue_name)
         chaos = ChaosExecutor(initial_nodes)
 
         if chaos_mode == "partitions":
@@ -94,7 +82,7 @@ def main():
 
         consumer_manager.start_consumers()
         
-        pub_thread = threading.Thread(target=publisher.publish_direct,args=(queue_name, count, 1, 0, "sequence"))
+        pub_thread = threading.Thread(target=publisher.start_publishing)
         pub_thread.start()
         console_out("publisher started", "TEST RUNNER")
 
@@ -112,7 +100,7 @@ def main():
         chaos.repair()
         console_out("repaired cluster", "TEST RUNNER")
         
-        publisher.stop(True)
+        publisher.stop_publishing()
 
         console_out("starting grace period for consumer to catch up", "TEST RUNNER")
         ctr = 0
@@ -151,8 +139,8 @@ def main():
 
         try:
             consumer_manager.stop_all_consumers()
-            con_thread.join()
             pub_thread.join()
+            monitor_thread.join()
         except Exception as e:
             console_out("Failed to clean up test correctly: " + str(e), "TEST RUNNER")
 

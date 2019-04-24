@@ -49,8 +49,8 @@ RUN set -ex; \
 		xz \
 	; \
 	\
-	wget -O rabbitmq-server.tar.xz.asc "https://bintray.com/rabbitmq/all-dev/download_file?file_path=rabbitmq-server%2F3.8.0-alpha.572%2Frabbitmq-server-generic-unix-3.8.0-alpha.572.tar.xz.asc"; \
-	wget -O rabbitmq-server.tar.xz     "https://bintray.com/rabbitmq/all-dev/download_file?file_path=rabbitmq-server%2F3.8.0-alpha.572%2Frabbitmq-server-generic-unix-3.8.0-alpha.572.tar.xz"; \
+	wget -O rabbitmq-server.tar.xz.asc "https://bintray.com/rabbitmq/all-dev/download_file?file_path=rabbitmq-server%2F3.8.0-alpha.600%2Frabbitmq-server-generic-unix-3.8.0-alpha.600.tar.xz.asc"; \
+	wget -O rabbitmq-server.tar.xz     "https://bintray.com/rabbitmq/all-dev/download_file?file_path=rabbitmq-server%2F3.8.0-alpha.600%2Frabbitmq-server-generic-unix-3.8.0-alpha.600.tar.xz"; \
 	\
 	export GNUPGHOME="$(mktemp -d)"; \
 	gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$RABBITMQ_GPG_KEY"; \

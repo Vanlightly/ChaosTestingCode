@@ -5,7 +5,7 @@ from collections import deque
 from printer import console_out
 
 class MessageMonitor:
-    def __init__(self, print_mod):
+    def __init__(self, print_mod, analyze):
         self.msg_queue = deque()
         self.msg_set = set()
         self.last_consumer_ids = dict()
@@ -17,6 +17,7 @@ class MessageMonitor:
         self.concurrent_consumers = False
         self.stop = False
         self.last_msg_time = datetime.datetime.now()
+        self.analyze = analyze
 
     def append(self, message_body, consumer_tag, consumer_id, actor, redelivered):
         self.msg_queue.append((message_body, consumer_tag, consumer_id, actor, redelivered))
@@ -45,59 +46,68 @@ class MessageMonitor:
         self.last_msg_time = datetime.datetime.now()
         self.receive_ctr += 1
         body_str = str(message_body, "utf-8")
-        parts = body_str.split('=')
-        key = parts[0]
-        curr_value = int(parts[1])
+        is_sequence = "=" in body_str
+        
+        if is_sequence and self.analyze:
+            parts = body_str.split('=')
+            key = parts[0]
+            curr_value = int(parts[1])
 
-        if key in self.last_consumer_tags:
-            if self.last_consumer_tags[key] != consumer_tag:
-                console_out(f"CONSUMER CHANGE FOR SEQUENCE {key.upper()}! Last id: {self.last_consumer_ids[key]} New id: {consumer_id} Last tag: {self.last_consumer_tags[key]} New tag: {consumer_tag}", actor)
+            if key in self.last_consumer_tags:
+                if self.last_consumer_tags[key] != consumer_tag:
+                    console_out(f"CONSUMER CHANGE FOR SEQUENCE {key.upper()}! Last id: {self.last_consumer_ids[key]} New id: {consumer_id} Last tag: {self.last_consumer_tags[key]} New tag: {consumer_tag}", actor)
+                    self.last_consumer_ids[key] = consumer_id
+                    self.last_consumer_tags[key] = consumer_tag
+            else:
+                console_out(f"CONSUMER STARTING CONSUMING SEQUENCE {key.upper()}! Consumer Id: {consumer_id} Consumer tag: {consumer_tag}", actor)
                 self.last_consumer_ids[key] = consumer_id
                 self.last_consumer_tags[key] = consumer_tag
-        else:
-            console_out(f"CONSUMER STARTING CONSUMING SEQUENCE {key.upper()}! Consumer Id: {consumer_id} Consumer tag: {consumer_tag}", actor)
-            self.last_consumer_ids[key] = consumer_id
-            self.last_consumer_tags[key] = consumer_tag
-        
-        if body_str in self.msg_set:
-            duplicate = f"DUPLICATE"
-            is_dup = True
-        else:
-            duplicate = ""
-            is_dup = False
-
-        if redelivered:
-            redelivered_str = "REDELIVERED"
-        else:
-            redelivered_str = ""
-
-        self.msg_set.add(body_str)
-
-        if key in self.keys:
-            last_value = self.keys[key]
             
-            if last_value + 1 < curr_value:
-                jump = curr_value - last_value
-                last = f"Last-acked={last_value}"
-                console_out(f"{message_body} {last} JUMP FORWARD {jump} {duplicate} {redelivered_str}", actor)
-            elif last_value > curr_value:
-                jump = last_value - curr_value
-                last = f"Last-acked={last_value}"
-                console_out(f"{message_body} {last} JUMP BACK {jump} {duplicate} {redelivered_str}", actor)
-                if is_dup == False and redelivered == False:
-                    self.out_of_order = True
-            elif self.receive_ctr % self.print_mod == 0:
-                console_out(f"Sample msg: {message_body} {duplicate} {redelivered_str}", actor)
-            elif is_dup or redelivered:
-                console_out(f"Msg: {message_body} {duplicate} {redelivered_str}", actor)
-        else:
-            if curr_value == 1:
-                console_out(f"Latest msg: {message_body} {duplicate} {redelivered_str}", actor)
+            if body_str in self.msg_set:
+                duplicate = f"DUPLICATE"
+                is_dup = True
             else:
-                console_out(f"{message_body} JUMP FORWARD {curr_value} {duplicate} {redelivered_str}", actor)
-                # self.out_of_order = True
-        
-        self.keys[key] = curr_value
+                duplicate = ""
+                is_dup = False
+
+            if redelivered:
+                redelivered_str = "REDELIVERED"
+            else:
+                redelivered_str = ""
+
+            self.msg_set.add(body_str)
+
+            if key in self.keys:
+                last_value = self.keys[key]
+                
+                if last_value + 1 < curr_value:
+                    jump = curr_value - last_value
+                    last = f"Last-acked={last_value}"
+                    console_out(f"{message_body} {last} JUMP FORWARD {jump} {duplicate} {redelivered_str}", actor)
+                elif last_value > curr_value:
+                    jump = last_value - curr_value
+                    last = f"Last-acked={last_value}"
+                    console_out(f"{message_body} {last} JUMP BACK {jump} {duplicate} {redelivered_str}", actor)
+                    if is_dup == False and redelivered == False:
+                        self.out_of_order = True
+                elif self.receive_ctr % self.print_mod == 0:
+                    console_out(f"Sample msg: {message_body} {duplicate} {redelivered_str}", actor)
+                elif is_dup or redelivered:
+                    console_out(f"Msg: {message_body} {duplicate} {redelivered_str}", actor)
+            else:
+                if curr_value == 1:
+                    console_out(f"Latest msg: {message_body} {duplicate} {redelivered_str}", actor)
+                else:
+                    console_out(f"{message_body} JUMP FORWARD {curr_value} {duplicate} {redelivered_str}", actor)
+                    # self.out_of_order = True
+            
+            self.keys[key] = curr_value
+        else:
+            self.msg_set.add(body_str)
+            if self.receive_ctr % self.print_mod == 0:
+                if len(body_str) > 20:
+                    body_str = body_str[0:20]
+                console_out(f"Receive counter: {self.receive_ctr} Sample msg: {body_str}", actor)
 
     def stop_consuming(self):
         self.stop = True

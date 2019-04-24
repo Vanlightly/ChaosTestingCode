@@ -9,60 +9,32 @@ from printer import console_out
 
 class MultiTopicConsumer:
     
-    def __init__(self, consumer_id, node_names, message_monitor, connect_node):
-        self.node_names = node_names
+    def __init__(self, consumer_id, test_number, broker_manager, message_monitor, connect_node):
+        self.broker_manager = broker_manager
         self.connection = None
         self.channel = None
         self.queue_name = ""
         self.message_monitor = message_monitor
         self.terminate = False
         self.consumer_id = consumer_id
+        self.test_number = test_number
         self.connected_node = connect_node
         self.consumer_tag = ""
         self.actor = "-"
-
-        self.nodes = list()
-        for node_name in self.node_names:
-            self.nodes.append(self.get_node_ip(node_name))
-
-        self.curr_node = self.get_node_index(connect_node)
         self.set_actor()
     
-    def get_node_ip(self, node_name):
-        bash_command = "bash ../cluster/get-node-ip.sh " + node_name
-        process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
-        output, error = process.communicate()
-        ip = output.decode('ascii').replace('\n', '')
-        return ip
-
-    def get_node_index(self, node_name):
-        index = 0
-        for node in self.node_names:
-            if node == node_name:
-                return index
-
-            index +=1
-
-        return -1
-        
-    def next_node(self):
-        new_node = self.curr_node
-        while new_node == self.curr_node:
-            new_node = random.randint(0, len(self.node_names)-1)
-
-        self.curr_node = new_node
-
     def set_actor(self):
-        self.actor = f"{self.consumer_id}->{self.connected_node}"
+        self.actor = f"CONSUMER (Test:{self.test_number} Id:C{self.consumer_id})->{self.connected_node}"
     
     def get_actor(self):
         return self.actor
 
     def connect(self):
         try:
-            self.connected_node = self.nodes[self.curr_node]
+            self.connected_node = self.broker_manager.get_current_node()
+            ip = self.broker_manager.get_node_ip(self.connected_node)
             credentials = pika.PlainCredentials('jack', 'jack')
-            parameters = pika.ConnectionParameters(self.connected_node,
+            parameters = pika.ConnectionParameters(ip,
                                                 5672,
                                                 '/',
                                                 credentials)
@@ -114,7 +86,7 @@ class MultiTopicConsumer:
         self.connection = None
         self.channel = None
         console_out("Connection is closed. Opening new connection", self.get_actor())
-        self.next_node()
+        self.broker_manager.next_node()
         return self.connect()
 
     def consume(self):
@@ -160,7 +132,7 @@ class MultiTopicConsumer:
                     self.connected_node = "none"
                     continue
                 else:
-                    self.terminate = True;
+                    self.terminate = True
                     console_out("Aborting consumer", self.get_actor())
                     break
             except pika.exceptions.AMQPConnectionError:
@@ -170,7 +142,7 @@ class MultiTopicConsumer:
                     self.connected_node = "none"
                     continue
                 else:
-                    self.terminate = True;
+                    self.terminate = True
                     console_out("Aborting consumer", self.get_actor())
                     break
             except Exception as ex:
@@ -183,7 +155,7 @@ class MultiTopicConsumer:
                     self.connected_node = "none"
                     continue
                 else:
-                    self.terminate = True;
+                    self.terminate = True
                     console_out("Aborting consumer", self.get_actor())
                     break
 

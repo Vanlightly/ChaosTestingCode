@@ -17,11 +17,10 @@ class ConsumerManager:
         self.stop_random = False
 
     def add_consumers(self, consumer_count, test_number, queue_name):
-        live_nodes = self.broker_manager.get_initial_nodes()
         for con_id in range (1, consumer_count+1):
             consumer_node = self.broker_manager.get_init_node(con_id)
             console_out(f"Consumer {con_id} will first connect to {consumer_node}", self.actor)
-            consumer = MultiTopicConsumer(f"CONSUMER (Test:{test_number} Id:C{con_id})", live_nodes, self.msg_monitor, consumer_node)
+            consumer = MultiTopicConsumer(con_id, test_number, self.broker_manager, self.msg_monitor, consumer_node)
             consumer.connect()
             consumer.set_queue(queue_name)
 

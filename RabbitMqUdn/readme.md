@@ -2,15 +2,25 @@
 
 The code in RabbitMqUdn folder is under active development. Once it is stable I will fully document it.
 
-The code has been developed with Python 3.6.6
+The code has been developed with Python 3.6.7
+
+## Some notes
+
+You can output all scripts to a file appending "2>&1 | tee my-log-file.log" to the end. Just ensure to use the -u flag when executing this way. For example: 
+
+```bash
+$ python -u some-script.py 2>&1 | tee my-log-file.log
+```
 
 ## General Environment setup
 
 ### Create a virtualenv and install dependencies
 
+This codebase uses Python 3.6.
+
 ```bash
 $ cd RabbitMqUdn
-$ virtualenv venv-rabbit
+$ python3.6 -m venv venv-rabbit
 $ source venv-rabbit/bin/activate
 $ pip install -r requirements.txt
 ```
@@ -21,85 +31,16 @@ The RabbitMQ cluster is created in blockade. Various blockade files exist in the
 
 There is also a bash script setup-test-run.sh that will perform a destroy and up command, copying a blockade.yml file according to the parameters to specify. Currently only the version of RabbitMQ can be chosen (3.7 or 3.8). Note that for the 3.8 version you'll need to follow the instructions in the quorum queues section to create a docker image.
 
-## Scripts guide
+Blockade will not pull docker images. Make sure you do a docker pull on any images first.
 
-### Publishers
+### RabbitMQ v3.8 Testing
 
-There is a RabbitPublisher python class that performs various message publishing plus a set of python scripts that use that class that you can use:
+I make docker images available, currently:
 
-- publish.py
-- publish-sequence.py
-- publish-large-messages.py
+- jackvanlightly/rabbitmq-mgmt-v3.8.0-beta.3.erl.alpine:latest
+- jackvanlightly/rabbitmq-mgmt-v3.8.0-alpha.613.erl.alpine:latest
 
-#### publish.py
-
-Send 10000 messages to the queue "myqueue"
-
-```bash
-python publish.py --queue myqueue --msgs 1python create-quorum-queue.py rabbitmq1 Test1 3 rabbitmq3
-```
-
-Send 10000 messages to the exchange "orderpython create-quorum-queue.py rabbitmq1 Test1 3 rabbitmq3
-
-```bash
-python publish.py --ex orders --msgs 10000python create-quorum-queue.py rabbitmq1 Test1 3 rabbitmq3
-```
-
-Send 10000 messages to the exchanges orders1, orders2 and orders3
-
-```bash
-python publish.py --exchanges orders1,orders2,orders3 --msgs 10000
-```
-
-There are more arguments, please check the script.
-
-#### publish-sequence.py
-
-You can send monotonically increasing integer sequences. Additionally, you send multiple sequences with different keys, for example: a=1 b=1 c=1 a=2 b=2 c=2...
-
-This script does not auto declare any exchanges or queues. The consumer scripts declare exchanges and queues so you can start the consumers first, or manually declare them.
-
-Send one sequence of 10000 messages to the queue "myqueue"
-
-```bash
-python publish-sequence.py --queue myqueue --msgs 10000 --keys 1
-```
-
-Send five sequences of 10000 messages to the queue "myqueue"
-
-```bash
-python publish-sequence.py --queue myqueue --msgs 10000 --keys 5
-```
-
-Send five sequences of 10000 messages to the exchange "orders"
-
-```bash
-python publish-sequence.py --ex orders --msgs 10000 --keys 5
-```
-
-Send five sequences of 10000 messages to the exchanges orders1, orders2 and orders3
-
-```bash
-python publish-sequence.py --exchanges orders1,orders2,orders3 --msgs 10000 --keys 5
-```
-
-### Consumers
-
-There is a MultiTopicConsumer class that can perform multiple consumer roles, plus additional scripts that use that class for specific purposes.
-
-#### ordering-consumer.py
-
-Consume from a queue that binds to one or more fanout exchanges. Then start consuming and detect message ordering issues. It assumes the use of the publish-sequence.py script as the source of messages.
-
-```bash
-python ordering-consumer.py --queue q1 --exchanges topic1,topic2,topic3,topic4,topic5
-```
-
-## RabbitMQ v3.8 Testing
-
-### Create a docker image
-
-Note that the 3.8.0-beta 2 and 3 binaries are available. Each use the latest erlang image as a base.
+If you want to build your own, the dockerfiles can be found in folders v3.8.0-beta.3 and v3.8.0-alpha.613.
 
 ```bash
 $ cd RabbitMqUdn/v3.8.0-beta.3
@@ -108,18 +49,87 @@ $ cd management
 $ docker build -t jackvanlightly/rabbitmq-mgmt-v3.8.0-beta.3.erl.alpine .
 ```
 
-### Quorum Queues Test
+## Publishing and Consuming without chaos
 
-#### Manual test steps using python client and blockade
+Use the publish-consume.py script. With arguments:
+
+Cluster:
+
+- --new-cluster Defaults to false. When true, a new blockade cluster will be deployed
+- --cluster-size The number of brokers (3 or 5)
+- --rmq-version The version of RabbitMQ (3.7 or 3.8)
+
+Publish to:
+
+- --queue The queue which consumers consume from. When using direct mode, uses the direct exchange to publish messages directly to this queue. When using exhange mode, a binding from this queue is made to the exchange.
+- --exchanges Send messages to one or more exchanges. Comma separated. Only in exchange mode.
+
+Send what:
+
+- --pub-mode Either "direct" or "exchange". Defaults to direct.
+- --msg-mode One of 4 modes. "sequence" to send monotonic sequences. "partitioned-sequence" to use a separate routing key per sequence (not useful at this point - more coming soon). "large-msgs" to send large messages. "hello" to send a small message that says hello. Defaults to sequence.
+- --msgs The number of messages to send
+- --sequences When using either sequence mode, the number of monotonic sequences to send. Each sequence is identified by a key to differentiate themselves. Messages are in the format key=number.
+- --dup-rate Introduce duplicate messages. Float between 0 and 1, for example 0.2 would be 20% duplicate rate. Default is 0.
+- --in-flight-max The maximum number of unconfirmed messages allowed at any one moment. Higher gives better throughput.
+- --connect-node The broker to connect to initially. Defaults to rabbitmq1
+
+Consumers:
+
+- --consumers The number of consumers. They will consume from the queue --queue. Defaults to one consumer
+- --analyze Analyze message ordering and message duplication or not. Default to true. Best to turn off when using multiple publishers, or not using sequences.
+
+Example 1: Send a single 10000 long monotonic sequence to the queue "q1" on an existing cluster with one publisher and one consumer
+
+```bash
+python publish-consume.py --new-cluster false --queue q1 --msgs 100000
+```
+
+Example 2: Send a single 10000 long monotonic sequence to the queue "q1" on an existing cluster with one publisher and one consumer. With a high in-flight-max we get much higher throughput than example 1.
+
+```bash
+python publish-consume.py --new-cluster false --queue q1 --msgs 100000 --in-flight-max 10000
+```
+
+Example 3: Sends 10 monotonic sequences each with 100000 messages to the exchange "ex1" on a new cluster and bind a queue q1 to ex1 with one consumer consuming
+
+```bash
+python publish-consume.py --new-cluster true --cluster-size 3 --rmq-version 3.8 --queue q1 --exchanges ex1 --msgs 100000 --pub-mode exchange --msg-mode sequence --sequences 10
+```
+
+Example 4: Send 10000 large messages to the exchange "orders" with a message length of approximately 15000 characters
+
+```bash
+python publish-consume.py --new-cluster false --queue orders2 --exchanges orders --msgs 10000 --pub-mode exchange --msg-mode large-msgs --msg-size 15000
+```
+
+Example 5: Send a 10000 long sequence to the exchanges orders1, orders2 and orders3
+
+```bash
+python publish.py --exchanges orders1,orders2,orders3 --msgs 10000 --pub-mode hello
+```
+
+Example 6: Send a single 10000 long monotonic sequence to the quorum queue "qq1" with rep-factor of 3 with Single-Active-Consumer enabled on an existing cluster. Ouorum queues and SAC only on 3.8 clusters.
+
+```bash
+python publish-consume.py --new-cluster false --queue qq1 --msgs 100000 --queue-type quorum --rep-factor 3 --sac true
+```
+
+Example 7: Send a single 10000 long monotonic sequence to the mirrored queue "mq1" with rep-factor of 3 on an existing cluster.
+
+```bash
+python publish-consume.py --new-cluster false --queue mq1 --msgs 100000 --queue-type standard --rep-factor 3
+```
+
+## Manual Quorum Queues Test
 
 Create a quorum queue Test1 with rep factor of 3, with leader on rabbitmq3.
 
 First ensure that the cluster/blockade-files/blockade-rmq-3b-3.8.yml has the correct image of RabbitMQ that you want to test. Then run the following:
 
 ```bash
-$ cd RabbitMqUdn/automated
-$ bash setup-test-run.sh 3 3.8
-$ cd ../cluster
+$ cd RabbitMqUdn/cluster
+$ bash deploy-blockade-cluster.sh 3 3.8
 $ python create-quorum-queue.py rabbitmq1 Test1 3 rabbitmq3
 ```
 
@@ -127,7 +137,7 @@ You can now perform various tests on the Test1 quorum queue.
 
 Note that create-quorum-queue-sac.py creates a quorum queue with Single Active Consumer enabled.
 
-#### Automated tests
+## Automated test Quorum Queues Test
 
 The script client/quorum-queue-test.py runs an automated randomized test and verifies the following invariants:
 
@@ -151,13 +161,21 @@ Messages can jump forward only (this could indicate message loss but not an orde
 
 Messages can jump back when redelivered=true.
 
+Example 1: with Single Active Consumer disabled
+
 ```bash
-$ python -u quorum-queue-test.py --queue q --tests 20 --actions 20 --grace-period-sec 300 --in-flight-max 100  2>&1 | tee test.log
+$ python -u quorum-queue-test.py --queue q --tests 20 --actions 20 --grace-period-sec 300 --in-flight-max 100 --sac false  2>&1 | tee test.log
 ```
 
-### Single Active Consumer Test
+Example 2: with Single Active Consumer enabled
 
-#### Test Design
+```bash
+$ python -u quorum-queue-test.py --queue q --tests 20 --actions 20 --grace-period-sec 300 --in-flight-max 100 --sac true  2>&1 | tee test.log
+```
+
+## Single Active Consumer Test
+
+### Test Design
 
 One publisher sends messages with a monotonically increasing integer. Three consumers, each at first connected to a different broker in the cluster.
 
@@ -186,7 +204,7 @@ The detection mechanisms are:
 
 Both detection mechanisms are not perfect and can result in false positives due to ordering and message loss bugs. So manual review of the logs of a failed run is required.
 
-#### Running the test
+### Running the test
 
 The test can be run again mirrored or quorum queues.
 
@@ -202,6 +220,6 @@ Mirrored queues
 $ python -u sac-test.py --queue beta3 --tests 10 --actions 20 --grace-period-sec 300 --in-flight-max 200 --cluster 3 --consumers 5 --queue-type mirrored  2>&1 | tee test-sac.log
 ```
 
-### Random Test
+## Random Test
 
 A test script that is highly configurable, to perform automated or manual testing on quorum or mirrored queues, with or without SAC enabled. See the client/examples/random folder for examples.

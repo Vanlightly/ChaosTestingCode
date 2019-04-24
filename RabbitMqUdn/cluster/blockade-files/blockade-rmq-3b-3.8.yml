@@ -34,7 +34,7 @@ containers:
     }
     command: sh -c "/usr/local/bin/cluster-entrypoint.sh"
     expose: [1936,5672,15672]
-    start_delay: 1
+    start_delay: 10
 
 network:
   driver: udn

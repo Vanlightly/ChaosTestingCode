@@ -7,6 +7,8 @@ import datetime
 import uuid
 import random
 
+from printer import console_out
+
 class ChaosExecutor(object):
     def __init__(self, node_names):
         self.chaos_actions = ["node", "node", "partition", "partition", "network"]
@@ -106,9 +108,12 @@ class ChaosExecutor(object):
         
     def repair(self):
         live_nodes = self.get_live_nodes()
+        console_out(f"CLUSTER REPAIR INITIATED. Of nodes: {self.node_names}, {live_nodes} are up", "TEST RUNNER")
         for node in self.node_names:
             if node not in live_nodes:
+                console_out(f"STARTING BROKER {node} -----------------------", "TEST RUNNER")
                 subprocess.call(["bash", "../cluster/start-node.sh", node])
+                console_out(f"BROKER {node} STARTED -----------------------", "TEST RUNNER")
 
         time.sleep(5)
 
@@ -137,12 +142,13 @@ class ChaosExecutor(object):
             victim = live_nodes[node_index]
             subprocess.call(["bash", "../cluster/kill-node.sh", victim])
 
-            # 33% chance of killing two nodes
+            # 33% chance of killing two nodes (only if 3 nodes were originally up)
             if random.randint(0, 2) == 2:
                 live_nodes = self.get_live_nodes()
-                node_index = random.randint(0, len(live_nodes)-1)
-                victim = live_nodes[node_index]
-                subprocess.call(["bash", "../cluster/kill-node.sh", victim])
+                if len(live_nodes) > 1:
+                    node_index = random.randint(0, len(live_nodes)-1)
+                    victim = live_nodes[node_index]
+                    subprocess.call(["bash", "../cluster/kill-node.sh", victim])
 
         elif chaos_action == "partition":
             victim = self.choose_live_victim()

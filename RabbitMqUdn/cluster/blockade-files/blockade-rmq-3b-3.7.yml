@@ -36,7 +36,7 @@ containers:
     command: sh -c "/usr/local/bin/cluster-entrypoint.sh"
     expose: [1936,5672,15672]
     links: { rabbitmq1: rabbitmq1 }
-    start_delay: 20
+    start_delay: 10
 
 network:
   driver: udn

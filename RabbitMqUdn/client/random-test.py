@@ -9,7 +9,7 @@ import requests
 import json
 import signal
 
-from command_args import get_args, get_mandatory_arg, get_optional_arg
+from command_args import get_args, get_mandatory_arg, get_optional_arg, is_true
 from RabbitPublisher import RabbitPublisher
 from MultiTopicConsumer import MultiTopicConsumer
 from QueueStats import QueueStats
@@ -44,53 +44,31 @@ def main():
     grace_period_sec = int(get_mandatory_arg(args, "--grace-period-sec"))
     queue = get_mandatory_arg(args, "--queue")
     queue_type = get_mandatory_arg(args, "--queue-type")
-    sac = get_mandatory_arg(args, "--sac")
+    sac_enabled = is_true(get_mandatory_arg(args, "--sac"))
 
     publisher_count = int(get_optional_arg(args, "--publishers", "1"))
     print_mod = int(get_optional_arg(args, "--print-mod", "0"))
-    new_cluster = get_optional_arg(args, "--new-cluster", "true")
+    new_cluster = is_true(get_optional_arg(args, "--new-cluster", "true"))
     in_flight_max = int(get_optional_arg(args, "--in-flight-max", "10"))
     sequence_count = int(get_optional_arg(args, "--sequences", "1"))
     cluster_size = get_optional_arg(args, "--cluster", "3")
-    chaos = get_optional_arg(args, "--chaos-actions", "true")
+    include_chaos = is_true(get_optional_arg(args, "--chaos-actions", "true"))
     chaos_mode = get_optional_arg(args, "--chaos-mode", "mixed")
     chaos_min_interval = int(get_optional_arg(args, "--chaos-min-interval", "60"))
     chaos_max_interval = int(get_optional_arg(args, "--chaos-max-interval", "120"))
-    consumer_actions = get_optional_arg(args, "--consumer-actions", "true")
+    include_con_actions = is_true(get_optional_arg(args, "--consumer-actions", "true"))
     con_action_min_interval = int(get_optional_arg(args, "--consumer-min-interval", "20"))
     con_action_max_interval = int(get_optional_arg(args, "--consumer-max-interval", "60"))
 
     if print_mod == 0:
         print_mod = in_flight_max * 5
-
-    include_chaos = True
-    if chaos.upper() == "FALSE":
-        include_chaos = False
-
-    include_con_actions = True
-    if consumer_actions.upper() == "FALSE":
-        include_con_actions = False
-
-    sac_enabled = True
-    if sac.upper() == "FALSE":
-        sac_enabled = False
-
-    message_type = "sequence"
     
     for test_number in range(tests):
 
         print("")
         console_out(f"TEST RUN: {str(test_number)} --------------------------", "TEST RUNNER")
-        if new_cluster.upper() == "TRUE":
-            subprocess.call(["bash", "../automated/setup-test-run.sh", cluster_size, "3.8"])
-            console_out(f"Waiting for cluster...", "TEST RUNNER")
-            time.sleep(30)
-
-        console_out(f"Cluster status:", "TEST RUNNER")
-        subprocess.call(["bash", "../cluster/cluster-status.sh"])
-        
         broker_manager = BrokerManager()
-        broker_manager.load_initial_nodes()
+        broker_manager.deploy(cluster_size, new_cluster, "3.8")
         initial_nodes = broker_manager.get_initial_nodes()
         console_out(f"Initial nodes: {initial_nodes}", "TEST RUNNER")
 
@@ -109,8 +87,7 @@ def main():
 
         time.sleep(10)
 
-        msg_monitor = MessageMonitor(print_mod)
-        stats = QueueStats('jack', 'jack', queue_name)
+        msg_monitor = MessageMonitor(print_mod, True)
         chaos = ChaosExecutor(initial_nodes)
 
         if chaos_mode == "partitions":
@@ -121,7 +98,8 @@ def main():
         consumer_manager = ConsumerManager(broker_manager, msg_monitor, "TEST RUNNER")
 
         pub_node = broker_manager.get_random_init_node()
-        publisher = RabbitPublisher(f"PUBLISHER(Test:{test_number} Id:P1)", initial_nodes, pub_node, in_flight_max, 120, print_mod)
+        publisher = RabbitPublisher(1, test_number, broker_manager, pub_node, in_flight_max, 120, print_mod)
+        publisher.configure_sequence_direct(queue_name, count, 0, sequence_count)
         consumer_manager.add_consumers(consumer_count, test_number, queue_name)
 
         monitor_thread = threading.Thread(target=msg_monitor.process_messages)
@@ -130,7 +108,7 @@ def main():
         consumer_manager.start_consumers()
 
         if publisher_count == 1:
-            pub_thread = threading.Thread(target=publisher.publish_direct,args=(queue_name, count, sequence_count, 0, "sequence"))
+            pub_thread = threading.Thread(target=publisher.start_publishing)
             pub_thread.start()
             console_out("publisher started", "TEST RUNNER")
 
@@ -179,7 +157,7 @@ def main():
         consumer_manager.resume_all_consumers()
         
         if publisher_count == 1:
-            publisher.stop(True)
+            publisher.stop_publishing()
 
         console_out("starting grace period for consumer to catch up", "TEST RUNNER")
         ctr = 0

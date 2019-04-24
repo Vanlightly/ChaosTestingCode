@@ -6,20 +6,22 @@ import subprocess
 import datetime
 import uuid
 import random
+from itertools import permutations 
 
 from printer import console_out
 
 class RabbitPublisher(object):
     
-    def __init__(self, publisher_id, node_names, connect_node, in_flight_limit, confirm_timeout_sec, print_mod):
+    def __init__(self, publisher_id, test_number, broker_manager, connect_node, in_flight_limit, confirm_timeout_sec, print_mod):
         
+        self.broker_manager = broker_manager
         self._connection = None
         self._channel = None
         self._stopping = False
 
         self.publisher_id = publisher_id
+        self.test_number = test_number
         self.message_type = ""
-        self.exchange = ""   
         self.exchanges = list()
         self.routing_key = ""
         self.count = 0
@@ -30,7 +32,7 @@ class RabbitPublisher(object):
         self.in_flight_limit = in_flight_limit
         self.confirm_timeout_sec = confirm_timeout_sec
         self.print_mod = print_mod
-
+        
         # message tracking
         self.last_ack_time = datetime.datetime.now()
         self.last_ack = 0
@@ -42,7 +44,7 @@ class RabbitPublisher(object):
         self.undeliverable = 0
         self.no_acks = 0
         self.key_index = 0
-        self.keys = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
+        self.keys = [str(publisher_id) + ''.join(p) for p in permutations(['a', 'b', 'c', 'd', 'e'])]
         self.val = 1
         self.waiting_for_acks = False
         self.waiting_for_acks_sec = 0
@@ -52,13 +54,6 @@ class RabbitPublisher(object):
         # nodes and ips
         self.curr_node = 0
         self.connected_node = connect_node
-        self.node_names = node_names
-        self.nodes = list()
-
-        for node_name in self.node_names:
-            self.nodes.append(self.get_node_ip(node_name))
-
-        self.curr_node = self.get_node_index(connect_node)
         self.actor = ""
         self.set_actor()
 
@@ -72,42 +67,19 @@ class RabbitPublisher(object):
         self.waiting_for_acks_sec = 0
         self.pending_messages.clear()
 
-    def get_pos_ack_count(self):
-        return self.pos_acks
-
-    def get_node_ip(self, node_name):
-        bash_command = "bash ../cluster/get-node-ip.sh " + node_name
-        process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
-        output, error = process.communicate()
-        ip = output.decode('ascii').replace('\n', '')
-        return ip
-
-    def get_node_index(self, node_name):
-        index = 0
-        for node in self.node_names:
-            if node == node_name:
-                return index
-
-            index +=1
-
-        return -1
-        
-    def next_node(self):
-        self.curr_node += 1
-        if self.curr_node >= len(self.node_names):
-            self.curr_node = 0
-
     def set_actor(self):
-        self.actor = f"{self.publisher_id}->{self.connected_node}"
+        publisher_id = f"PUBLISHER(Test:{self.test_number} Id:P{self.publisher_id})"
+        self.actor = f"{publisher_id}->{self.connected_node}"
 
     def get_actor(self):
         return self.actor
 
     def connect(self):
-        self.connected_node = self.nodes[self.curr_node]
+        self.connected_node = self.broker_manager.get_current_node()
+        ip = self.broker_manager.get_node_ip(self.connected_node)
         self.set_actor()
-        console_out("Attempting to connect to " + self.nodes[self.curr_node], self.get_actor())
-        parameters = pika.URLParameters('amqp://jack:jack@' + self.nodes[self.curr_node] + ':5672/%2F')
+        console_out(f"Attempting to connect to {self.connected_node} {ip}", self.get_actor())
+        parameters = pika.URLParameters(f"amqp://jack:jack@{ip}:5672/%2F")
         return pika.SelectConnection(parameters,
                                      on_open_callback=self.on_connection_open,
                                      on_open_error_callback=self.on_connection_open_error,
@@ -120,7 +92,7 @@ class RabbitPublisher(object):
         
     def on_connection_open_error(self, unused_connection, err):
         console_out(f'Connection open failed, reopening in 5 seconds: {err}', self.get_actor())
-        self.next_node()
+        self.broker_manager.next_node()
         self._connection.ioloop.add_timeout(5, self._connection.ioloop.stop)
 
     def on_connection_closed(self, connection, reason_code, reason_text):
@@ -130,7 +102,7 @@ class RabbitPublisher(object):
             self._connection.ioloop.stop()                
         else:
             console_out(f"Connection closed. Code: {reason_code} Text: {reason_text}. Reopening in 5 seconds.", self.get_actor())
-            self.next_node()
+            self.broker_manager.next_node()
             self._connection.ioloop.add_timeout(5, self._connection.ioloop.stop)
 
     def open_channel(self):
@@ -144,7 +116,7 @@ class RabbitPublisher(object):
                 
         self.reset_ack_tracking()
         self.seq_no = 0
-        self.start_publishing()
+        self.send_messages()
 
     def add_on_channel_close_callback(self):
         self._channel.add_on_close_callback(self.on_channel_closed)
@@ -165,7 +137,7 @@ class RabbitPublisher(object):
 
             if not full_stop:
                 console_out("Reopening a new connection in 10 seconds", self.get_actor())
-                self.next_node()
+                self.broker_manager.next_node()
                 self._connection.ioloop.add_timeout(10, self._connection.ioloop.stop)
 
     def close_channel(self):
@@ -181,14 +153,13 @@ class RabbitPublisher(object):
     def repeat_to_length(self, string_to_expand, length):
         return (string_to_expand * (int(length/len(string_to_expand))+1))[:length]
 
-    def start_publishing(self):
+    def send_messages(self):
         if self._channel == None or not self._channel.is_open:
             return
 
         self.enable_delivery_confirmations()
         rk = self.routing_key
         body = ""
-        large_msg = self.repeat_to_length("1234567890", 1000)
         curr_exchange = 0
         send_to_exchange = None
         
@@ -212,7 +183,7 @@ class RabbitPublisher(object):
                         self.waiting_for_acks_sec += 1
                         if self._channel.is_open:
                             #print(f"{len(self.pending_messages)} pending messages")
-                            self._connection.add_timeout(1, self.start_publishing)
+                            self._connection.add_timeout(1, self.send_messages)
                             break
 
                 
@@ -234,12 +205,13 @@ class RabbitPublisher(object):
                     body = f"{self.keys[self.key_index]}={self.val}"
                     self.msg_map[self.seq_no] = body
                 elif self.message_type == "large-msgs":
-                    body = large_msg
+                    body = self.large_msg
                 else:
-                    body = "hello"
+                    body = "{\"message\": \"Hello there, how are you?\"}"
                 
-                if self.exchange != None:
-                    send_to_exchange = self.exchange
+                if len(self.exchanges) == 1:
+                    curr_exchange = 0
+                    send_to_exchange = self.exchanges[curr_exchange]
                 else:
                     if curr_exchange >= len(self.exchanges):
                         curr_exchange = 0
@@ -258,7 +230,7 @@ class RabbitPublisher(object):
                 # potentially send a duplicate if enabled
                 if self.dup_rate > 0:
                     if random.uniform(0, 1) < self.dup_rate:
-                        self._channel.basic_publish(exchange=self.exchange, 
+                        self._channel.basic_publish(exchange=send_to_exchange, 
                                     routing_key=self.routing_key,
                                     body=body,
                                     mandatory=True,
@@ -281,7 +253,6 @@ class RabbitPublisher(object):
         self._channel.add_on_return_callback(callback=self.on_undeliverable)
 
     def on_undeliverable(self, channel, method, properties, body):
-        body_str = str(body, "utf-8")
         self.undeliverable += 1
         if self.undeliverable % 100 == 0:
             console_out(f"{str(self.undeliverable)} messages could not be delivered", self.get_actor())
@@ -324,37 +295,72 @@ class RabbitPublisher(object):
             console_out(f"Final Count => Pos acks: {self.pos_acks} Neg acks: {self.neg_acks} Undeliverable: {self.undeliverable} No Acks: {self.no_acks}", self.get_actor())
             self._stopping = True
             self.stop(True)
-            
 
-    def publish_direct(self, queue, count, sequence_count, dup_rate, message_type):
-        self.publish("", queue, count, sequence_count, dup_rate, message_type)
-    
-    def publish_to_exchanges(self, exchanges, routing_key, count, sequence_count, dup_rate, message_type):
+    def configure_hello_msgs_direct(self, queue, count, dup_rate):
+        self.routing_key = queue
+        self.exchanges = [""]
+        console_out(f"Will publish large messages to queue {queue}", self.get_actor())
+        self.configure(count, dup_rate, "hello")
+
+    def configure_hello_msgs_to_exchanges(self, exchanges, routing_key, count, dup_rate):
         self.exchanges = exchanges
-        self.publish(None, routing_key, count, sequence_count, dup_rate, message_type)
-
-    def publish(self, exchange, routing_key, count, sequence_count, dup_rate, message_type):
-        self._stopping = False
-        console_out(f"Will publish to exchange {exchange} and routing key {routing_key}", self.get_actor())
-        self.exchange = exchange
         self.routing_key = routing_key
-        self.count = count
+        console_out(f"Will publish hello msgs to exchanges {exchanges}", self.get_actor())
+        self.configure(count, dup_rate, "hello")
+
+
+    def configure_large_msgs_direct(self, queue, count, dup_rate, msg_size):
+        self.large_msg = self.repeat_to_length("1234567890", msg_size)
+        self.routing_key = queue
+        self.exchanges = [""]
+        console_out(f"Will publish large messages to queue {queue}", self.get_actor())
+        self.configure(count, dup_rate, "large-msgs")
+
+    def configure_large_msgs_to_exchanges(self, exchanges, routing_key, count, dup_rate, msg_size):
+        self.large_msg = self.repeat_to_length("1234567890", msg_size)
+        self.exchanges = exchanges
+        self.routing_key = routing_key
+        console_out(f"Will publish large msgs to exchanges {exchanges}", self.get_actor())
+        self.configure(count, dup_rate, "large-msgs")
+
+    def configure_sequence_direct(self, queue, count, dup_rate, sequence_count):
         self.sequence_count = sequence_count
+        self.routing_key = queue
+        self.exchanges = [""]
+        console_out(f"Will publish {sequence_count} sequences to queue {queue}", self.get_actor())
+        self.configure(count, dup_rate, "sequence")
+
+    def configure_sequence_to_exchanges(self, exchanges, routing_key, count, dup_rate, sequence_count):
+        self.exchanges = exchanges
+        self.sequence_count = sequence_count
+        self.routing_key = routing_key
+        console_out(f"Will publish {sequence_count} sequences to exchanges {exchanges}", self.get_actor())
+        self.configure(count, dup_rate, "sequence")
+
+    def configure_partitioned_sequence_to_exchanges(self, exchanges, count, dup_rate, sequence_count):
+        self.exchanges = exchanges
+        self.sequence_count = sequence_count
+        console_out(f"Will publish {sequence_count} partitioned sequences to exchanges {exchanges}", self.get_actor())
+        self.configure(count, dup_rate, "partitioned-sequence")
+
+    def configure(self, count, dup_rate, message_type):
+        self._stopping = False
+        self.count = count
         self.dup_rate = dup_rate
 
         if count == -1:
             self.total = 100000000
         else:
-            self.total = count * sequence_count
+            self.total = count * max(self.sequence_count, 1)
 
         self.expected = self.total
         self.message_type = message_type
 
-        if self.message_type == "partitioned-sequence":
+        if self.message_type == "partitioned-sequence" and self.routing_key != "":
             console_out("Routing key is ignored with the sequence type", self.get_actor())
 
-        if self.sequence_count > 10:
-            console_out("Key count limit is 10", self.get_actor())
+        if self.sequence_count > 120:
+            console_out("Key count limit is 120", self.get_actor())
             exit(1)
 
         allowed_types = ["partitioned-sequence", "sequence", "large-msgs", "hello"]
@@ -362,14 +368,24 @@ class RabbitPublisher(object):
             console_out(f"Valid message types are: {allowed_types}", self.get_actor())
             exit(1)
 
+    def start_publishing(self):
         while not self._stopping:
             self._connection = None
 
             self._connection = self.connect()
             self._connection.ioloop.start()
 
+    def stop_publishing(self):
+        self.stop(True)
+
     def print_final_count(self):
         console_out(f"Final Count => Sent: {self.curr_pos} Pos acks: {self.pos_acks} Neg acks: {self.neg_acks} Undeliverable: {self.undeliverable} No Acks: {self.no_acks}", self.get_actor())
+
+    def get_pos_ack_count(self):
+        return self.pos_acks
+
+    def get_neg_ack_count(self):
+        return self.neg_acks
 
     def get_msg_set(self):
         return self.msg_set
