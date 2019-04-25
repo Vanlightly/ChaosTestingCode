@@ -12,11 +12,11 @@ python -u random-test.py --queue $1 \
 --cluster 3 \
 --publishers 1 \
 --consumers 3 \
---queue-type quorum \
+--queue-type mirrored \
 --chaos-actions true \
 --chaos-mode mixed \
---chaos-min-interval 30
---chaos-min-interval 90
+--chaos-min-interval 30 \
+--chaos-min-interval 90 \
 --consumer-actions true \
 --consumer-min-interval 10 \
 --consumer-max-interval 45 \

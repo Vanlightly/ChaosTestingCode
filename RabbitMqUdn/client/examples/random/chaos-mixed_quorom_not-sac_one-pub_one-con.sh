@@ -15,8 +15,8 @@ python -u random-test.py --queue $1 \
 --queue-type quorum \
 --chaos-actions true \
 --chaos-mode mixed \
---chaos-min-interval 30
---chaos-min-interval 90
+--chaos-min-interval 30 \
+--chaos-min-interval 90 \
 --consumer-actions true \
 --consumer-min-interval 30 \
 --consumer-max-interval 30 \
