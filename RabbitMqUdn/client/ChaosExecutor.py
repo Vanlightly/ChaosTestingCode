@@ -41,6 +41,10 @@ class ChaosExecutor(object):
 
     def choose_live_victim(self):
         live_nodes = self.get_live_nodes()
+
+        if len(live_nodes) == 0:
+            return None
+        
         if len(live_nodes) == 1:
             return live_nodes[0]
 

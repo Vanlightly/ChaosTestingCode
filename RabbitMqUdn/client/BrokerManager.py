@@ -26,9 +26,14 @@ class BrokerManager:
             subprocess.call(["bash", "../cluster/cluster-status.sh"])
             
         self.load_initial_nodes()
-        
+        self.print_log_files()
+    
     def load_initial_nodes(self):
         self.init_live_nodes =  self.get_live_nodes()
+
+    def print_log_files(self):
+        for node in self.init_live_nodes:
+            subprocess.call(["bash", "../cluster/print-log-file.sh", node])
 
     def get_initial_nodes(self):
         return self.init_live_nodes

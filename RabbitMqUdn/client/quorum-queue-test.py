@@ -20,6 +20,7 @@ from ConsumerManager import ConsumerManager
 from BrokerManager import BrokerManager
 
 def main():
+    print("quorum-queue-test.py")
     args = get_args(sys.argv)
 
     count = -1 # no limit

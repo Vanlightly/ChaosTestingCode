@@ -33,7 +33,7 @@ def interuppt_handler(signum, frame):
     
 
 def main():
-
+    print("random_test")
     #signal.signal(signal.SIGINT, interuppt_handler)
     args = get_args(sys.argv)
 

@@ -12,6 +12,7 @@ from printer import console_out
 
 
 def main():
+    print("publish-consume.py")
     args = get_args(sys.argv)
 
     # cluster
