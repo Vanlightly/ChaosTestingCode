@@ -33,7 +33,7 @@ def interuppt_handler(signum, frame):
     
 
 def main():
-    print("random_test")
+    print("random-test.py")
     #signal.signal(signal.SIGINT, interuppt_handler)
     args = get_args(sys.argv)
 
@@ -47,22 +47,27 @@ def main():
     sac_enabled = is_true(get_mandatory_arg(args, "--sac"))
 
     publisher_count = int(get_optional_arg(args, "--publishers", "1"))
-    print_mod = int(get_optional_arg(args, "--print-mod", "0"))
-    new_cluster = is_true(get_optional_arg(args, "--new-cluster", "true"))
-    in_flight_max = int(get_optional_arg(args, "--in-flight-max", "10"))
-    sequence_count = int(get_optional_arg(args, "--sequences", "1"))
-    cluster_size = get_optional_arg(args, "--cluster", "3")
-    include_chaos = is_true(get_optional_arg(args, "--chaos-actions", "true"))
-    chaos_mode = get_optional_arg(args, "--chaos-mode", "mixed")
-    chaos_min_interval = int(get_optional_arg(args, "--chaos-min-interval", "60"))
-    chaos_max_interval = int(get_optional_arg(args, "--chaos-max-interval", "120"))
-    include_con_actions = is_true(get_optional_arg(args, "--consumer-actions", "true"))
-    con_action_min_interval = int(get_optional_arg(args, "--consumer-min-interval", "20"))
-    con_action_max_interval = int(get_optional_arg(args, "--consumer-max-interval", "60"))
+    if publisher_count > 0:
+        in_flight_max = int(get_optional_arg(args, "--in-flight-max", "10"))
+        print_mod = int(get_optional_arg(args, "--print-mod", f"{in_flight_max * 5}"))
+        sequence_count = int(get_optional_arg(args, "--sequences", "1"))
+    else:
+        print_mod = int(get_optional_arg(args, "--print-mod", f"1000"))
 
-    if print_mod == 0:
-        print_mod = in_flight_max * 5
+    new_cluster = is_true(get_optional_arg(args, "--new-cluster", "true"))
+    cluster_size = get_optional_arg(args, "--cluster", "3")
+
+    include_chaos = is_true(get_optional_arg(args, "--chaos-actions", "true"))
+    if include_chaos:
+        chaos_mode = get_optional_arg(args, "--chaos-mode", "mixed")
+        chaos_min_interval = int(get_optional_arg(args, "--chaos-min-interval", "60"))
+        chaos_max_interval = int(get_optional_arg(args, "--chaos-max-interval", "120"))
     
+    include_con_actions = is_true(get_optional_arg(args, "--consumer-actions", "true"))
+    if include_con_actions:
+        con_action_min_interval = int(get_optional_arg(args, "--consumer-min-interval", "20"))
+        con_action_max_interval = int(get_optional_arg(args, "--consumer-max-interval", "60"))
+
     for test_number in range(tests):
 
         print("")
@@ -90,24 +95,25 @@ def main():
         msg_monitor = MessageMonitor(print_mod, True)
         chaos = ChaosExecutor(initial_nodes)
 
-        if chaos_mode == "partitions":
-            chaos.only_partitions()
-        elif chaos_mode == "nodes":
-            chaos.only_kill_nodes()
-
-        consumer_manager = ConsumerManager(broker_manager, msg_monitor, "TEST RUNNER")
-
-        pub_node = broker_manager.get_random_init_node()
-        publisher = RabbitPublisher(1, test_number, broker_manager, pub_node, in_flight_max, 120, print_mod)
-        publisher.configure_sequence_direct(queue_name, count, 0, sequence_count)
-        consumer_manager.add_consumers(consumer_count, test_number, queue_name)
+        if include_chaos:
+            if chaos_mode == "partitions":
+                chaos.only_partitions()
+            elif chaos_mode == "nodes":
+                chaos.only_kill_nodes()
 
         monitor_thread = threading.Thread(target=msg_monitor.process_messages)
         monitor_thread.start()
         
-        consumer_manager.start_consumers()
+        if consumer_count > 0:
+            consumer_manager = ConsumerManager(broker_manager, msg_monitor, "TEST RUNNER")
+            consumer_manager.add_consumers(consumer_count, test_number, queue_name)
+            consumer_manager.start_consumers()
 
         if publisher_count == 1:
+            pub_node = broker_manager.get_random_init_node()
+            publisher = RabbitPublisher(1, test_number, broker_manager, pub_node, in_flight_max, 120, print_mod)
+            publisher.configure_sequence_direct(queue_name, count, 0, sequence_count)
+
             pub_thread = threading.Thread(target=publisher.start_publishing)
             pub_thread.start()
             console_out("publisher started", "TEST RUNNER")
@@ -143,7 +149,9 @@ def main():
 
         try:
             chaos.stop_random_single_action_and_repair()
-            consumer_manager.stop_random_consumer_actions()
+            
+            if consumer_count > 0:
+                consumer_manager.stop_random_consumer_actions()
             
             if include_chaos:
                 chaos_thread.join()
@@ -153,35 +161,46 @@ def main():
         except Exception as e:
             console_out("Failed to stop chaos cleanly: " + str(e), "TEST RUNNER")
 
-        console_out("Resuming consumers", "TEST RUNNER")
-        consumer_manager.resume_all_consumers()
-        
-        if publisher_count == 1:
+        if publisher_count > 0:
             publisher.stop_publishing()
 
-        console_out("starting grace period for consumer to catch up", "TEST RUNNER")
-        ctr = 0
-        
-        while ctr < grace_period_sec:
-            if msg_monitor.get_unique_count() >= publisher.get_pos_ack_count() and len(publisher.get_msg_set().difference(msg_monitor.get_msg_set())) == 0:
-                break
-            time.sleep(1)
-            ctr += 1
-
-        confirmed_set = publisher.get_msg_set()
-        not_consumed_msgs = confirmed_set.difference(msg_monitor.get_msg_set())
+        if consumer_count > 0:
+            console_out("Resuming consumers", "TEST RUNNER")
+            consumer_manager.resume_all_consumers()
+               
+            console_out("Starting grace period for consumer to catch up", "TEST RUNNER")
+            ctr = 0
+            
+            try:
+                while ctr < grace_period_sec:
+                    if publisher_count > 0 and msg_monitor.get_unique_count() >= publisher.get_pos_ack_count() and len(publisher.get_msg_set().difference(msg_monitor.get_msg_set())) == 0:
+                        break
+                    time.sleep(1)
+                    ctr += 1
+            except KeyboardInterrupt:
+                console_out("Grace period ended", "TEST RUNNER")
 
         console_out("RESULTS ----------------------------------------", "TEST RUNNER")
-        console_out(f"Confirmed count: {publisher.get_pos_ack_count()} Received count: {msg_monitor.get_receive_count()} Unique received: {msg_monitor.get_unique_count()}", "TEST RUNNER")
+        if publisher_count > 0:
+            confirmed_set = publisher.get_msg_set()
+            not_consumed_msgs = confirmed_set.difference(msg_monitor.get_msg_set())
+            console_out(f"Confirmed count: {publisher.get_pos_ack_count()} Received count: {msg_monitor.get_receive_count()} Unique received: {msg_monitor.get_unique_count()}", "TEST RUNNER")
+        else:
+            not_consumed_msgs = set()
+            console_out(f"Received count: {msg_monitor.get_receive_count()} Unique received: {msg_monitor.get_unique_count()}", "TEST RUNNER")
 
         success = True
-        if len(not_consumed_msgs) > 0:
-            console_out(f"FAILED TEST: Potential failure to promote Waiting to Active. Not consumed count: {len(not_consumed_msgs)}", "TEST RUNNER")
-            success = False
+        if consumer_count > 0:
+            if len(not_consumed_msgs) > 0:
+                if sac_enabled:
+                    console_out(f"FAILED TEST: Potential message loss or failure of consumers to consume or failure to promote Waiting to Active. Not consumed count: {len(not_consumed_msgs)}", "TEST RUNNER")
+                else:
+                    console_out(f"FAILED TEST: Potential message loss or failure of consumers to consume. Not consumed count: {len(not_consumed_msgs)}", "TEST RUNNER")
+                success = False
 
-        if msg_monitor.get_out_of_order() == True:
-            success = False
-            console_out(f"FAILED TEST: Received out-of-order messages", "TEST RUNNER")
+            if msg_monitor.get_out_of_order() == True:
+                success = False
+                console_out(f"FAILED TEST: Received out-of-order messages", "TEST RUNNER")
 
         if success:
             console_out("TEST OK", "TEST RUNNER")
@@ -189,7 +208,8 @@ def main():
         console_out("RESULTS END ------------------------------------", "TEST RUNNER")
 
         try:
-            consumer_manager.stop_all_consumers()
+            if consumer_count > 0:
+                consumer_manager.stop_all_consumers()
             
             if publisher_count == 1:
                 pub_thread.join()
