@@ -8,13 +8,14 @@ import threading
 import requests
 import json
 import signal
+import datetime
 
 from command_args import get_args, get_mandatory_arg, get_optional_arg, is_true
 from RabbitPublisher import RabbitPublisher
 from MultiTopicConsumer import MultiTopicConsumer
 from QueueStats import QueueStats
 from ChaosExecutor import ChaosExecutor
-from printer import console_out
+from printer import console_out, console_out_exception
 from MessageMonitor import MessageMonitor
 from ConsumerManager import ConsumerManager
 from BrokerManager import BrokerManager
@@ -38,6 +39,7 @@ def main():
     args = get_args(sys.argv)
 
     count = -1 # no limit
+    test_name = get_mandatory_arg(args, "--test-name")
     tests = int(get_mandatory_arg(args, "--tests"))
     run_minutes = int(get_mandatory_arg(args, "--run-minutes"))
     consumer_count = int(get_mandatory_arg(args, "--consumers"))
@@ -67,6 +69,9 @@ def main():
     if include_con_actions:
         con_action_min_interval = int(get_optional_arg(args, "--consumer-min-interval", "20"))
         con_action_max_interval = int(get_optional_arg(args, "--consumer-max-interval", "60"))
+
+    failed_test_log = list()
+    failed_tests = set()
 
     for test_number in range(tests):
 
@@ -154,10 +159,10 @@ def main():
                 consumer_manager.stop_random_consumer_actions()
             
             if include_chaos:
-                chaos_thread.join()
+                chaos_thread.join(30)
 
             if include_con_actions:
-                consumer_action_thread.join()
+                consumer_action_thread.join(30)
         except Exception as e:
             console_out("Failed to stop chaos cleanly: " + str(e), "TEST RUNNER")
 
@@ -196,11 +201,23 @@ def main():
                     console_out(f"FAILED TEST: Potential message loss or failure of consumers to consume or failure to promote Waiting to Active. Not consumed count: {len(not_consumed_msgs)}", "TEST RUNNER")
                 else:
                     console_out(f"FAILED TEST: Potential message loss or failure of consumers to consume. Not consumed count: {len(not_consumed_msgs)}", "TEST RUNNER")
+                failed_test_log.append(f"Test {test_number} FAILURE: Potential Message Loss. {len(not_consumed_msgs)} messsages.")
+                failed_tests.add(test_number)
+                
+                lost_ctr = 0
+                for msg in not_consumed_msgs:
+                    console_out(f"Lost? {msg}", "TEST RUNNER")
+                    lost_ctr += 1
+                    if lost_ctr > 500:
+                        break
+
                 success = False
 
             if msg_monitor.get_out_of_order() == True:
                 success = False
                 console_out(f"FAILED TEST: Received out-of-order messages", "TEST RUNNER")
+                failed_test_log.append(f"Test {test_number} FAILURE: Received out-of-order messages")
+                failed_tests.add(test_number)
 
         if success:
             console_out("TEST OK", "TEST RUNNER")
@@ -212,13 +229,22 @@ def main():
                 consumer_manager.stop_all_consumers()
             
             if publisher_count == 1:
-                pub_thread.join()
+                pub_thread.join(30)
             msg_monitor.stop_consuming()
-            monitor_thread.join()
+            monitor_thread.join(30)
         except Exception as e:
-            console_out("Failed to clean up test correctly: " + str(e), "TEST RUNNER")
+            console_out_exception("Failed to clean up test correctly.", e, "TEST RUNNER")
 
+        broker_manager.zip_log_files(test_name, test_number)
         console_out(f"TEST {str(test_number )} COMPLETE", "TEST RUNNER")
+
+    console_out("", "TEST RUNNER")
+    console_out("SUMMARY", "TEST RUNNER")
+    console_out(f"OK {tests - len(failed_tests)} FAIL {len(failed_tests)}", "TEST RUNNER")
+    for line in failed_test_log:
+        console_out(line, "TEST RUNNER")
+
+    console_out("TEST RUN COMPLETE", "TEST RUNNER")
 
 if __name__ == '__main__':
     main()

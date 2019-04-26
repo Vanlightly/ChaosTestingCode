@@ -6,6 +6,7 @@ import random
 from random import shuffle
 import time
 import threading
+from printer import console_out_exception
 
 class ConsumerManager:
     def __init__(self, broker_manager, msg_monitor, actor):
@@ -55,7 +56,7 @@ class ConsumerManager:
             console_out(f"STOPPING CONSUMER {con_index+1} --------------------------------------", self.actor)
             try:
                 con.stop()
-                self.consumer_threads[con_index].join()
+                self.consumer_threads[con_index].join(15)
             except Exception as e:
                 template = "An exception of type {0} occurred. Arguments:{1!r}"
                 message = template.format(type(e).__name__, e.args)
@@ -75,16 +76,14 @@ class ConsumerManager:
         con = self.consumers[con_index]
         try:
             con.stop()
-            self.consumer_threads[con_index].join()
+            self.consumer_threads[con_index].join(15)
             
             conn_ok = con.connect()
             if conn_ok:
                 self.consumer_threads[con_index] = threading.Thread(target=con.consume)
                 self.consumer_threads[con_index].start()
         except Exception as e:
-            template = "An exception of type {0} occurred. Arguments:{1!r}"
-            message = template.format(type(e).__name__, e.args)
-            console_out(f"Failed to stop/start consumer correctly: {message}", self.actor)
+            console_out_exception("Failed to stop/start consumer correctly", e, self.actor)
 
     def get_running_consumer_count(self):
         running_cons = 0
@@ -101,7 +100,10 @@ class ConsumerManager:
             self.wait_for(wait_sec)
 
             if self.stop_random == False:
-                self.stop_start_consumers()
+                try:
+                    self.stop_start_consumers()
+                except Exception as e:
+                    console_out_exception("Failed stopping/starting consumers", e, self.actor)
 
     def resume_all_consumers(self):
         for con_index in range(0, len(self.consumers)):
@@ -117,7 +119,7 @@ class ConsumerManager:
             con.stop()
 
         for con_thread in self.consumer_threads:
-            con_thread.join()
+            con_thread.join(15)
 
     def start_random_consumer_actions(self, min_seconds_interval, max_seconds_interval):
         while self.stop_random == False:
@@ -126,7 +128,10 @@ class ConsumerManager:
             self.wait_for(wait_sec)
 
             if self.stop_random == False:
-                self.do_consumer_action()
+                try:
+                    self.do_consumer_action()
+                except Exception as e:
+                    console_out_exception("Failed performing consumer action", e, "TEST RUNNER")
 
     def stop_random_consumer_actions(self):
         self.stop_random = True

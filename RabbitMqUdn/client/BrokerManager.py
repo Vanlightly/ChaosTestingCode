@@ -35,6 +35,10 @@ class BrokerManager:
         for node in self.init_live_nodes:
             subprocess.call(["bash", "../cluster/print-log-file.sh", node])
 
+    def zip_log_files(self, test_name, test_number):
+        for node in self.init_live_nodes:
+            subprocess.call(["bash", "../cluster/zip-log-file.sh", node, f"../client/logs/{test_name}/{test_number}"])
+
     def get_initial_nodes(self):
         return self.init_live_nodes
 

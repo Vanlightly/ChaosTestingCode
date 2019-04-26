@@ -7,7 +7,7 @@ import datetime
 import uuid
 import random
 
-from printer import console_out
+from printer import console_out, console_out_exception
 
 class ChaosExecutor(object):
     def __init__(self, node_names):
@@ -134,7 +134,10 @@ class ChaosExecutor(object):
     
     def start_random_single_action_and_repair(self, min_duration_seconds, max_duration_seconds):
         while self.stop_random == False:
-            self.single_action_and_repair(min_duration_seconds, max_duration_seconds)
+            try:
+                self.single_action_and_repair(min_duration_seconds, max_duration_seconds)
+            except Exception as e:
+                console_out_exception("Failed performing action and repair", e, "TEST RUNNER")
 
     def single_action_and_repair(self, min_duration_seconds, max_duration_seconds):
         duration_seconds = random.randint(min_duration_seconds, max_duration_seconds)

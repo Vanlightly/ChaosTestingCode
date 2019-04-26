@@ -46,6 +46,11 @@ class MessageMonitor:
         self.last_msg_time = datetime.datetime.now()
         self.receive_ctr += 1
         body_str = str(message_body, "utf-8")
+        time_part = body_str[0:body_str.find("|")]
+        send_time = datetime.datetime.strptime(time_part, "%Y-%m-%d %H:%M:%S.%f")
+        seconds_lag = f"           [Lag: {(datetime.datetime.now()-send_time).total_seconds()}s Sent: {send_time.time()}]"
+        body_str = body_str[body_str.find("|")+1:]
+
         is_sequence = "=" in body_str
         
         if is_sequence and self.analyze:
@@ -83,22 +88,25 @@ class MessageMonitor:
                 if last_value + 1 < curr_value:
                     jump = curr_value - last_value
                     last = f"Last-acked={last_value}"
-                    console_out(f"{message_body} {last} JUMP FORWARD {jump} {duplicate} {redelivered_str}", actor)
+                    console_out(f"{body_str} {last} JUMP FORWARD {jump} {duplicate} {redelivered_str} {seconds_lag}", actor)
                 elif last_value > curr_value:
                     jump = last_value - curr_value
                     last = f"Last-acked={last_value}"
-                    console_out(f"{message_body} {last} JUMP BACK {jump} {duplicate} {redelivered_str}", actor)
+                    
                     if is_dup == False and redelivered == False:
+                        console_out(f"{body_str} {last} OUT-OF-ORDER!! JUMP BACK {jump} {duplicate} {redelivered_str} {seconds_lag}", actor)
                         self.out_of_order = True
+                    else:
+                        console_out(f"{body_str} {last} JUMP BACK {jump} {duplicate} {redelivered_str} {seconds_lag}", actor)
                 elif self.receive_ctr % self.print_mod == 0:
-                    console_out(f"Sample msg: {message_body} {duplicate} {redelivered_str}", actor)
+                    console_out(f"Sample msg: {body_str} {duplicate} {redelivered_str} {seconds_lag}", actor)
                 elif is_dup or redelivered:
-                    console_out(f"Msg: {message_body} {duplicate} {redelivered_str}", actor)
+                    console_out(f"{body_str} {duplicate} {redelivered_str} {seconds_lag}", actor)
             else:
                 if curr_value == 1:
-                    console_out(f"Latest msg: {message_body} {duplicate} {redelivered_str}", actor)
+                    console_out(f"{body_str} {duplicate} {redelivered_str} {seconds_lag}", actor)
                 else:
-                    console_out(f"{message_body} JUMP FORWARD {curr_value} {duplicate} {redelivered_str}", actor)
+                    console_out(f"{body_str} JUMP FORWARD {curr_value} {duplicate} {redelivered_str} {seconds_lag}", actor)
                     # self.out_of_order = True
             
             self.keys[key] = curr_value

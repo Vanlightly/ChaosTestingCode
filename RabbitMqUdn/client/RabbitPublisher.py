@@ -6,7 +6,7 @@ import subprocess
 import datetime
 import uuid
 import random
-from itertools import permutations 
+from itertools import permutations, combinations
 
 from printer import console_out
 
@@ -44,7 +44,7 @@ class RabbitPublisher(object):
         self.undeliverable = 0
         self.no_acks = 0
         self.key_index = 0
-        self.keys = [str(publisher_id) + ''.join(p) for p in permutations(['a', 'b', 'c', 'd', 'e'])]
+        self.keys = list()
         self.val = 1
         self.waiting_for_acks = False
         self.waiting_for_acks_sec = 0
@@ -56,6 +56,12 @@ class RabbitPublisher(object):
         self.connected_node = connect_node
         self.actor = ""
         self.set_actor()
+        self.create_keys()
+
+    def create_keys(self):
+        for i in range(1, 6):
+            for k in list(combinations('abcde', i)):
+                self.keys.append(f"{self.publisher_id}{''.join(k)}")
 
     def reset_ack_tracking(self):
         pending_count = len(self.pending_messages)
@@ -207,8 +213,10 @@ class RabbitPublisher(object):
                 elif self.message_type == "large-msgs":
                     body = self.large_msg
                 else:
-                    body = "{\"message\": \"Hello there, how are you?\"}"
+                    body = "Hello there, how are you?"
                 
+                body = f"{datetime.datetime.now()}|{body}"
+
                 if len(self.exchanges) == 1:
                     curr_exchange = 0
                     send_to_exchange = self.exchanges[curr_exchange]
