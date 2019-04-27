@@ -42,12 +42,18 @@ class MessageMonitor:
 
         console_out("Monitor exited", "MONITOR")
 
+    def get_time(self, time_str):
+        try:
+            return datetime.datetime.strptime(time_str, "%Y-%m-%d %H:%M:%S.%f")
+        except ValueError:
+            return datetime.datetime.strptime(time_str, "%Y-%m-%d %H:%M:%S")
+
     def consume(self, message_body, consumer_tag, consumer_id, actor, redelivered):
         self.last_msg_time = datetime.datetime.now()
         self.receive_ctr += 1
         body_str = str(message_body, "utf-8")
         time_part = body_str[0:body_str.find("|")]
-        send_time = datetime.datetime.strptime(time_part, "%Y-%m-%d %H:%M:%S.%f")
+        send_time = self.get_time(time_part)
         seconds_lag = f"           [Lag: {(datetime.datetime.now()-send_time).total_seconds()}s Sent: {send_time.time()}]"
         body_str = body_str[body_str.find("|")+1:]
 

@@ -43,6 +43,7 @@ def main():
     tests = int(get_mandatory_arg(args, "--tests"))
     run_minutes = int(get_mandatory_arg(args, "--run-minutes"))
     consumer_count = int(get_mandatory_arg(args, "--consumers"))
+    prefetch = int(get_optional_arg(args, "--pre-fetch", "10"))
     grace_period_sec = int(get_mandatory_arg(args, "--grace-period-sec"))
     queue = get_mandatory_arg(args, "--queue")
     queue_type = get_mandatory_arg(args, "--queue-type")
@@ -111,7 +112,7 @@ def main():
         
         if consumer_count > 0:
             consumer_manager = ConsumerManager(broker_manager, msg_monitor, "TEST RUNNER")
-            consumer_manager.add_consumers(consumer_count, test_number, queue_name)
+            consumer_manager.add_consumers(consumer_count, test_number, queue_name, prefetch)
             consumer_manager.start_consumers()
 
         if publisher_count == 1:

@@ -52,6 +52,7 @@ def main():
 
     # consumers
     consumer_count = int(get_optional_arg(args, "--consumers", "1"))
+    prefetch = int(get_optional_arg(args, "--pre-fetch", "10"))
     analyze = is_true(get_optional_arg(args, "--analyze", "true"))
 
     
@@ -77,7 +78,7 @@ def main():
     if consumer_count > 0:
         msg_monitor = MessageMonitor(print_mod, analyze)
         consumer_manager = ConsumerManager(broker_manager, msg_monitor, "TEST RUNNER")
-        consumer_manager.add_consumers(consumer_count, 1, queue_name)
+        consumer_manager.add_consumers(consumer_count, 1, queue_name, prefetch)
 
         monitor_thread = threading.Thread(target=msg_monitor.process_messages)
         monitor_thread.start()

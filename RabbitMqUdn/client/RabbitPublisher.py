@@ -18,6 +18,7 @@ class RabbitPublisher(object):
         self._connection = None
         self._channel = None
         self._stopping = False
+        self.is_blocked = False
 
         self.publisher_id = publisher_id
         self.test_number = test_number
@@ -89,27 +90,37 @@ class RabbitPublisher(object):
         return pika.SelectConnection(parameters,
                                      on_open_callback=self.on_connection_open,
                                      on_open_error_callback=self.on_connection_open_error,
-                                     on_close_callback=self.on_connection_closed,
-                                     stop_ioloop_on_close=False)
+                                     on_close_callback=self.on_connection_closed)
 
     def on_connection_open(self, unused_connection):
         console_out(f'Connection opened: {unused_connection}', self.get_actor())
         self.open_channel()
+        self._connection.add_on_connection_blocked_callback(self.on_connnection_blocked)
+        self._connection.add_on_connection_unblocked_callback(self.on_connnection_unblocked)
         
+    def on_connnection_blocked(self, method_frame):
+        self.is_blocked = True
+        console_out("Connection Blocked!!!", self.get_actor())
+
+    def on_connnection_unblocked(self, method_frame):
+        self.is_blocked = False
+        console_out("Connection Unblocked!!!", self.get_actor())
+
+
     def on_connection_open_error(self, unused_connection, err):
         console_out(f'Connection open failed, reopening in 5 seconds: {err}', self.get_actor())
         self.broker_manager.next_node()
-        self._connection.ioloop.add_timeout(5, self._connection.ioloop.stop)
+        self._connection.ioloop.call_later(5, self._connection.ioloop.stop)
 
-    def on_connection_closed(self, connection, reason_code, reason_text):
+    def on_connection_closed(self, connection, reason):
         self.connected_node = "none"
         self._channel = None
         if self._stopping:
             self._connection.ioloop.stop()                
         else:
-            console_out(f"Connection closed. Code: {reason_code} Text: {reason_text}. Reopening in 5 seconds.", self.get_actor())
+            console_out(f"Connection closed. Reason: {reason}. Reopening in 5 seconds.", self.get_actor())
             self.broker_manager.next_node()
-            self._connection.ioloop.add_timeout(5, self._connection.ioloop.stop)
+            self._connection.ioloop.call_later(5, self._connection.ioloop.stop)
 
     def open_channel(self):
         #print('Creating a new channel')
@@ -127,8 +138,8 @@ class RabbitPublisher(object):
     def add_on_channel_close_callback(self):
         self._channel.add_on_close_callback(self.on_channel_closed)
 
-    def on_channel_closed(self, channel, reply_code, reply_text):
-        console_out(f"Channel {channel} was closed. Code: {reply_code} Text: {reply_text}", self.get_actor())
+    def on_channel_closed(self, channel, reason):
+        console_out(f"Channel {channel} was closed. Reason: {reason}", self.get_actor())
         self._channel = None
         if not self._stopping:
             if self._connection.is_open:    
@@ -144,7 +155,7 @@ class RabbitPublisher(object):
             if not full_stop:
                 console_out("Reopening a new connection in 10 seconds", self.get_actor())
                 self.broker_manager.next_node()
-                self._connection.ioloop.add_timeout(10, self._connection.ioloop.stop)
+                self._connection.ioloop.call_later(10, self._connection.ioloop.stop)
 
     def close_channel(self):
         if self._channel is not None:
@@ -163,6 +174,7 @@ class RabbitPublisher(object):
         if self._channel == None or not self._channel.is_open:
             return
 
+        self.is_blocked = False
         self.enable_delivery_confirmations()
         rk = self.routing_key
         body = ""
@@ -179,6 +191,10 @@ class RabbitPublisher(object):
 
 
             if self._channel.is_open:
+                
+                if self.is_blocked:
+                    self._connection.ioloop.call_later(1, self.send_messages)
+
                 if self.curr_pos % 10 == 0:
                     if len(self.pending_messages) >= self.in_flight_limit:
                         
@@ -189,7 +205,7 @@ class RabbitPublisher(object):
                         self.waiting_for_acks_sec += 1
                         if self._channel.is_open:
                             #print(f"{len(self.pending_messages)} pending messages")
-                            self._connection.add_timeout(1, self.send_messages)
+                            self._connection.ioloop.call_later(1, self.send_messages)
                             break
 
                 
@@ -197,7 +213,7 @@ class RabbitPublisher(object):
                 #     console_out("Waiting over, received enough acks to publish again", self.get_actor())
                 
                 
-                self.waiting_for_acks = False
+                self.waitingreply_for_acks = False
                 self.waiting_for_acks_sec = 0
                 self.curr_pos += 1
                 self.seq_no += 1
@@ -257,7 +273,7 @@ class RabbitPublisher(object):
                 break
 
     def enable_delivery_confirmations(self):
-        self._channel.confirm_delivery(callback=self.on_delivery_confirmation)
+        self._channel.confirm_delivery(self.on_delivery_confirmation)
         self._channel.add_on_return_callback(callback=self.on_undeliverable)
 
     def on_undeliverable(self, channel, method, properties, body):

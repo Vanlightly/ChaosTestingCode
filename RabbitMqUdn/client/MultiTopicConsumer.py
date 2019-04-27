@@ -5,15 +5,16 @@ import time
 import random
 import subprocess
 
-from printer import console_out
+from printer import console_out, console_out_exception
 
 class MultiTopicConsumer:
     
-    def __init__(self, consumer_id, test_number, broker_manager, message_monitor, connect_node):
+    def __init__(self, consumer_id, test_number, broker_manager, message_monitor, connect_node, prefetch):
         self.broker_manager = broker_manager
         self.connection = None
         self.channel = None
         self.queue_name = ""
+        self.prefetch = prefetch
         self.message_monitor = message_monitor
         self.terminate = False
         self.consumer_id = consumer_id
@@ -40,12 +41,13 @@ class MultiTopicConsumer:
                                                 credentials)
             self.connection = pika.BlockingConnection(parameters)
             self.channel = self.connection.channel()
-            self.channel.basic_qos(prefetch_count=10)
+
+            if self.prefetch > 0:
+                self.channel.basic_qos(prefetch_count=self.prefetch)
+
             return True
         except Exception as e:
-            template = "An exception of type {0} occurred. Arguments:{1!r}"
-            message = template.format(type(e).__name__, e.args)
-            console_out("Failed trying to connect. " + message, self.get_actor())
+            console_out_exception("Failed trying to connect.", e, self.get_actor())
             return False 
 
     def declare(self, queue_name, exchanges):
@@ -62,24 +64,31 @@ class MultiTopicConsumer:
     
     def callback(self, ch, method, properties, body):
         if self.terminate == False:
-            ch.basic_ack(delivery_tag = method.delivery_tag)
             self.message_monitor.append(body, self.consumer_tag, self.consumer_id, self.get_actor(), method.redelivered)
+            ch.basic_ack(delivery_tag = method.delivery_tag)
             
 
-    def disconnect(self):
+    def cancel_and_disconnect(self):
         try:
             if self.channel is not None and self.channel.is_open:
                 self.channel.stop_consuming()
+                self.connection.sleep(2)
 
             if self.connection is not None and self.connection.is_open:
                 self.connection.close()
                 console_out(f"Closed connection", self.get_actor())
 
             return True
+        except AttributeError:
+            console_out(f"Closed connection (with internal pika attribute error)", self.get_actor())
+        except TypeError:
+            console_out(f"Closed connection (with internal pika type error)", self.get_actor())
+        except pika.exceptions.ConnectionWrongStateError:
+            console_out(f"Cannot close connection, already closed", self.get_actor())
+        except pika.exceptions.StreamLostError:
+            console_out(f"Closed connection (stream lost)", self.get_actor())
         except Exception as e:
-            template = "An exception of type {0} occurred. Arguments:{1!r}"
-            message = template.format(type(e).__name__, e.args)
-            console_out("Failed trying to disconnect. " + message, self.get_actor())
+            console_out_exception("Failed trying to disconnect.", e, self.get_actor())
             return False
         
     def reconnect(self):
@@ -88,6 +97,14 @@ class MultiTopicConsumer:
         console_out("Connection is closed. Opening new connection", self.get_actor())
         self.broker_manager.next_node()
         return self.connect()
+
+    def wait_for(self, seconds):
+        start = time.time()
+        
+        while self.terminate == False:
+            if time.time() - start > seconds:
+                break
+            time.sleep(0.01)
 
     def consume(self):
         self.terminate = False
@@ -98,12 +115,10 @@ class MultiTopicConsumer:
 
                 if self.connection is None or self.connection.is_closed or self.channel is None or self.channel.is_closed:
                     if self.reconnect() == False:
-                        time.sleep(5)
+                        self.wait_for(5)
                         continue
 
-                self.consumer_tag = self.channel.basic_consume(self.callback,
-                            queue=self.queue_name,
-                            no_ack=False)
+                self.consumer_tag = self.channel.basic_consume(self.queue_name, self.callback)
                 
                 console_out(f"Consuming queue: {self.queue_name} with consumer tag: {self.consumer_tag}", self.get_actor())
 
@@ -115,43 +130,54 @@ class MultiTopicConsumer:
             #     self.connection.close()
             #     console_out("Connection closed", self.get_actor())
             #     break
-            except pika.exceptions.ConnectionClosed:
-                console_out("Connection was closed, retrying...", self.get_actor())
-                time.sleep(5)
-                if self.disconnect():
-                    self.connected_node = "none"
-                    continue
-                else:
-                    self.terminate = True;
-                    console_out("Aborting consumer", self.get_actor())
+            except pika.exceptions.ConnectionClosed as e:
+                if self.terminate == True:
                     break
-            except pika.exceptions.AMQPChannelError as err:
-                console_out("Caught a channel error: {}, stopping...".format(err), self.get_actor())
-                time.sleep(5)
-                if self.disconnect():
+                
+                console_out_exception("Connection was closed, retrying...", e, self.get_actor())
+                self.wait_for(5)
+                continue
+                # if self.disconnect():
+                #     self.connected_node = "none"
+                #     continue
+                # else:
+                #     self.terminate = True
+                #     console_out("Aborting consumer", self.get_actor())
+                #     break
+            except pika.exceptions.AMQPChannelError as e:
+                if self.terminate == True:
+                    break
+
+                console_out_exception("Caught a channel error, stopping...", e, self.get_actor())
+                self.wait_for(5)
+                if self.cancel_and_disconnect():
                     self.connected_node = "none"
                     continue
                 else:
                     self.terminate = True
                     console_out("Aborting consumer", self.get_actor())
                     break
-            except pika.exceptions.AMQPConnectionError:
-                console_out("Connection error, retrying...", self.get_actor())
-                time.sleep(5)
-                if self.disconnect():
-                    self.connected_node = "none"
-                    continue
-                else:
-                    self.terminate = True
-                    console_out("Aborting consumer", self.get_actor())
+            except pika.exceptions.AMQPConnectionError as e:
+                if self.terminate == True:
                     break
-            except Exception as ex:
-                template = "An exception of type {0} occurred. Arguments:{1!r}"
-                message = template.format(type(ex).__name__, ex.args)
-                if "object has no attribute 'clear'" not in message: # seems like a bug in Pika
-                    console_out(message, self.get_actor())
-                time.sleep(5)
-                if self.disconnect():
+
+                console_out_exception("Connection error, retrying...", e, self.get_actor())
+                self.wait_for(5)
+                continue
+                # if self.disconnect():
+                #     self.connected_node = "none"
+                #     continue
+                # else:
+                #     self.terminate = True
+                #     console_out("Aborting consumer", self.get_actor())
+                #     break
+            except Exception as e:
+                if self.terminate == True:
+                    break
+                
+                console_out_exception("Unexpected error", e, self.get_actor())                
+                self.wait_for(5)
+                if self.cancel_and_disconnect():
                     self.connected_node = "none"
                     continue
                 else:
@@ -161,5 +187,5 @@ class MultiTopicConsumer:
 
     def stop(self):
         self.terminate = True
-        self.disconnect()
+        self.cancel_and_disconnect()
         

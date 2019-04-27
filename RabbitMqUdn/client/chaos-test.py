@@ -34,6 +34,7 @@ def main():
     chaos_min_interval = int(get_optional_arg(args, "--chaos-min-interval", "30"))
     chaos_max_interval = int(get_optional_arg(args, "--chaos-max-interval", "120"))
     queue_type = get_mandatory_arg(args, "--queue-type")
+    prefetch = int(get_optional_arg(args, "--pre-fetch", "10"))
 
     for test_number in range(tests):
 
@@ -69,7 +70,7 @@ def main():
         publisher = RabbitPublisher(1, test_number, broker_manager, pub_node, in_flight_max, 120, print_mod)
         publisher.configure_sequence_direct(queue_name, count, 0, 1)
         consumer_manager = ConsumerManager(broker_manager, msg_monitor, "TEST RUNNER")
-        consumer_manager.add_consumers(1, test_number, queue_name)
+        consumer_manager.add_consumers(1, test_number, queue_name, prefetch)
 
         chaos = ChaosExecutor(initial_nodes)
 
