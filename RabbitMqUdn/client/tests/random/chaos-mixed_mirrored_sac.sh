@@ -3,6 +3,7 @@
 cd ../..
 
 TEST_NAME=$(date +%Y%m%d_%H%M)
+mkdir logs/$TEST_NAME
 
 python -u random-test.py --queue $1 \
 --test-name $TEST_NAME \
