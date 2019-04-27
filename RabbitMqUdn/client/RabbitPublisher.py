@@ -8,7 +8,7 @@ import uuid
 import random
 from itertools import permutations, combinations
 
-from printer import console_out
+from printer import console_out, console_out_exception
 
 class RabbitPublisher(object):
     
@@ -164,8 +164,13 @@ class RabbitPublisher(object):
 
     def close_connection(self):
         self.connected_node = "none"
-        if self._connection is not None:
-            self._connection.close()
+        if self._connection is not None and self._connection.is_open:
+            try:
+                self._connection.close()
+            except pika.execeptions.ConnectionWrongStateError:
+                console_out("Cannot close connection, already closed", self.get_actor())
+            except Exception as e:
+                console_out_exception("Failed closing connection", e, self.get_actor())
 
     def repeat_to_length(self, string_to_expand, length):
         return (string_to_expand * (int(length/len(string_to_expand))+1))[:length]
