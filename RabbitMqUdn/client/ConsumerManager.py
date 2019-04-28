@@ -19,9 +19,7 @@ class ConsumerManager:
 
     def add_consumers(self, consumer_count, test_number, queue_name, prefetch):
         for con_id in range (1, consumer_count+1):
-            consumer_node = self.broker_manager.get_init_node(con_id)
-            console_out(f"Consumer {con_id} will first connect to {consumer_node}", self.actor)
-            consumer = MultiTopicConsumer(con_id, test_number, self.broker_manager, self.msg_monitor, consumer_node, prefetch)
+            consumer = MultiTopicConsumer(con_id, test_number, self.broker_manager, self.msg_monitor, prefetch)
             consumer.connect()
             consumer.set_queue(queue_name)
 
@@ -33,6 +31,37 @@ class ConsumerManager:
             con_thread.start()
             self.consumer_threads.append(con_thread)
             console_out(f"consumer {con_id} started", self.actor)
+
+    def add_consumer_and_start_consumer(self, test_number, queue_name, prefetch):
+        con_id = len(self.consumers)+1
+        consumer = MultiTopicConsumer(con_id, test_number, self.broker_manager, self.msg_monitor, prefetch)
+        consumer.connect()
+        consumer.set_queue(queue_name)
+        self.consumers.append(consumer)
+        con_thread = threading.Thread(target=self.consumers[con_id-1].consume)
+        con_thread.start()
+        self.consumer_threads.append(con_thread)
+        console_out(f"consumer {con_id} started", self.actor)
+        
+    def stop_and_remove_oldest_consumer(self):
+        if len(self.consumers) > 0:
+            self.stop_and_remove_specfic_consumer_index(0)
+
+    def stop_and_remove_specfic_consumer(self, target_consumer):
+        if len(self.consumers) > 0:
+            for index in range(0, len(self.consumers)):
+                if f"P{self.consumers[index].get_consumer_id()}" == target_consumer:
+                    self.stop_and_remove_specfic_consumer_index(index)
+                    return
+            
+            console_out(f"No consumer matches id: P{target_consumer}", self.actor)
+                    
+    def stop_and_remove_specfic_consumer_index(self, index):
+        self.consumers[index].stop_consuming()
+        self.consumer_threads[index].join(10)
+        self.consumers.remove(self.consumers[index])
+        self.consumer_threads.remove(self.consumer_threads[index])
+        console_out("Consumer removed", self.actor)
 
     def do_consumer_action(self):
         con_indexes = [i for i in range(len(self.consumers))]
@@ -55,7 +84,7 @@ class ConsumerManager:
         else:
             console_out(f"STOPPING CONSUMER {con_index+1} --------------------------------------", self.actor)
             try:
-                con.stop()
+                con.stop_consuming()
                 self.consumer_threads[con_index].join(15)
             except Exception as e:
                 template = "An exception of type {0} occurred. Arguments:{1!r}"
@@ -75,7 +104,7 @@ class ConsumerManager:
     def stop_start_consumer(self, con_index):
         con = self.consumers[con_index]
         try:
-            con.stop()
+            con.stop_consuming()
             self.consumer_threads[con_index].join(15)
             
             conn_ok = con.connect()
@@ -116,7 +145,7 @@ class ConsumerManager:
 
     def stop_all_consumers(self):
         for con in self.consumers:
-            con.stop()
+            con.stop_consuming()
 
         for con_thread in self.consumer_threads:
             con_thread.join(15)

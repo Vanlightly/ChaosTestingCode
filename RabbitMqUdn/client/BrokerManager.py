@@ -12,7 +12,7 @@ from printer import console_out
 class BrokerManager:
     def __init__(self):
         self.init_live_nodes = list()
-        self.curr_node = 0
+        self.curr_node = dict()
 
     def deploy(self, cluster_size, new_cluster, rmq_version):
         if new_cluster:
@@ -68,14 +68,23 @@ class BrokerManager:
 
         return ips
 
-    def next_node(self):
-        self.curr_node += 1
-        if self.curr_node >= len(self.init_live_nodes):
-            self.curr_node = 0
+    def next_node(self, client):
+        if client in self.curr_node.keys():
+            node_index = self.curr_node[client]
+            while node_index == self.curr_node[client]:
+                node_index = random.randint(0, len(self.init_live_nodes)-1)
 
-    def get_current_node(self):
-        return self.init_live_nodes[self.curr_node]
+            self.curr_node[client] = node_index
+        else:
+            node_index = random.randint(0, len(self.init_live_nodes)-1)
+            self.curr_node[client] = node_index
 
+    def get_current_node(self, client):
+        if client not in self.curr_node.keys():
+            self.next_node(client)
+        
+        return self.init_live_nodes[self.curr_node[client]]
+        
     def create_sac_queue(self, mgmt_node, queue_name, replication_factor, queue_type):
         try:
             mgmt_node_ip = self.get_node_ip(mgmt_node)

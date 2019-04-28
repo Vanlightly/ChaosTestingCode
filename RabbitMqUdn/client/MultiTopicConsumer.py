@@ -9,7 +9,7 @@ from printer import console_out, console_out_exception
 
 class MultiTopicConsumer:
     
-    def __init__(self, consumer_id, test_number, broker_manager, message_monitor, connect_node, prefetch):
+    def __init__(self, consumer_id, test_number, broker_manager, message_monitor, prefetch):
         self.broker_manager = broker_manager
         self.connection = None
         self.channel = None
@@ -17,23 +17,28 @@ class MultiTopicConsumer:
         self.prefetch = prefetch
         self.message_monitor = message_monitor
         self.terminate = False
-        self.consumer_id = consumer_id
+        self.consumer_id = f"C{consumer_id}"
         self.test_number = test_number
-        self.connected_node = connect_node
+        self.connected_node = broker_manager.get_current_node(self.consumer_id)
         self.consumer_tag = ""
         self.actor = "-"
+        self.last_msg = ""
         self.set_actor()
     
+    def get_consumer_id(self):
+        return self.consumer_id
+
     def set_actor(self):
-        self.actor = f"CONSUMER (Test:{self.test_number} Id:C{self.consumer_id})->{self.connected_node}"
+        self.actor = f"CONSUMER (Test:{self.test_number} Id:{self.consumer_id})->{self.connected_node}"
     
     def get_actor(self):
         return self.actor
 
     def connect(self):
         try:
-            self.connected_node = self.broker_manager.get_current_node()
+            self.connected_node = self.broker_manager.get_current_node(self.consumer_id)
             ip = self.broker_manager.get_node_ip(self.connected_node)
+            console_out(f"Connecting to {self.connected_node}", self.get_actor())
             credentials = pika.PlainCredentials('jack', 'jack')
             parameters = pika.ConnectionParameters(ip,
                                                 5672,
@@ -64,6 +69,7 @@ class MultiTopicConsumer:
     
     def callback(self, ch, method, properties, body):
         if self.terminate == False:
+            self.last_msg = body
             self.message_monitor.append(body, self.consumer_tag, self.consumer_id, self.get_actor(), method.redelivered)
             ch.basic_ack(delivery_tag = method.delivery_tag)
             
@@ -95,7 +101,7 @@ class MultiTopicConsumer:
         self.connection = None
         self.channel = None
         console_out("Connection is closed. Opening new connection", self.get_actor())
-        self.broker_manager.next_node()
+        self.broker_manager.next_node(self.consumer_id)
         return self.connect()
 
     def wait_for(self, seconds):
@@ -108,6 +114,7 @@ class MultiTopicConsumer:
 
     def consume(self):
         self.terminate = False
+        self.last_msg = ""
         while True:
             try:
                 if self.terminate == True:
@@ -124,31 +131,18 @@ class MultiTopicConsumer:
 
                 self.set_actor()
                 self.channel.start_consuming()
-            # except KeyboardInterrupt:
-            #     console_out("Stopping consumption and closing the connection", self.get_actor())
-            #     self.channel.stop_consuming()
-            #     self.connection.close()
-            #     console_out("Connection closed", self.get_actor())
-            #     break
             except pika.exceptions.ConnectionClosed as e:
                 if self.terminate == True:
                     break
                 
-                console_out_exception("Connection was closed, retrying...", e, self.get_actor())
+                console_out_exception(f"Connection was closed. Last msg received: {self.last_msg}", e, self.get_actor())
                 self.wait_for(5)
                 continue
-                # if self.disconnect():
-                #     self.connected_node = "none"
-                #     continue
-                # else:
-                #     self.terminate = True
-                #     console_out("Aborting consumer", self.get_actor())
-                #     break
             except pika.exceptions.AMQPChannelError as e:
                 if self.terminate == True:
                     break
 
-                console_out_exception("Caught a channel error, stopping...", e, self.get_actor())
+                console_out_exception(f"Caught a channel error. Last msg received: {self.last_msg}", e, self.get_actor())
                 self.wait_for(5)
                 if self.cancel_and_disconnect():
                     self.connected_node = "none"
@@ -161,21 +155,14 @@ class MultiTopicConsumer:
                 if self.terminate == True:
                     break
 
-                console_out_exception("Connection error, retrying...", e, self.get_actor())
+                console_out_exception(f"Connection error. Last msg received: {self.last_msg}", e, self.get_actor())
                 self.wait_for(5)
                 continue
-                # if self.disconnect():
-                #     self.connected_node = "none"
-                #     continue
-                # else:
-                #     self.terminate = True
-                #     console_out("Aborting consumer", self.get_actor())
-                #     break
             except Exception as e:
                 if self.terminate == True:
                     break
                 
-                console_out_exception("Unexpected error", e, self.get_actor())                
+                console_out_exception(f"Unexpected error. Last msg received: {self.last_msg}", e, self.get_actor())                
                 self.wait_for(5)
                 if self.cancel_and_disconnect():
                     self.connected_node = "none"
@@ -185,7 +172,11 @@ class MultiTopicConsumer:
                     console_out("Aborting consumer", self.get_actor())
                     break
 
-    def stop(self):
+    def stop_consuming(self):
         self.terminate = True
+        if self.last_msg != "":
+            console_out(f"Requested to stop. Last msg received: {self.last_msg}", self.get_actor())
+        else:
+            console_out(f"Requested to stop.", self.get_actor())
         self.cancel_and_disconnect()
         

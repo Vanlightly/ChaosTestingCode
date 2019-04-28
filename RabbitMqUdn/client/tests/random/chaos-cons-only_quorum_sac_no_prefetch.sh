@@ -10,6 +10,7 @@ python -u random-test.py --queue $1 \
 --test-name $TEST_NAME \
 --tests 20 \
 --run-minutes 10 \
+--log-msgs true \
 --grace-period-sec 300 \
 --in-flight-max 1000 \
 --sequences 1 \

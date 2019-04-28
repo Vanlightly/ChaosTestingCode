@@ -53,12 +53,7 @@ def main():
             initial_nodes = broker_manager.get_initial_nodes()
             
             console_out(f"Initial nodes: {initial_nodes}", "TEST RUNNER")
-
-            pub_node = broker_manager.get_random_init_node()
-            con_node = broker_manager.get_random_init_node()
-            console_out(f"publish to: {pub_node}", "TEST RUNNER")
-            console_out(f"consume from: {con_node}", "TEST RUNNER")
-
+            
             print_mod = in_flight_max * 5
             queue_name = queue + "_" + str(test_number)
             
@@ -79,8 +74,8 @@ def main():
 
         time.sleep(10)
 
-        msg_monitor = MessageMonitor(print_mod, True)
-        publisher = RabbitPublisher(1, test_number, broker_manager, pub_node, in_flight_max, 120, print_mod)
+        msg_monitor = MessageMonitor("qqt", test_number, print_mod, True, False)
+        publisher = RabbitPublisher(1, test_number, broker_manager, in_flight_max, 120, print_mod)
         publisher.configure_sequence_direct(queue_name, count, 0, 1)
         consumer_manager = ConsumerManager(broker_manager, msg_monitor, "TEST RUNNER")
         consumer_manager.add_consumers(1, test_number, queue_name, prefetch)

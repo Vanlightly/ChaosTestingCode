@@ -28,7 +28,7 @@ def main():
     exchanges = as_list(get_optional_arg(args, "--exchanges", ""))
     queue_name = get_mandatory_arg(args, "--queue")
     queue_type = get_optional_arg(args, "--queue-type", "standard")
-    rep_factor = int(get_optional_arg(args, "--rep-factor", "1"))
+    rep_factor = int(get_optional_arg(args, "--rep-factor", str(cluster_size)))
     sac_enabled = is_true(get_optional_arg(args, "--sac", "false"))
 
     if rmq_version == "3.7":
@@ -48,8 +48,7 @@ def main():
     dup_rate = float(get_optional_arg(args, "--dup-rate", "0"))
     sequence_count = int(get_optional_arg(args, "--sequences", 1))
     in_flight_max = int(get_optional_arg(args, "--in-flight-max", 10))
-    connect_node = get_optional_arg(args, "--connect-node", "rabbitmq1")
-
+    
     # consumers
     consumer_count = int(get_optional_arg(args, "--consumers", "1"))
     prefetch = int(get_optional_arg(args, "--pre-fetch", "10"))
@@ -76,7 +75,7 @@ def main():
     time.sleep(10)
 
     if consumer_count > 0:
-        msg_monitor = MessageMonitor(print_mod, analyze)
+        msg_monitor = MessageMonitor("pub-con", 1, print_mod, analyze, False)
         consumer_manager = ConsumerManager(broker_manager, msg_monitor, "TEST RUNNER")
         consumer_manager.add_consumers(consumer_count, 1, queue_name, prefetch)
 
@@ -86,7 +85,7 @@ def main():
         consumer_manager.start_consumers()
 
     if publisher_count > 0:
-        pub_manager = PublisherManager(broker_manager, 1, "TEST RUNNER", publisher_count, connect_node, in_flight_max, print_mod)
+        pub_manager = PublisherManager(broker_manager, 1, "TEST RUNNER", publisher_count, in_flight_max, print_mod)
         
         if pub_mode == "direct":
             if msg_mode == "sequence":
@@ -118,7 +117,14 @@ def main():
 
     while True:
         try:
-            time.sleep(1)
+            console_out("Press + to add a consumer, - to remove a consumer, ! to remove the active consumer (SAC only)", "TEST_RUNNER")
+            input_str = input()
+            if input_str == "+":
+                consumer_manager.add_consumer_and_start_consumer(1, queue_name, prefetch)
+            elif input_str == "-":
+                consumer_manager.stop_and_remove_oldest_consumer()
+            else:
+                consumer_manager.stop_and_remove_specfic_consumer(input_str)
         except KeyboardInterrupt:
             if publisher_count > 0:
                 console_out("Stopping publishers. Starting grace period for consumers to catch up.", "TEST_RUNNER")
@@ -159,7 +165,7 @@ def main():
     try:
         consumer_manager.stop_all_consumers()
         msg_monitor.stop_consuming()
-        monitor_thread.join()
+        monitor_thread.join(10)
     except Exception as e:
         console_out("Failed to clean up test correctly: " + str(e), "TEST RUNNER")
 

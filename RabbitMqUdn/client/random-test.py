@@ -48,6 +48,7 @@ def main():
     queue = get_mandatory_arg(args, "--queue")
     queue_type = get_mandatory_arg(args, "--queue-type")
     sac_enabled = is_true(get_mandatory_arg(args, "--sac"))
+    log_messages = is_true(get_optional_arg(args, "--log-msgs", "false"))
 
     publisher_count = int(get_optional_arg(args, "--publishers", "1"))
     if publisher_count > 0:
@@ -59,6 +60,7 @@ def main():
 
     new_cluster = is_true(get_optional_arg(args, "--new-cluster", "true"))
     cluster_size = get_optional_arg(args, "--cluster", "3")
+    rmq_version = get_optional_arg(args, "--rmq-version", "3.8")
 
     include_chaos = is_true(get_optional_arg(args, "--chaos-actions", "true"))
     if include_chaos:
@@ -77,9 +79,10 @@ def main():
     for test_number in range(tests):
 
         print("")
+        subprocess.call(["mkdir", f"logs/{test_name}/{str(test_number)}"])
         console_out(f"TEST RUN: {str(test_number)} --------------------------", "TEST RUNNER")
         broker_manager = BrokerManager()
-        broker_manager.deploy(cluster_size, new_cluster, "3.8")
+        broker_manager.deploy(cluster_size, new_cluster, rmq_version)
         initial_nodes = broker_manager.get_initial_nodes()
         console_out(f"Initial nodes: {initial_nodes}", "TEST RUNNER")
 
@@ -98,7 +101,7 @@ def main():
 
         time.sleep(10)
 
-        msg_monitor = MessageMonitor(print_mod, True)
+        msg_monitor = MessageMonitor(test_name, test_number, print_mod, True, log_messages)
         chaos = ChaosExecutor(initial_nodes)
 
         if include_chaos:
@@ -116,8 +119,7 @@ def main():
             consumer_manager.start_consumers()
 
         if publisher_count == 1:
-            pub_node = broker_manager.get_random_init_node()
-            publisher = RabbitPublisher(1, test_number, broker_manager, pub_node, in_flight_max, 120, print_mod)
+            publisher = RabbitPublisher(1, test_number, broker_manager, in_flight_max, 120, print_mod)
             publisher.configure_sequence_direct(queue_name, count, 0, sequence_count)
 
             pub_thread = threading.Thread(target=publisher.start_publishing)
@@ -206,10 +208,13 @@ def main():
                 failed_tests.add(test_number)
                 
                 lost_ctr = 0
-                for msg in not_consumed_msgs:
+                sorted_msgs = list(not_consumed_msgs)
+                sorted_msgs.sort()
+                for msg in sorted_msgs:
                     console_out(f"Lost? {msg}", "TEST RUNNER")
                     lost_ctr += 1
                     if lost_ctr > 500:
+                        console_out("More than 500, truncated list", "TEST RUNNER")
                         break
 
                 success = False

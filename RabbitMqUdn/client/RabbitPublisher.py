@@ -12,7 +12,7 @@ from printer import console_out, console_out_exception
 
 class RabbitPublisher(object):
     
-    def __init__(self, publisher_id, test_number, broker_manager, connect_node, in_flight_limit, confirm_timeout_sec, print_mod):
+    def __init__(self, publisher_id, test_number, broker_manager, in_flight_limit, confirm_timeout_sec, print_mod):
         
         self.broker_manager = broker_manager
         self._connection = None
@@ -20,7 +20,7 @@ class RabbitPublisher(object):
         self._stopping = False
         self.is_blocked = False
 
-        self.publisher_id = publisher_id
+        self.publisher_id = f"P{publisher_id}"
         self.test_number = test_number
         self.message_type = ""
         self.exchanges = list()
@@ -53,8 +53,7 @@ class RabbitPublisher(object):
         self.msg_map = dict()
         
         # nodes and ips
-        self.curr_node = 0
-        self.connected_node = connect_node
+        self.connected_node = broker_manager.get_current_node(self.publisher_id)
         self.actor = ""
         self.set_actor()
         self.create_keys()
@@ -75,14 +74,14 @@ class RabbitPublisher(object):
         self.pending_messages.clear()
 
     def set_actor(self):
-        publisher_id = f"PUBLISHER(Test:{self.test_number} Id:P{self.publisher_id})"
-        self.actor = f"{publisher_id}->{self.connected_node}"
+        pub_id = f"PUBLISHER(Test:{self.test_number} Id:{self.publisher_id})"
+        self.actor = f"{pub_id}->{self.connected_node}"
 
     def get_actor(self):
         return self.actor
 
     def connect(self):
-        self.connected_node = self.broker_manager.get_current_node()
+        self.connected_node = self.broker_manager.get_current_node(self.publisher_id)
         ip = self.broker_manager.get_node_ip(self.connected_node)
         self.set_actor()
         console_out(f"Attempting to connect to {self.connected_node} {ip}", self.get_actor())
@@ -109,7 +108,7 @@ class RabbitPublisher(object):
 
     def on_connection_open_error(self, unused_connection, err):
         console_out(f'Connection open failed, reopening in 5 seconds: {err}', self.get_actor())
-        self.broker_manager.next_node()
+        self.broker_manager.next_node(self.publisher_id)
         self._connection.ioloop.call_later(5, self._connection.ioloop.stop)
 
     def on_connection_closed(self, connection, reason):
@@ -119,7 +118,7 @@ class RabbitPublisher(object):
             self._connection.ioloop.stop()                
         else:
             console_out(f"Connection closed. Reason: {reason}. Reopening in 5 seconds.", self.get_actor())
-            self.broker_manager.next_node()
+            self.broker_manager.next_node(self.publisher_id)
             self._connection.ioloop.call_later(5, self._connection.ioloop.stop)
 
     def open_channel(self):
@@ -154,7 +153,7 @@ class RabbitPublisher(object):
 
             if not full_stop:
                 console_out("Reopening a new connection in 10 seconds", self.get_actor())
-                self.broker_manager.next_node()
+                self.broker_manager.next_node(self.publisher_id)
                 self._connection.ioloop.call_later(10, self._connection.ioloop.stop)
 
     def close_channel(self):
