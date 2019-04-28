@@ -173,6 +173,8 @@ Example 2: with Single Active Consumer enabled
 $ python -u quorum-queue-test.py --queue q --tests 20 --actions 20 --grace-period-sec 300 --in-flight-max 100 --sac true  2>&1 | tee test.log
 ```
 
+Note that the random-test.py can also do this.
+
 ## Single Active Consumer Test
 
 ### Test Design
@@ -211,15 +213,17 @@ The test can be run again mirrored or quorum queues.
 Quorum queues
 
 ```bash
-$ python -u sac-test.py --queue beta3 --tests 10 --run-minutes 10 --grace-period-sec 300 --in-flight-max 200 --cluster 3 --consumers 5 --queue-type quorum  2>&1 | tee test-sac.log
+$ cd client/tests/random
+$ bash chaos-mixed_quorum_sac.sh q1
 ```
 
 Mirrored queues
 
 ```bash
-$ python -u sac-test.py --queue beta3 --tests 10 --actions 20 --grace-period-sec 300 --in-flight-max 200 --cluster 3 --consumers 5 --queue-type mirrored  2>&1 | tee test-sac.log
+$ cd client/tests/random
+$ bash chaos-mixed_mirrored_sac.sh q1
 ```
 
 ## Random Test
 
-A test script that is highly configurable, to perform automated or manual testing on quorum or mirrored queues, with or without SAC enabled. See the client/examples/random folder for examples.
+A test script that is highly configurable, to perform automated or manual testing on quorum or mirrored queues, with or without SAC enabled. See the client/examples/random and client/tests/random folders for examples.
