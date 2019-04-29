@@ -47,6 +47,10 @@ def main():
     grace_period_sec = int(get_mandatory_arg(args, "--grace-period-sec"))
     queue = get_mandatory_arg(args, "--queue")
     queue_type = get_mandatory_arg(args, "--queue-type")
+
+    if queue_type == "quorum":
+        qq_max_length = int(get_optional_arg(args, "--qq-max-length", "0"))
+
     sac_enabled = is_true(get_mandatory_arg(args, "--sac"))
     consumer_hard_close = is_true(get_optional_arg(args, "--consumer-hard-close", str(sac_enabled)))
     log_messages = is_true(get_optional_arg(args, "--log-msgs", "false"))
@@ -92,10 +96,16 @@ def main():
         queue_created = False
 
         while queue_created == False:  
-            if sac_enabled:  
-                queue_created = broker_manager.create_sac_queue(mgmt_node, queue_name, cluster_size, queue_type)
-            else:
-                queue_created = broker_manager.create_queue(mgmt_node, queue_name, cluster_size, queue_type)
+            if queue_type == "standard":
+                if sac_enabled:
+                    queue_created = broker_manager.create_standard_sac_queue(mgmt_node, queue_name, cluster_size)
+                else:
+                    queue_created = broker_manager.create_standard_queue(mgmt_node, queue_name, cluster_size)
+            elif queue_type == "quorum":
+                if sac_enabled:
+                    queue_created = broker_manager.create_quorum_sac_queue(mgmt_node, queue_name, cluster_size, qq_max_length)
+                else:
+                    queue_created = broker_manager.create_quorum_queue(mgmt_node, queue_name, cluster_size, qq_max_length)
 
             if queue_created == False:
                 time.sleep(5)

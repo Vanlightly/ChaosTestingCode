@@ -85,22 +85,18 @@ class BrokerManager:
         
         return self.init_live_nodes[self.curr_node[client]]
         
-    def create_sac_queue(self, mgmt_node, queue_name, replication_factor, queue_type):
+    def create_quorum_sac_queue(self, mgmt_node, queue_name, replication_factor, max_memory_length):
         try:
             mgmt_node_ip = self.get_node_ip(mgmt_node)
             queue_node = "rabbit@" + mgmt_node
 
-            if queue_type == "quorum":
+            if max_memory_length > 0:
                 r = requests.put('http://' + mgmt_node_ip + ':15672/api/queues/%2F/' + queue_name, 
-                        data = "{\"durable\":true,\"arguments\":{\"x-queue-type\":\"quorum\", \"x-quorum-initial-group-size\":" + str(replication_factor) + ",\"x-single-active-consumer\": true},\"node\":\"" + queue_node + "\"}",
+                        data = "{\"durable\":true,\"arguments\":{\"x-queue-type\":\"quorum\", \"x-quorum-initial-group-size\":" + str(replication_factor) + ",\"x-single-active-consumer\": true,\"x-max-in-memory-length\": " + str(max_memory_length) +"},\"node\":\"" + queue_node + "\"}",
                         auth=('jack','jack'))
             else:
                 r = requests.put('http://' + mgmt_node_ip + ':15672/api/queues/%2F/' + queue_name, 
-                        data = "{\"auto_delete\":false,\"durable\":true,\"arguments\":{\"x-single-active-consumer\": true},\"node\":\"" + queue_node + "\"}",
-                        auth=('jack','jack'))
-
-                r = requests.put('http://' + mgmt_node_ip + ':15672/api/policies/%2F/ha-queues', 
-                        data = "{\"pattern\":\"" + queue_name + "\", \"definition\": {\"ha-mode\":\"exactly\", \"ha-params\": " + str(replication_factor) + ",\"ha-sync-mode\":\"automatic\" }, \"priority\":0, \"apply-to\": \"queues\"}",
+                        data = "{\"durable\":true,\"arguments\":{\"x-queue-type\":\"quorum\", \"x-quorum-initial-group-size\":" + str(replication_factor) + ",\"x-single-active-consumer\": true},\"node\":\"" + queue_node + "\"}",
                         auth=('jack','jack'))
 
             console_out(f"Created {queue_name} with response code {r}", "TEST_RUNNER")
@@ -110,23 +106,59 @@ class BrokerManager:
             console_out("Could not create queue. Will retry. " + str(e), "TEST RUNNER")
             return False
 
-    def create_queue(self, mgmt_node, queue_name, replication_factor, queue_type):
+    def create_standard_sac_queue(self, mgmt_node, queue_name, replication_factor):
         try:
             mgmt_node_ip = self.get_node_ip(mgmt_node)
             queue_node = "rabbit@" + mgmt_node
 
-            if queue_type == "quorum":
+            r = requests.put('http://' + mgmt_node_ip + ':15672/api/queues/%2F/' + queue_name, 
+                    data = "{\"auto_delete\":false,\"durable\":true,\"arguments\":{\"x-single-active-consumer\": true},\"node\":\"" + queue_node + "\"}",
+                    auth=('jack','jack'))
+
+            r = requests.put('http://' + mgmt_node_ip + ':15672/api/policies/%2F/ha-queues', 
+                    data = "{\"pattern\":\"" + queue_name + "\", \"definition\": {\"ha-mode\":\"exactly\", \"ha-params\": " + str(replication_factor) + ",\"ha-sync-mode\":\"automatic\" }, \"priority\":0, \"apply-to\": \"queues\"}",
+                    auth=('jack','jack'))
+
+            console_out(f"Created {queue_name} with response code {r}", "TEST_RUNNER")
+
+            return r.status_code == 201 or r.status_code == 204
+        except Exception as e:
+            console_out("Could not create queue. Will retry. " + str(e), "TEST RUNNER")
+            return False
+
+    def create_quorum_queue(self, mgmt_node, queue_name, replication_factor, max_memory_length):
+        try:
+            mgmt_node_ip = self.get_node_ip(mgmt_node)
+            queue_node = "rabbit@" + mgmt_node
+
+            if max_memory_length > 0:
                 r = requests.put('http://' + mgmt_node_ip + ':15672/api/queues/%2F/' + queue_name, 
-                        data = "{\"durable\":true,\"arguments\":{\"x-queue-type\":\"quorum\", \"x-quorum-initial-group-size\":" + str(replication_factor) + ",\"x-single-active-consumer\": false},\"node\":\"" + queue_node + "\"}",
+                        data = "{\"durable\":true,\"arguments\":{\"x-queue-type\":\"quorum\", \"x-quorum-initial-group-size\":" + str(replication_factor) + ",\"x-single-active-consumer\": false,\"x-max-in-memory-length\": " + str(max_memory_length) +"},\"node\":\"" + queue_node + "\"}",
                         auth=('jack','jack'))
             else:
                 r = requests.put('http://' + mgmt_node_ip + ':15672/api/queues/%2F/' + queue_name, 
-                        data = "{\"auto_delete\":false,\"durable\":true,\"arguments\":{\"x-single-active-consumer\": false},\"node\":\"" + queue_node + "\"}",
+                        data = "{\"durable\":true,\"arguments\":{\"x-queue-type\":\"quorum\", \"x-quorum-initial-group-size\":" + str(replication_factor) + ",\"x-single-active-consumer\": false},\"node\":\"" + queue_node + "\"}",
                         auth=('jack','jack'))
+            
+            console_out(f"Created {queue_name} with response code {r}", "TEST_RUNNER")
 
-                r = requests.put('http://' + mgmt_node_ip + ':15672/api/policies/%2F/ha-queues', 
-                        data = "{\"pattern\":\"" + queue_name + "\", \"definition\": {\"ha-mode\":\"exactly\", \"ha-params\": " + str(replication_factor) + ",\"ha-sync-mode\":\"automatic\" }, \"priority\":0, \"apply-to\": \"queues\"}",
-                        auth=('jack','jack'))
+            return r.status_code == 201 or r.status_code == 204
+        except Exception as e:
+            console_out("Could not create queue. Will retry. " + str(e), "TEST RUNNER")
+            return False
+
+    def create_standard_queue(self, mgmt_node, queue_name, replication_factor):
+        try:
+            mgmt_node_ip = self.get_node_ip(mgmt_node)
+            queue_node = "rabbit@" + mgmt_node
+
+            r = requests.put('http://' + mgmt_node_ip + ':15672/api/queues/%2F/' + queue_name, 
+                    data = "{\"auto_delete\":false,\"durable\":true,\"arguments\":{\"x-single-active-consumer\": false},\"node\":\"" + queue_node + "\"}",
+                    auth=('jack','jack'))
+
+            r = requests.put('http://' + mgmt_node_ip + ':15672/api/policies/%2F/ha-queues', 
+                    data = "{\"pattern\":\"" + queue_name + "\", \"definition\": {\"ha-mode\":\"exactly\", \"ha-params\": " + str(replication_factor) + ",\"ha-sync-mode\":\"automatic\" }, \"priority\":0, \"apply-to\": \"queues\"}",
+                    auth=('jack','jack'))
 
             console_out(f"Created {queue_name} with response code {r}", "TEST_RUNNER")
 

@@ -19,11 +19,37 @@ def get_mandatory_arg(args_dict, key):
         print(f"Missing mandatory argument {key}")
         exit(1)
 
+def get_mandatory_arg_validated(args_dict, key, allowed_values):
+    if key in args_dict:
+        val = args_dict[key]
+        if val in allowed_values:
+            print(f"SUPPLIED {key}={val}")
+            return val
+        else:
+            print(f"SUPPLIED ILLEGAL VALUE {key}={val}. ALLOWED {allowed_values}")
+            exit(1)
+    else:
+        print(f"Missing mandatory argument {key}")
+        exit(1)
+
 def get_optional_arg(args_dict, key, default_value):
     if key in args_dict:
         val = args_dict[key]
         print(f"SUPPLIED {key}={val}")
         return val
+    else:
+        print(f"DEFAULT {key}={default_value}")
+        return default_value
+
+def get_optional_arg_validated(args_dict, key, default_value, allowed_values):
+    if key in args_dict:
+        val = args_dict[key]
+        if val in allowed_values:
+            print(f"SUPPLIED {key}={val}")
+            return val
+        else:
+            print(f"SUPPLIED ILLEGAL VALUE {key}={val}. ALLOWED {allowed_values}")
+            exit(1)
     else:
         print(f"DEFAULT {key}={default_value}")
         return default_value

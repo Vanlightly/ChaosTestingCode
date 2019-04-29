@@ -2,7 +2,7 @@
 import sys
 import time
 import threading
-from command_args import get_args, get_mandatory_arg, get_optional_arg, is_true, as_list
+from command_args import get_args, get_mandatory_arg, get_optional_arg, is_true, as_list, get_optional_arg_validated
 from RabbitPublisher import RabbitPublisher
 from BrokerManager import BrokerManager
 from PublisherManager import PublisherManager
@@ -16,20 +16,21 @@ def main():
     args = get_args(sys.argv)
 
     # cluster
-    new_cluster = is_true(get_optional_arg(args, "--new-cluster", "false"))
+    new_cluster = is_true(get_optional_arg_validated(args, "--new-cluster", "false", ["true", "false"]))
     if new_cluster:
         cluster_size = int(get_mandatory_arg(args, "--cluster-size"))
     else:
         cluster_size = int(get_optional_arg(args, "--cluster-size", "3"))
 
-    rmq_version = get_optional_arg(args, "--rmq-version", "3.8")
+    rmq_version = get_optional_arg_validated(args, "--rmq-version", "3.8", ["3.7","3.8"])
 
     # queues and exchanges
     exchanges = as_list(get_optional_arg(args, "--exchanges", ""))
     queue_name = get_mandatory_arg(args, "--queue")
-    queue_type = get_optional_arg(args, "--queue-type", "standard")
+    queue_type = get_optional_arg_validated(args, "--queue-type", "standard", ["standard", "quorum"])
+    qq_max_length = int(get_optional_arg(args, "--qq-max-length", "0"))
     rep_factor = int(get_optional_arg(args, "--rep-factor", str(cluster_size)))
-    sac_enabled = is_true(get_optional_arg(args, "--sac", "false"))
+    sac_enabled = is_true(get_optional_arg_validated(args, "--sac", "false", ["true", "false"]))
 
     if rmq_version == "3.7":
         if sac_enabled:
@@ -42,8 +43,8 @@ def main():
 
     # publisher
     publisher_count = int(get_optional_arg(args, "--publishers", "1"))
-    pub_mode = get_optional_arg(args, "--pub-mode", "direct")
-    msg_mode = get_optional_arg(args, "--msg-mode", "sequence")
+    pub_mode = get_optional_arg_validated(args, "--pub-mode", "direct", ["direct","exchange"])
+    msg_mode = get_optional_arg_validated(args, "--msg-mode", "sequence", ["sequence", "partitioned-sequence","large-msgs","hello"])
     count = int(get_mandatory_arg(args, "--msgs"))
     dup_rate = float(get_optional_arg(args, "--dup-rate", "0"))
     sequence_count = int(get_optional_arg(args, "--sequences", 1))
@@ -52,7 +53,7 @@ def main():
     # consumers
     consumer_count = int(get_optional_arg(args, "--consumers", "1"))
     prefetch = int(get_optional_arg(args, "--pre-fetch", "10"))
-    analyze = is_true(get_optional_arg(args, "--analyze", "true"))
+    analyze = is_true(get_optional_arg_validated(args, "--analyze", "true", ["true", "false"]))
 
     
     print_mod = get_optional_arg(args, "--print-mod", in_flight_max * 5)
@@ -63,10 +64,17 @@ def main():
     mgmt_node = broker_manager.get_random_init_node()
     queue_created = False
     while queue_created == False:    
-        if sac_enabled:
-            queue_created = broker_manager.create_sac_queue(mgmt_node, queue_name, rep_factor, queue_type)
-        else:
-            queue_created = broker_manager.create_queue(mgmt_node, queue_name, rep_factor, queue_type)
+        if queue_type == "standard":
+            if sac_enabled:
+                queue_created = broker_manager.create_standard_sac_queue(mgmt_node, queue_name, rep_factor)
+            else:
+                queue_created = broker_manager.create_standard_queue(mgmt_node, queue_name, rep_factor)
+        elif queue_type == "quorum":
+            if sac_enabled:
+                queue_created = broker_manager.create_quorum_sac_queue(mgmt_node, queue_name, rep_factor, qq_max_length)
+            else:
+                queue_created = broker_manager.create_quorum_queue(mgmt_node, queue_name, rep_factor, qq_max_length)
+        
         if queue_created == False:
             time.sleep(5)
 
@@ -142,30 +150,39 @@ def main():
         except KeyboardInterrupt:
             console_out("Grace period ended", "TEST RUNNER")
 
-    confirmed_set = pub_manager.get_total_msg_set()
-    lost_msgs = confirmed_set.difference(msg_monitor.get_msg_set())
+        confirmed_set = pub_manager.get_total_msg_set()
+        lost_msgs = confirmed_set.difference(msg_monitor.get_msg_set())
 
-    console_out("RESULTS------------------------------------", "TEST RUNNER")
-    console_out(f"Confirmed count: {pub_manager.get_total_pos_ack_count()} Received count: {msg_monitor.get_receive_count()} Unique received: {msg_monitor.get_unique_count()}", "TEST RUNNER")
+        console_out("RESULTS------------------------------------", "TEST RUNNER")    
+        console_out(f"Confirmed count: {pub_manager.get_total_pos_ack_count()} Received count: {msg_monitor.get_receive_count()} Unique received: {msg_monitor.get_unique_count()}", "TEST RUNNER")
+    
+        if analyze:
+            success = True
+            if len(lost_msgs) > 0:
+                console_out(f"FAILED TEST: Lost messages: {len(lost_msgs)}", "TEST RUNNER")
+                success = False
 
-    if analyze:
-        success = True
-        if len(lost_msgs) > 0:
-            console_out(f"FAILED TEST: Lost messages: {len(lost_msgs)}", "TEST RUNNER")
-            success = False
+            if msg_monitor.get_out_of_order() == True:
+                success = False
+                console_out(f"FAILED TEST: Received out-of-order messages", "TEST RUNNER")
 
-        if msg_monitor.get_out_of_order() == True:
-            success = False
-            console_out(f"FAILED TEST: Received out-of-order messages", "TEST RUNNER")
-
-        if success:
-            console_out("TEST OK", "TEST RUNNER")
+            if success:
+                console_out("TEST OK", "TEST RUNNER")
+    
+    elif publisher_count > 0:
+        console_out("RESULTS------------------------------------", "TEST RUNNER")
+        console_out(f"Confirmed count: {pub_manager.get_total_pos_ack_count()}", "TEST RUNNER")
+    elif consumer_count > 0:
+        console_out("RESULTS------------------------------------", "TEST RUNNER")
+        console_out(f"Received count: {msg_monitor.get_receive_count()} Unique received: {msg_monitor.get_unique_count()}", "TEST RUNNER")
+    
     console_out("RESULTS END------------------------------------", "TEST RUNNER")
 
     try:
-        consumer_manager.stop_all_consumers()
-        msg_monitor.stop_consuming()
-        monitor_thread.join(10)
+        if consumer_count > 0:
+            consumer_manager.stop_all_consumers()
+            msg_monitor.stop_consuming()
+            monitor_thread.join(10)
     except Exception as e:
         console_out("Failed to clean up test correctly: " + str(e), "TEST RUNNER")
 
