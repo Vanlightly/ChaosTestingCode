@@ -97,11 +97,11 @@ class RabbitPublisher(object):
         self._connection.add_on_connection_blocked_callback(self.on_connnection_blocked)
         self._connection.add_on_connection_unblocked_callback(self.on_connnection_unblocked)
         
-    def on_connnection_blocked(self, method_frame):
+    def on_connnection_blocked(self, connection, method_frame):
         self.is_blocked = True
         console_out("Connection Blocked!!!", self.get_actor())
 
-    def on_connnection_unblocked(self, method_frame):
+    def on_connnection_unblocked(self, connection, method_frame):
         self.is_blocked = False
         console_out("Connection Unblocked!!!", self.get_actor())
 
