@@ -48,6 +48,7 @@ def main():
     queue = get_mandatory_arg(args, "--queue")
     queue_type = get_mandatory_arg(args, "--queue-type")
     sac_enabled = is_true(get_mandatory_arg(args, "--sac"))
+    consumer_hard_close = is_true(get_optional_arg(args, "--consumer-hard-close", str(sac_enabled)))
     log_messages = is_true(get_optional_arg(args, "--log-msgs", "false"))
 
     publisher_count = int(get_optional_arg(args, "--publishers", "1"))
@@ -137,7 +138,7 @@ def main():
             console_out("Chaos executor started", "TEST RUNNER")
 
         if include_con_actions:
-            consumer_action_thread = threading.Thread(target=consumer_manager.start_random_consumer_actions,args=(con_action_min_interval, con_action_max_interval))
+            consumer_action_thread = threading.Thread(target=consumer_manager.start_random_consumer_actions,args=(con_action_min_interval, con_action_max_interval, consumer_hard_close))
             consumer_action_thread.start()
             console_out("Consumer actions started", "TEST RUNNER")
 

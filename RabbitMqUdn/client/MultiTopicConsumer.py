@@ -17,6 +17,7 @@ class MultiTopicConsumer:
         self.prefetch = prefetch
         self.message_monitor = message_monitor
         self.terminate = False
+        self.hard_close = False
         self.consumer_id = f"C{consumer_id}"
         self.test_number = test_number
         self.connected_node = broker_manager.get_current_node(self.consumer_id)
@@ -68,16 +69,17 @@ class MultiTopicConsumer:
         self.queue_name = queue_name
     
     def callback(self, ch, method, properties, body):
-        if self.terminate == False:
+        if not self.terminate:
             self.last_msg = body
             self.message_monitor.append(body, self.consumer_tag, self.consumer_id, self.get_actor(), method.redelivered)
             ch.basic_ack(delivery_tag = method.delivery_tag)
             
 
-    def cancel_and_disconnect(self):
+    def disconnect(self):
         try:
-            if self.channel is not None and self.channel.is_open:
+            if not self.hard_close and self.channel is not None and self.channel.is_open:
                 self.channel.stop_consuming()
+                console_out(f"Cancelled consumer", self.get_actor())
                 self.connection.sleep(2)
 
             if self.connection is not None and self.connection.is_open:
@@ -114,6 +116,7 @@ class MultiTopicConsumer:
 
     def consume(self):
         self.terminate = False
+        self.hard_close = False
         self.last_msg = ""
         while True:
             try:
@@ -135,16 +138,16 @@ class MultiTopicConsumer:
                 if self.terminate == True:
                     break
                 
-                console_out_exception(f"Connection was closed. Last msg received: {self.last_msg}", e, self.get_actor())
+                console_out_exception(f"Connection was closed. Last msg acked: {self.last_msg}", e, self.get_actor())
                 self.wait_for(5)
                 continue
             except pika.exceptions.AMQPChannelError as e:
                 if self.terminate == True:
                     break
 
-                console_out_exception(f"Caught a channel error. Last msg received: {self.last_msg}", e, self.get_actor())
+                console_out_exception(f"Caught a channel error. Last msg acked: {self.last_msg}", e, self.get_actor())
                 self.wait_for(5)
-                if self.cancel_and_disconnect():
+                if self.disconnect():
                     self.connected_node = "none"
                     continue
                 else:
@@ -155,16 +158,16 @@ class MultiTopicConsumer:
                 if self.terminate == True:
                     break
 
-                console_out_exception(f"Connection error. Last msg received: {self.last_msg}", e, self.get_actor())
+                console_out_exception(f"Connection error. Last msg acked: {self.last_msg}", e, self.get_actor())
                 self.wait_for(5)
                 continue
             except Exception as e:
                 if self.terminate == True:
                     break
                 
-                console_out_exception(f"Unexpected error. Last msg received: {self.last_msg}", e, self.get_actor())                
+                console_out_exception(f"Unexpected error. Last msg acked: {self.last_msg}", e, self.get_actor())                
                 self.wait_for(5)
-                if self.cancel_and_disconnect():
+                if self.disconnect():
                     self.connected_node = "none"
                     continue
                 else:
@@ -175,8 +178,17 @@ class MultiTopicConsumer:
     def stop_consuming(self):
         self.terminate = True
         if self.last_msg != "":
-            console_out(f"Requested to stop. Last msg received: {self.last_msg}", self.get_actor())
+            console_out(f"Requested to stop. Last msg acked: {self.last_msg}", self.get_actor())
         else:
             console_out(f"Requested to stop.", self.get_actor())
-        self.cancel_and_disconnect()
+        self.disconnect()
+
+    def perform_hard_close(self):
+        self.terminate = True
+        self.hard_close = True
+        if self.last_msg != "":
+            console_out(f"Requested to hard close. Last msg acked: {self.last_msg}", self.get_actor())
+        else:
+            console_out(f"Requested to hard close.", self.get_actor())
+        self.disconnect()
         
