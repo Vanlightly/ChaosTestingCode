@@ -96,7 +96,7 @@ def main():
         queue_created = False
 
         while queue_created == False:  
-            if queue_type == "standard":
+            if queue_type == "mirrored":
                 if sac_enabled:
                     queue_created = broker_manager.create_standard_sac_queue(mgmt_node, queue_name, cluster_size)
                 else:

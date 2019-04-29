@@ -27,7 +27,7 @@ def main():
     # queues and exchanges
     exchanges = as_list(get_optional_arg(args, "--exchanges", ""))
     queue_name = get_mandatory_arg(args, "--queue")
-    queue_type = get_optional_arg_validated(args, "--queue-type", "standard", ["standard", "quorum"])
+    queue_type = get_optional_arg_validated(args, "--queue-type", "mirrored", ["mirrored", "quorum"])
     qq_max_length = int(get_optional_arg(args, "--qq-max-length", "0"))
     rep_factor = int(get_optional_arg(args, "--rep-factor", str(cluster_size)))
     sac_enabled = is_true(get_optional_arg_validated(args, "--sac", "false", ["true", "false"]))
@@ -64,7 +64,7 @@ def main():
     mgmt_node = broker_manager.get_random_init_node()
     queue_created = False
     while queue_created == False:    
-        if queue_type == "standard":
+        if queue_type == "mirrored":
             if sac_enabled:
                 queue_created = broker_manager.create_standard_sac_queue(mgmt_node, queue_name, rep_factor)
             else:
