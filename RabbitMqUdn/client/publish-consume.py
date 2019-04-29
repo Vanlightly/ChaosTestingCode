@@ -22,7 +22,7 @@ def main():
     else:
         cluster_size = int(get_optional_arg(args, "--cluster-size", "3"))
 
-    rmq_version = get_optional_arg_validated(args, "--rmq-version", "3.8", ["3.7","3.8"])
+    rmq_version = get_optional_arg_validated(args, "--rmq-version", "3.8-beta", ["3.7","3.8-beta","3.8-alpha"])
 
     # queues and exchanges
     exchanges = as_list(get_optional_arg(args, "--exchanges", ""))

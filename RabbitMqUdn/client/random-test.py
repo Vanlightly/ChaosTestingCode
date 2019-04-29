@@ -10,7 +10,7 @@ import json
 import signal
 import datetime
 
-from command_args import get_args, get_mandatory_arg, get_optional_arg, is_true
+from command_args import get_args, get_mandatory_arg, get_optional_arg, is_true, get_optional_arg_validated
 from RabbitPublisher import RabbitPublisher
 from MultiTopicConsumer import MultiTopicConsumer
 from QueueStats import QueueStats
@@ -65,7 +65,7 @@ def main():
 
     new_cluster = is_true(get_optional_arg(args, "--new-cluster", "true"))
     cluster_size = get_optional_arg(args, "--cluster", "3")
-    rmq_version = get_optional_arg(args, "--rmq-version", "3.8")
+    rmq_version = get_optional_arg_validated(args, "--rmq-version", "3.8-alpha", ["3.7", "3.8-beta", "3.8-alpha"])
 
     include_chaos = is_true(get_optional_arg(args, "--chaos-actions", "true"))
     if include_chaos:
