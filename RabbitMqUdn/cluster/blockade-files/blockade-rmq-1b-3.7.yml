@@ -1,6 +1,6 @@
 containers:
   rabbitmq1:
-    image: jackvanlightly/rabbitmq-mgmt-v3.8.0-alpha.613.erl.alpine:latest
+    image: rabbitmq:3.7-management
     hostname: rabbitmq1
     container_name: rabbitmq1
     environment: { "RABBITMQ_ERLANG_COOKIE": 12345 }
@@ -11,5 +11,5 @@ containers:
 
 network:
   driver: udn
-  flaky: 5%
-  slow: 200ms 50ms 25% distribution normal
+  flaky: 2%
+  slow: 100ms 50ms 25% distribution normal

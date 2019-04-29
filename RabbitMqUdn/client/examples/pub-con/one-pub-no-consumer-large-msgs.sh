@@ -4,8 +4,8 @@ cd ../..
 
 python publish-consume.py \
 --new-cluster true \
---cluster-size 3 \
---rmq-version 3.8 \
+--cluster-size 1 \
+--rmq-version 3.8-alpha \
 --queue $1 \
 --queue-type quorum \
 --qq-max-length 1000 \

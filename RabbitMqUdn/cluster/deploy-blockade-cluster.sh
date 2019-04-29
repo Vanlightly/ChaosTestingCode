@@ -11,7 +11,21 @@ if blockade status > /dev/null 2>&1; then
 fi
 
 echo Creating blockade cluster
-if [[ $1 == "3" ]]; then
+if [[ $1 == "1" ]]; then
+    if [[ $2 == "3.7" ]]; then
+        echo "Creating 1 node of version 3.7"
+        cp ./blockade-files/blockade-rmq-1b-3.7.yml blockade.yml
+    elif [[ $2 == "3.8-beta" ]]; then
+        echo "Creating 1 node of version 3.8 beta"
+        cp ./blockade-files/blockade-rmq-1b-3.8-beta.yml blockade.yml
+    elif [[ $2 == "3.8-alpha" ]]; then
+        echo "Creating 1 node of version 3.8 alpha"
+        cp ./blockade-files/blockade-rmq-1b-3.8-alpha.yml blockade.yml
+    else
+        echo "Only versions 3.7 and 3.8 are supported at this time"
+        exit 1
+    fi
+elif [[ $1 == "3" ]]; then
     if [[ $2 == "3.7" ]]; then
         echo "Creating 3 node cluster of version 3.7"
         cp ./blockade-files/blockade-rmq-3b-3.7.yml blockade.yml
