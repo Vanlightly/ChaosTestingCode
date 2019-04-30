@@ -47,6 +47,7 @@ def main():
     grace_period_sec = int(get_mandatory_arg(args, "--grace-period-sec"))
     queue = get_mandatory_arg(args, "--queue")
     queue_type = get_mandatory_arg(args, "--queue-type")
+    analyze = is_true(get_optional_arg(args, "--analyze", "true"))
 
     if queue_type == "quorum":
         qq_max_length = int(get_optional_arg(args, "--qq-max-length", "0"))
@@ -112,7 +113,7 @@ def main():
 
         time.sleep(10)
 
-        msg_monitor = MessageMonitor(test_name, test_number, print_mod, True, log_messages)
+        msg_monitor = MessageMonitor(test_name, test_number, print_mod, analyze, log_messages)
         chaos = ChaosExecutor(initial_nodes)
 
         if include_chaos:
