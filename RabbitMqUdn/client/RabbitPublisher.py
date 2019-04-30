@@ -50,6 +50,7 @@ class RabbitPublisher(object):
         self.waiting_for_acks = False
         self.waiting_for_acks_sec = 0
         self.msg_set = set()
+        self.undeliverable_set = set()
         self.msg_map = dict()
         
         # nodes and ips
@@ -226,15 +227,14 @@ class RabbitPublisher(object):
                 if self.message_type == "partitioned-sequence":
                     rk = self.keys[self.key_index]
                     body = f"{self.keys[self.key_index]}={self.val}"
-                    self.msg_map[self.seq_no] = body
                 elif self.message_type == "sequence":
                     body = f"{self.keys[self.key_index]}={self.val}"
-                    self.msg_map[self.seq_no] = body
                 elif self.message_type == "large-msgs":
                     body = self.large_msg
                 else:
                     body = "Hello there, how are you?"
-                
+
+                self.msg_map[self.seq_no] = body                
                 body = f"{datetime.datetime.now()}|{body}"
 
                 if len(self.exchanges) == 1:
@@ -282,6 +282,7 @@ class RabbitPublisher(object):
 
     def on_undeliverable(self, channel, method, properties, body):
         self.undeliverable += 1
+        self.undeliverable_set.add(str(body, "utf-8"))
         if self.undeliverable % 100 == 0:
             console_out(f"{str(self.undeliverable)} messages could not be delivered", self.get_actor())
 
@@ -311,9 +312,7 @@ class RabbitPublisher(object):
             self.pos_acks += acks
         elif isinstance(frame.method, spec.Basic.Nack):
             self.neg_acks += acks
-        elif isinstance(frame.method, spec.Basic.Return):
-            console_out("Undeliverable message", self.get_actor())
-        
+                
         curr_ack = int((self.pos_acks + self.neg_acks) / self.print_mod)
         if curr_ack > self.last_ack:
             console_out(f"Pos acks: {self.pos_acks} Neg acks: {self.neg_acks} Undeliverable: {self.undeliverable} No Acks: {self.no_acks}", self.get_actor())
@@ -410,10 +409,10 @@ class RabbitPublisher(object):
         console_out(f"Final Count => Sent: {self.curr_pos} Pos acks: {self.pos_acks} Neg acks: {self.neg_acks} Undeliverable: {self.undeliverable} No Acks: {self.no_acks}", self.get_actor())
 
     def get_pos_ack_count(self):
-        return self.pos_acks
+        return self.pos_acks - self.undeliverable
 
     def get_neg_ack_count(self):
         return self.neg_acks
 
     def get_msg_set(self):
-        return self.msg_set
+        return self.msg_set.difference(self.undeliverable_set)

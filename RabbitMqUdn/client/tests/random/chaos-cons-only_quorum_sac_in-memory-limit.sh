@@ -15,6 +15,8 @@ python -u random-test.py --queue $1 \
 --sequences 1 \
 --cluster 3 \
 --consumers 5 \
+--pre-fetch 1000 \
+--qq-max-length 1000 \
 --queue-type quorum \
 --chaos-actions false \
 --consumer-actions true \
