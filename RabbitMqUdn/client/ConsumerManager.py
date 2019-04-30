@@ -77,10 +77,9 @@ class ConsumerManager:
         con = self.consumers[con_index]
         if con.terminate == True:
             console_out(f"STARTING CONSUMER {con_index+1} --------------------------------------", self.actor)
-            conn_ok = con.connect()
-            if conn_ok:
-                self.consumer_threads[con_index] = threading.Thread(target=con.consume)
-                self.consumer_threads[con_index].start()
+            con.connect()
+            self.consumer_threads[con_index] = threading.Thread(target=con.consume)
+            self.consumer_threads[con_index].start()
         else:
             console_out(f"STOPPING CONSUMER {con_index+1} --------------------------------------", self.actor)
             try:
@@ -113,10 +112,9 @@ class ConsumerManager:
                 con.stop_consuming()
             self.consumer_threads[con_index].join(15)
             
-            conn_ok = con.connect()
-            if conn_ok:
-                self.consumer_threads[con_index] = threading.Thread(target=con.consume)
-                self.consumer_threads[con_index].start()
+            con.connect()
+            self.consumer_threads[con_index] = threading.Thread(target=con.consume)
+            self.consumer_threads[con_index].start()
         except Exception as e:
             console_out_exception("Failed to stop/start consumer correctly", e, self.actor)
 
@@ -145,9 +143,8 @@ class ConsumerManager:
             if self.consumers[con_index].terminate == True:
                 console_out(f"Starting consumer {con_index+1}", self.actor)
                 conn_ok = self.consumers[con_index].connect()
-                if conn_ok:
-                    self.consumer_threads[con_index] = threading.Thread(target=self.consumers[con_index].consume)
-                    self.consumer_threads[con_index].start()
+                self.consumer_threads[con_index] = threading.Thread(target=self.consumers[con_index].consume)
+                self.consumer_threads[con_index].start()
 
     def stop_all_consumers(self):
         for con in self.consumers:
