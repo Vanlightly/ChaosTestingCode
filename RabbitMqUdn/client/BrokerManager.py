@@ -13,8 +13,9 @@ class BrokerManager:
     def __init__(self):
         self.init_live_nodes = list()
         self.curr_node = dict()
+        self.use_toxiproxy = False
 
-    def deploy(self, cluster_size, new_cluster, rmq_version):
+    def deploy(self, cluster_size, new_cluster, rmq_version, use_toxiproxy):
         if new_cluster:
             subprocess.call(["bash", "../cluster/deploy-blockade-cluster.sh", str(cluster_size), rmq_version])
             console_out(f"Waiting for cluster to establish itself...", "TEST RUNNER")
@@ -27,6 +28,12 @@ class BrokerManager:
             
         self.load_initial_nodes()
         self.print_log_files()
+        self.use_toxiproxy = use_toxiproxy
+
+        if self.use_toxiproxy:
+            console_out("Creating ToxiProxy proxies", "TEST RUNNER")
+            toxiproxy_ip = self.get_node_ip("toxiproxy")
+            subprocess.call(["bash", "../cluster/proxies-add.sh", toxiproxy_ip, str(len(self.init_live_nodes))])
     
     def load_initial_nodes(self):
         self.init_live_nodes =  self.get_live_nodes()
@@ -42,12 +49,26 @@ class BrokerManager:
     def get_initial_nodes(self):
         return self.init_live_nodes
 
-    def get_node_ip(self, node_name):
+    def get_mgmt_node_ip(self, node_name):
         bash_command = "bash ../cluster/get-node-ip.sh " + node_name
         process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
         output, error = process.communicate()
         ip = output.decode('ascii').replace('\n', '')
         return ip
+
+    def get_node_ip(self, node_name):
+        if self.use_toxiproxy:
+            bash_command = "bash ../cluster/get-node-ip.sh toxiproxy"
+            process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
+            output, error = process.communicate()
+            ip = output.decode('ascii').replace('\n', '')
+            return ip
+        else:
+            bash_command = "bash ../cluster/get-node-ip.sh " + node_name
+            process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
+            output, error = process.communicate()
+            ip = output.decode('ascii').replace('\n', '')
+            return ip
 
     def get_live_nodes(self):
         bash_command = "bash ../cluster/list-live-nodes.sh"
@@ -68,6 +89,22 @@ class BrokerManager:
 
         return ips
 
+    def get_consumer_port(self, node, consumer_id):
+        if self.use_toxiproxy:
+            node_num = int(node[8:9])
+            port = int(consumer_id[1:]) + (node_num * 10000) 
+            return port
+        else:
+            return 5672
+
+    def get_publisher_port(self, node):
+        if self.use_toxiproxy:
+            node_num = int(node[8:9])
+            port = node_num * 10000
+            return port
+        else:
+            return 5672
+
     def next_node(self, client):
         if client in self.curr_node.keys():
             node_index = self.curr_node[client]
@@ -87,7 +124,7 @@ class BrokerManager:
         
     def create_quorum_sac_queue(self, mgmt_node, queue_name, replication_factor, max_memory_length):
         try:
-            mgmt_node_ip = self.get_node_ip(mgmt_node)
+            mgmt_node_ip = self.get_mgmt_node_ip(mgmt_node)
             queue_node = "rabbit@" + mgmt_node
 
             if max_memory_length > 0:
@@ -108,7 +145,7 @@ class BrokerManager:
 
     def create_standard_sac_queue(self, mgmt_node, queue_name, replication_factor):
         try:
-            mgmt_node_ip = self.get_node_ip(mgmt_node)
+            mgmt_node_ip = self.get_mgmt_node_ip(mgmt_node)
             queue_node = "rabbit@" + mgmt_node
 
             r = requests.put('http://' + mgmt_node_ip + ':15672/api/queues/%2F/' + queue_name, 
@@ -128,7 +165,7 @@ class BrokerManager:
 
     def create_quorum_queue(self, mgmt_node, queue_name, replication_factor, max_memory_length):
         try:
-            mgmt_node_ip = self.get_node_ip(mgmt_node)
+            mgmt_node_ip = self.get_mgmt_node_ip(mgmt_node)
             queue_node = "rabbit@" + mgmt_node
 
             if max_memory_length > 0:
@@ -149,7 +186,7 @@ class BrokerManager:
 
     def create_standard_queue(self, mgmt_node, queue_name, replication_factor):
         try:
-            mgmt_node_ip = self.get_node_ip(mgmt_node)
+            mgmt_node_ip = self.get_mgmt_node_ip(mgmt_node)
             queue_node = "rabbit@" + mgmt_node
 
             r = requests.put('http://' + mgmt_node_ip + ':15672/api/queues/%2F/' + queue_name, 
@@ -170,7 +207,7 @@ class BrokerManager:
     def connect(self, mgmt_node):
         try:
             credentials = pika.PlainCredentials('jack', 'jack')
-            parameters = pika.ConnectionParameters(self.get_node_ip(mgmt_node),
+            parameters = pika.ConnectionParameters(self.get_mgmt_node_ip(mgmt_node),
                                                 5672,
                                                 '/',
                                                 credentials)
@@ -212,3 +249,19 @@ class BrokerManager:
     def get_random_init_node(self):
         index = random.randint(1, len(self.init_live_nodes))
         return self.get_init_node(index)
+
+    def disable_consumer_proxy(self, consumer_id):
+        toxiproxy_ip = self.get_node_ip("toxiproxy")
+        subprocess.call(["bash", "../cluster/proxy-consumer-disable.sh", toxiproxy_ip, consumer_id[1:], str(len(self.init_live_nodes))])
+
+    def enable_consumer_proxy(self, consumer_id):
+        toxiproxy_ip = self.get_node_ip("toxiproxy")
+        subprocess.call(["bash", "../cluster/proxy-consumer-enable.sh", toxiproxy_ip, consumer_id[1:], str(len(self.init_live_nodes))])
+
+    def disable_publisher_proxy(self):
+        toxiproxy_ip = self.get_node_ip("toxiproxy")
+        subprocess.call(["bash", "../cluster/proxy-pub-disable.sh", toxiproxy_ip])
+
+    def enable_publisher_proxy(self):
+        toxiproxy_ip = self.get_node_ip("toxiproxy")
+        subprocess.call(["bash", "../cluster/proxy-pub-enable.sh", toxiproxy_ip])

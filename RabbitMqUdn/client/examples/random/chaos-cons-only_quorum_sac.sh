@@ -8,7 +8,7 @@ mkdir logs/$TEST_NAME
 
 python -u random-test.py --queue $1 \
 --test-name $TEST_NAME \
---tests 15 \
+--tests 1 \
 --run-minutes 10 \
 --grace-period-sec 300 \
 --in-flight-max 1000 \

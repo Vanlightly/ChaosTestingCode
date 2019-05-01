@@ -53,7 +53,6 @@ def main():
         qq_max_length = int(get_optional_arg(args, "--qq-max-length", "0"))
 
     sac_enabled = is_true(get_mandatory_arg(args, "--sac"))
-    consumer_hard_close = is_true(get_optional_arg(args, "--consumer-hard-close", str(sac_enabled)))
     log_messages = is_true(get_optional_arg(args, "--log-msgs", "false"))
 
     publisher_count = int(get_optional_arg(args, "--publishers", "1"))
@@ -67,6 +66,14 @@ def main():
     new_cluster = is_true(get_optional_arg(args, "--new-cluster", "true"))
     cluster_size = get_optional_arg(args, "--cluster", "3")
     rmq_version = get_optional_arg_validated(args, "--rmq-version", "3.8-alpha", ["3.7", "3.8-beta", "3.8-alpha"])
+    stop_mode = get_optional_arg_validated(args, "--stop-mode", "crash", ["crash","close","cancel"])
+
+    use_toxiproxy = False
+    consumer_hard_close = False
+    if stop_mode == "crash":
+        use_toxiproxy = True
+    elif stop_mode == "close":
+        consumer_hard_close = True
 
     include_chaos = is_true(get_optional_arg(args, "--chaos-actions", "true"))
     if include_chaos:
@@ -88,7 +95,7 @@ def main():
         subprocess.call(["mkdir", f"logs/{test_name}/{str(test_number)}"])
         console_out(f"TEST RUN: {str(test_number)} --------------------------", "TEST RUNNER")
         broker_manager = BrokerManager()
-        broker_manager.deploy(cluster_size, new_cluster, rmq_version)
+        broker_manager.deploy(cluster_size, new_cluster, rmq_version, use_toxiproxy)
         initial_nodes = broker_manager.get_initial_nodes()
         console_out(f"Initial nodes: {initial_nodes}", "TEST RUNNER")
 
@@ -126,7 +133,7 @@ def main():
         monitor_thread.start()
         
         if consumer_count > 0:
-            consumer_manager = ConsumerManager(broker_manager, msg_monitor, "TEST RUNNER")
+            consumer_manager = ConsumerManager(broker_manager, msg_monitor, "TEST RUNNER", use_toxiproxy)
             consumer_manager.add_consumers(consumer_count, test_number, queue_name, prefetch)
             consumer_manager.start_consumers()
 

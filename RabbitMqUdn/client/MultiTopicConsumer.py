@@ -42,7 +42,7 @@ class MultiTopicConsumer:
             console_out(f"Connecting to {self.connected_node}", self.get_actor())
             credentials = pika.PlainCredentials('jack', 'jack')
             parameters = pika.ConnectionParameters(ip,
-                                                5672,
+                                                self.broker_manager.get_consumer_port(self.connected_node, self.consumer_id),
                                                 '/',
                                                 credentials)
             self.connection = pika.BlockingConnection(parameters)
@@ -85,7 +85,7 @@ class MultiTopicConsumer:
             if self.connection is not None and self.connection.is_open:
                 self.connection.close()
                 console_out(f"Closed connection", self.get_actor())
-
+            
             return True
         except AttributeError:
             console_out(f"Closed connection (with internal pika attribute error)", self.get_actor())
@@ -177,18 +177,31 @@ class MultiTopicConsumer:
 
     def stop_consuming(self):
         self.terminate = True
-        if self.last_msg != "":
-            console_out(f"Requested to stop. Last msg acked: {self.last_msg}", self.get_actor())
+        if self.connection.is_open:
+            if self.last_msg != "":
+                console_out(f"Requested to stop. Last msg acked: {self.last_msg}", self.get_actor())
+            else:
+                console_out(f"Requested to stop.", self.get_actor())
+            self.disconnect()
         else:
-            console_out(f"Requested to stop.", self.get_actor())
-        self.disconnect()
+            if self.last_msg != "":
+                console_out(f"Requested to stop - connection already closed. Last msg acked: {self.last_msg}", self.get_actor())
+            else:
+                console_out(f"Requested to stop - connection already closed.", self.get_actor())
 
     def perform_hard_close(self):
         self.terminate = True
         self.hard_close = True
-        if self.last_msg != "":
-            console_out(f"Requested to hard close. Last msg acked: {self.last_msg}", self.get_actor())
+
+        if self.connection.is_open:
+            if self.last_msg != "":
+                console_out(f"Requested to hard close. Last msg acked: {self.last_msg}", self.get_actor())
+            else:
+                console_out(f"Requested to hard close.", self.get_actor())
+            self.disconnect()
         else:
-            console_out(f"Requested to hard close.", self.get_actor())
-        self.disconnect()
+            if self.last_msg != "":
+                console_out(f"Requested to hard close - connection already closed. Last msg acked: {self.last_msg}", self.get_actor())
+            else:
+                console_out(f"Requested to hard close - connection already closed", self.get_actor())
         

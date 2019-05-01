@@ -16,6 +16,7 @@ python -u random-test.py --queue $1 \
 --cluster 3 \
 --consumers 5 \
 --queue-type mirrored \
+--stop-mode crash \
 --chaos-actions false \
 --consumer-actions true \
 --consumer-min-interval 10 \

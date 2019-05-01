@@ -17,6 +17,7 @@ python -u random-test.py --queue $1 \
 --consumers 5 \
 --pre-fetch 1000 \
 --queue-type mirrored \
+--stop-mode crash \
 --chaos-actions false \
 --consumer-actions true \
 --consumer-min-interval 10 \

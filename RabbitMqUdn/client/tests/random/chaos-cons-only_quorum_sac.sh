@@ -16,9 +16,10 @@ python -u random-test.py --queue $1 \
 --cluster 3 \
 --consumers 5 \
 --queue-type quorum \
+--stop-mode crash \
 --chaos-actions false \
 --consumer-actions true \
---consumer-min-interval 10 \
---consumer-max-interval 10 \
+--consumer-min-interval 30 \
+--consumer-max-interval 30 \
 --sac true \
 --new-cluster true 2>&1 | tee logs/$TEST_NAME/test_run.log

@@ -9,13 +9,14 @@ import threading
 from printer import console_out_exception
 
 class ConsumerManager:
-    def __init__(self, broker_manager, msg_monitor, actor):
+    def __init__(self, broker_manager, msg_monitor, actor, use_toxiproxy):
         self.consumers = list()
         self.consumer_threads = list()
         self.broker_manager = broker_manager
         self.msg_monitor = msg_monitor
         self.actor = actor
         self.stop_random = False
+        self.use_toxiproxy = use_toxiproxy
 
     def add_consumers(self, consumer_count, test_number, queue_name, prefetch):
         for con_id in range (1, consumer_count+1):
@@ -77,16 +78,26 @@ class ConsumerManager:
         con = self.consumers[con_index]
         if con.terminate == True:
             console_out(f"STARTING CONSUMER {con_index+1} --------------------------------------", self.actor)
+
+            if self.use_toxiproxy:
+                self.broker_manager.enable_consumer_proxy(con.get_consumer_id())
+
             con.connect()
             self.consumer_threads[con_index] = threading.Thread(target=con.consume)
             self.consumer_threads[con_index].start()
         else:
-            console_out(f"STOPPING CONSUMER {con_index+1} --------------------------------------", self.actor)
             try:
-                if hard_close:
+                if self.use_toxiproxy:
+                    console_out(f"SIMULATING CRASH OF CONSUMER {con_index+1} --------------------------------------", self.actor)
+                    self.broker_manager.disable_consumer_proxy(con.get_consumer_id())
+                    time.sleep(1)
                     con.perform_hard_close()
                 else:
-                    con.stop_consuming()
+                    console_out(f"STOPPING CONSUMER {con_index+1} --------------------------------------", self.actor)
+                    if hard_close:
+                        con.perform_hard_close()
+                    else:
+                        con.stop_consuming()
                 self.consumer_threads[con_index].join(15)
             except Exception as e:
                 template = "An exception of type {0} occurred. Arguments:{1!r}"
@@ -106,10 +117,19 @@ class ConsumerManager:
     def stop_start_consumer(self, con_index, hard_close):
         con = self.consumers[con_index]
         try:
-            if hard_close:
+            if self.use_toxiproxy:
+                console_out(f"SIMULATING CRASH OF CONSUMER {con_index+1} --------------------------------------", self.actor)
+                self.broker_manager.disable_consumer_proxy(con.get_consumer_id())
+                time.sleep(1)
                 con.perform_hard_close()
+                time.sleep(1)
+                self.broker_manager.enable_consumer_proxy(con.get_consumer_id())
             else:
-                con.stop_consuming()
+                console_out(f"STOPPING CONSUMER {con_index+1} --------------------------------------", self.actor)
+                if hard_close:
+                    con.perform_hard_close()
+                else:
+                    con.stop_consuming()
             self.consumer_threads[con_index].join(15)
             
             con.connect()
@@ -142,7 +162,10 @@ class ConsumerManager:
         for con_index in range(0, len(self.consumers)):
             if self.consumers[con_index].terminate == True:
                 console_out(f"Starting consumer {con_index+1}", self.actor)
-                conn_ok = self.consumers[con_index].connect()
+                if self.use_toxiproxy:
+                    self.broker_manager.enable_consumer_proxy(self.consumers[con_index].get_consumer_id())
+
+                self.consumers[con_index].connect()
                 self.consumer_threads[con_index] = threading.Thread(target=self.consumers[con_index].consume)
                 self.consumer_threads[con_index].start()
 

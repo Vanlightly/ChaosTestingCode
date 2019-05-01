@@ -9,7 +9,7 @@ import threading
 import requests
 import json
 
-from command_args import get_args, get_mandatory_arg, get_optional_arg
+from command_args import get_args, get_mandatory_arg, get_optional_arg, is_true, get_optional_arg_validated
 from RabbitPublisher import RabbitPublisher
 from MultiTopicConsumer import MultiTopicConsumer
 from QueueStats import QueueStats
@@ -30,17 +30,13 @@ def main():
     grace_period_sec = int(get_mandatory_arg(args, "--grace-period-sec"))
     cluster_size = get_optional_arg(args, "--cluster", "3")
     queue = get_mandatory_arg(args, "--queue")
-    sac = get_mandatory_arg(args, "--sac")
+    sac_enabled = is_true(get_mandatory_arg(args, "--sac"))
     chaos_mode = get_optional_arg(args, "--chaos-mode", "mixed")
     chaos_min_interval = int(get_optional_arg(args, "--chaos-min-interval", "30"))
     chaos_max_interval = int(get_optional_arg(args, "--chaos-max-interval", "120"))
     prefetch = int(get_optional_arg(args, "--pre-fetch", "10"))
-    queue_type = "quorum"
-
-    sac_enabled = True
-    if sac.upper() == "FALSE":
-        sac_enabled = False
-
+    rmq_version = get_optional_arg_validated(args, "--rmq-version", "3.8-alpha", ["3.7", "3.8-beta", "3.8-alpha"])
+    
     for test_number in range(1, tests+1):
 
         print("")
@@ -49,7 +45,7 @@ def main():
         
         while not setup_complete:
             broker_manager = BrokerManager()
-            broker_manager.deploy(cluster_size, True, "3.8")
+            broker_manager.deploy(cluster_size, True, rmq_version, False)
             initial_nodes = broker_manager.get_initial_nodes()
             
             console_out(f"Initial nodes: {initial_nodes}", "TEST RUNNER")
@@ -63,9 +59,9 @@ def main():
             while queue_created == False and qc_ctr < 20:    
                 qc_ctr += 1
                 if sac_enabled:
-                    queue_created = broker_manager.create_sac_queue(mgmt_node, queue_name, cluster_size, queue_type)
+                    queue_created = broker_manager.create_quorum_sac_queue(mgmt_node, queue_name, cluster_size, 0)
                 else:
-                    queue_created = broker_manager.create_queue(mgmt_node, queue_name, cluster_size, queue_type)
+                    queue_created = broker_manager.create_quorum_queue(mgmt_node, queue_name, cluster_size, 0)
                 
                 if queue_created:
                     setup_complete = True
@@ -77,7 +73,7 @@ def main():
         msg_monitor = MessageMonitor("qqt", test_number, print_mod, True, False)
         publisher = RabbitPublisher(1, test_number, broker_manager, in_flight_max, 120, print_mod)
         publisher.configure_sequence_direct(queue_name, count, 0, 1)
-        consumer_manager = ConsumerManager(broker_manager, msg_monitor, "TEST RUNNER")
+        consumer_manager = ConsumerManager(broker_manager, msg_monitor, "TEST RUNNER", False)
         consumer_manager.add_consumers(1, test_number, queue_name, prefetch)
 
         chaos = ChaosExecutor(initial_nodes)

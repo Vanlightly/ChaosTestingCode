@@ -9,6 +9,41 @@ containers:
       "./rabbitmq.config": "/etc/rabbitmq/rabbitmq.config" }
     expose: [1936,5672,15672]
 
+  rabbitmq2:
+    image: jackvanlightly/rabbitmq-mgmt-v3.8.0-alpha.613.erl.alpine:latest
+    hostname: rabbitmq2
+    container_name: rabbitmq2
+    environment: { "RABBITMQ_ERLANG_COOKIE": 12345 }
+    volumes: { 
+      #"volumes/02/data": "/var/lib/rabbitmq/mnesia", 
+      "./rabbitmq.config": "/etc/rabbitmq/rabbitmq.config", 
+      "./cluster-entrypoint.sh": "/usr/local/bin/cluster-entrypoint.sh" }
+    command: sh -c "/usr/local/bin/cluster-entrypoint.sh"
+    expose: [1936,5672,15672]
+    start_delay: 10
+  
+  rabbitmq3:
+    image: jackvanlightly/rabbitmq-mgmt-v3.8.0-alpha.613.erl.alpine:latest
+    hostname: rabbitmq3
+    container_name: rabbitmq3
+    environment: { "RABBITMQ_ERLANG_COOKIE": 12345 }
+    volumes: { 
+      #"volumes/03/data": "/var/lib/rabbitmq/mnesia", 
+      "./rabbitmq.config": "/etc/rabbitmq/rabbitmq.config", 
+      "./cluster-entrypoint.sh": "/usr/local/bin/cluster-entrypoint.sh" 
+    }
+    command: sh -c "/usr/local/bin/cluster-entrypoint.sh"
+    expose: [1936,5672,15672]
+    start_delay: 10
+
+  toxiproxy:
+    image: shopify/toxiproxy
+    hostname: toxiproxy
+    container_name: toxiproxy
+    expose: [10000,10001,10002,10003,10004,10005,10006,10007,10008,10009,10010,10011,10012,10013,10014,10015,10016,10017,10018,10019,10020,
+    20000,20001,20002,20003,20004,20005,20006,20007,20008,20009,20010,20011,20012,20013,20014,20015,20016,20017,20018,20019,20020,
+    30000,30001,30002,30003,30004,30005,30006,30007,30008,30009,30010,30011,30012,30013,30014,30015,30016,30017,30018,30019,30020]
+
 network:
   driver: udn
   flaky: 5%

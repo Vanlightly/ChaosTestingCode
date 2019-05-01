@@ -18,6 +18,7 @@ python -u random-test.py --queue $1 \
 --consumers 5 \
 --pre-fetch 0 \
 --queue-type quorum \
+--stop-mode crash \
 --chaos-actions false \
 --consumer-actions true \
 --consumer-min-interval 10 \

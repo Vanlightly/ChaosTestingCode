@@ -84,9 +84,10 @@ class RabbitPublisher(object):
     def connect(self):
         self.connected_node = self.broker_manager.get_current_node(self.publisher_id)
         ip = self.broker_manager.get_node_ip(self.connected_node)
+        port = self.broker_manager.get_publisher_port(self.connected_node)
         self.set_actor()
-        console_out(f"Attempting to connect to {self.connected_node} {ip}", self.get_actor())
-        parameters = pika.URLParameters(f"amqp://jack:jack@{ip}:5672/%2F")
+        console_out(f"Attempting to connect to {self.connected_node} {ip}:{port}", self.get_actor())
+        parameters = pika.URLParameters(f"amqp://jack:jack@{ip}:{port}/%2F")
         return pika.SelectConnection(parameters,
                                      on_open_callback=self.on_connection_open,
                                      on_open_error_callback=self.on_connection_open_error,

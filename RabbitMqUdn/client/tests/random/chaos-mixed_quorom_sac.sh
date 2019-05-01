@@ -16,6 +16,7 @@ python -u random-test.py --queue $1 \
 --publishers 1 \
 --consumers 20 \
 --queue-type quorum \
+--stop-mode crash \
 --chaos-actions true \
 --chaos-mode mixed \
 --chaos-min-interval 30 \
