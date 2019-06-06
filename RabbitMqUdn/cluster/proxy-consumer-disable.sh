@@ -1,7 +1,7 @@
 #!/bin/bash
 
 LT=9
-if [ $2 > $LT ]; then
+if (( $2 > $LT )); then
     ZEROS="00"
 else
     ZEROS="000"
