@@ -59,7 +59,7 @@ def main():
     print_mod = get_optional_arg(args, "--print-mod", in_flight_max * 5)
 
     broker_manager = BrokerManager()
-    broker_manager.deploy(cluster_size, new_cluster, rmq_version)
+    broker_manager.deploy(cluster_size, new_cluster, rmq_version, False)
 
     mgmt_node = broker_manager.get_random_init_node()
     queue_created = False
@@ -84,7 +84,7 @@ def main():
 
     if consumer_count > 0:
         msg_monitor = MessageMonitor("pub-con", 1, print_mod, analyze, False)
-        consumer_manager = ConsumerManager(broker_manager, msg_monitor, "TEST RUNNER")
+        consumer_manager = ConsumerManager(broker_manager, msg_monitor, "TEST RUNNER", False)
         consumer_manager.add_consumers(consumer_count, 1, queue_name, prefetch)
 
         monitor_thread = threading.Thread(target=msg_monitor.process_messages)

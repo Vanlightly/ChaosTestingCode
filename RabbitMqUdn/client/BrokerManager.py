@@ -252,11 +252,15 @@ class BrokerManager:
 
     def disable_consumer_proxy(self, consumer_id):
         toxiproxy_ip = self.get_node_ip("toxiproxy")
-        subprocess.call(["bash", "../cluster/proxy-consumer-disable.sh", toxiproxy_ip, consumer_id[1:], str(len(self.init_live_nodes))])
+        pargs = ["bash", "../cluster/proxy-consumer-disable.sh", toxiproxy_ip, consumer_id[1:], str(len(self.init_live_nodes))]
+        console_out(pargs, "TEST RUNNER")
+        subprocess.call(pargs)
 
     def enable_consumer_proxy(self, consumer_id):
         toxiproxy_ip = self.get_node_ip("toxiproxy")
-        subprocess.call(["bash", "../cluster/proxy-consumer-enable.sh", toxiproxy_ip, consumer_id[1:], str(len(self.init_live_nodes))])
+        pargs = ["bash", "../cluster/proxy-consumer-enable.sh", toxiproxy_ip, consumer_id[1:], str(len(self.init_live_nodes))]
+        console_out(pargs, "TEST RUNNER")
+        subprocess.call(pargs)
 
     def disable_publisher_proxy(self):
         toxiproxy_ip = self.get_node_ip("toxiproxy")

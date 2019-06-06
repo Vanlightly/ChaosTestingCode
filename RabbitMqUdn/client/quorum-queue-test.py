@@ -35,7 +35,7 @@ def main():
     chaos_min_interval = int(get_optional_arg(args, "--chaos-min-interval", "30"))
     chaos_max_interval = int(get_optional_arg(args, "--chaos-max-interval", "120"))
     prefetch = int(get_optional_arg(args, "--pre-fetch", "10"))
-    rmq_version = get_optional_arg_validated(args, "--rmq-version", "3.8-alpha", ["3.7", "3.8-beta", "3.8-alpha"])
+    rmq_version = get_optional_arg_validated(args, "--rmq-version", "3.8-beta", ["3.7", "3.8-beta", "3.8-alpha"])
     
     for test_number in range(1, tests+1):
 

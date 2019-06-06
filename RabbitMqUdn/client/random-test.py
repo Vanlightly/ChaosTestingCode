@@ -65,7 +65,7 @@ def main():
 
     new_cluster = is_true(get_optional_arg(args, "--new-cluster", "true"))
     cluster_size = get_optional_arg(args, "--cluster", "3")
-    rmq_version = get_optional_arg_validated(args, "--rmq-version", "3.8-alpha", ["3.7", "3.8-beta", "3.8-alpha"])
+    rmq_version = get_optional_arg_validated(args, "--rmq-version", "3.8-beta", ["3.7", "3.8-beta", "3.8-alpha"])
     stop_mode = get_optional_arg_validated(args, "--stop-mode", "crash", ["crash","close","cancel"])
 
     use_toxiproxy = False

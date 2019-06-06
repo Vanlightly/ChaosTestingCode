@@ -73,7 +73,16 @@ class MultiTopicConsumer:
             self.last_msg = body
             self.message_monitor.append(body, self.consumer_tag, self.consumer_id, self.get_actor(), method.redelivered)
             ch.basic_ack(delivery_tag = method.delivery_tag)
+
+    def is_connection_open(self):
+        try:
+            if self.connection is None:
+                return False
             
+            return self.connection.is_open
+        except Exception as e:
+            console_out_exception("Failed checking if connection is open", e, self.get_actor())
+            return False
 
     def disconnect(self):
         try:
@@ -82,7 +91,7 @@ class MultiTopicConsumer:
                 console_out(f"Cancelled consumer", self.get_actor())
                 self.connection.sleep(2)
 
-            if self.connection is not None and self.connection.is_open:
+            if self.is_connection_open():
                 self.connection.close()
                 console_out(f"Closed connection", self.get_actor())
             
@@ -177,7 +186,7 @@ class MultiTopicConsumer:
 
     def stop_consuming(self):
         self.terminate = True
-        if self.connection.is_open:
+        if self.is_connection_open():
             if self.last_msg != "":
                 console_out(f"Requested to stop. Last msg acked: {self.last_msg}", self.get_actor())
             else:
@@ -193,7 +202,7 @@ class MultiTopicConsumer:
         self.terminate = True
         self.hard_close = True
 
-        if self.connection.is_open:
+        if self.is_connection_open():
             if self.last_msg != "":
                 console_out(f"Requested to hard close. Last msg acked: {self.last_msg}", self.get_actor())
             else:

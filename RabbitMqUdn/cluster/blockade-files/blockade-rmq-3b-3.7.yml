@@ -1,6 +1,6 @@
 containers:
   rabbitmq1:
-    image: rabbitmq:3.7-management
+    image: rabbitmq:3.7.14-management
     hostname: rabbitmq1
     container_name: rabbitmq1
     environment: { "RABBITMQ_ERLANG_COOKIE": 12345 }
@@ -10,7 +10,7 @@ containers:
     expose: [1936,5672,15672]
 
   rabbitmq2:
-    image: rabbitmq:3.7-management
+    image: rabbitmq:3.7.14-management
     hostname: rabbitmq2
     container_name: rabbitmq2
     environment: { "RABBITMQ_ERLANG_COOKIE": 12345 }
@@ -24,7 +24,7 @@ containers:
     start_delay: 10
   
   rabbitmq3:
-    image: rabbitmq:3.7-management
+    image: rabbitmq:3.7.14-management
     hostname: rabbitmq3
     container_name: rabbitmq3
     environment: { "RABBITMQ_ERLANG_COOKIE": 12345 }

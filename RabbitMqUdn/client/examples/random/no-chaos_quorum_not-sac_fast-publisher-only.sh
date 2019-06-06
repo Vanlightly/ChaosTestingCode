@@ -18,4 +18,4 @@ python -u random-test.py --queue $1 \
 --chaos-actions false \
 --consumer-actions false \
 --sac false \
---new-cluster false
+--new-cluster false 2>&1 | tee logs/$TEST_NAME/test_run.log
