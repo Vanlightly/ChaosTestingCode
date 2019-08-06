@@ -1,6 +1,6 @@
 containers:
   rabbitmq1:
-    image: jackvanlightly/rabbitmq-mgmt-v3.8.0-beta.5.erl.alpine:latest
+    image: jackvanlightly/rabbitmq-mgmt-v3.8.0-beta.6.erl.alpine:latest
     hostname: rabbitmq1
     container_name: rabbitmq1
     environment: { "RABBITMQ_ERLANG_COOKIE": 12345 }
