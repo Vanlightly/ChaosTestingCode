@@ -16,6 +16,6 @@ MarkupSafe==1.0
 PyYAML==3.11
 requests==2.19.1
 six==1.9.0
-urllib3==1.23
+urllib3==1.26.5
 websocket-client==0.53.0
 Werkzeug==0.14.1
