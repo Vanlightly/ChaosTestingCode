@@ -1,6 +1,6 @@
 args==0.1.0
 blockade==0.4.0
-certifi==2018.8.24
+certifi==2022.12.7
 chardet==3.0.4
 clint==0.4.1
 docker==2.1.0
